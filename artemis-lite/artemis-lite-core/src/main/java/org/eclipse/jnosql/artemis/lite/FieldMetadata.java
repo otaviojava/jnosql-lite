@@ -68,5 +68,9 @@ public interface FieldMetadata {
      */
     Class<?> getType();
 
+    /**
+     * Returns the parameters in the field.
+     * @return the field arguments
+     */
     Set<Class<?>> getArguments();
 }
