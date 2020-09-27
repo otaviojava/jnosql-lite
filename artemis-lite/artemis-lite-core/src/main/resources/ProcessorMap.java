@@ -1,8 +1,8 @@
 package org.soujava.metadata.processor;
 
-import org.eclipse.jnosql.artemis.lite.ClassMappings;
-import org.eclipse.jnosql.artemis.lite.EntityMetadata;
-import org.eclipse.jnosql.artemis.lite.FieldMetadata;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
+import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import org.eclipse.jnosql.artemis.lite.ValidationException;
 import org.soujava.medatadata.api.Mapper;
 
