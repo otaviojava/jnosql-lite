@@ -1,9 +1,9 @@
-package org.soujava.metadata.processor;
+package org.eclipse.jnosql.artemis.lite;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import org.soujava.medatadata.api.Entity;
+import jakarta.nosql.mapping.Entity;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -86,7 +86,7 @@ public class ClassAnalyzer implements Supplier<String> {
         final Entity annotation = element.getAnnotation(Entity.class);
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
-        String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
+        String entityName = annotation.value() == "" ? sourceClassName : annotation.value();
         return new EntityModel(packageName, sourceClassName, entityName, fields);
     }
 

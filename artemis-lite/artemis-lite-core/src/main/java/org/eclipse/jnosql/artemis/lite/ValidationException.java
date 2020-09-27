@@ -1,4 +1,4 @@
-package org.soujava.metadata.processor;
+package org.eclipse.jnosql.artemis.lite;
 
 public class ValidationException extends RuntimeException {
 

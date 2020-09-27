@@ -1,4 +1,4 @@
-package org.soujava.metadata.processor;
+package org.eclipse.jnosql.artemis.lite;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;

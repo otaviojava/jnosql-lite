@@ -1,4 +1,4 @@
-package org.soujava.metadata.processor;
+package org.eclipse.jnosql.artemis.lite;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -23,9 +23,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static org.soujava.metadata.processor.ProcessorUtil.capitalize;
-import static org.soujava.metadata.processor.ProcessorUtil.getPackageName;
-import static org.soujava.metadata.processor.ProcessorUtil.getSimpleNameAsString;
+import static org.eclipse.jnosql.artemis.lite.ProcessorUtil.capitalize;
+import static org.eclipse.jnosql.artemis.lite.ProcessorUtil.getPackageName;
+import static org.eclipse.jnosql.artemis.lite.ProcessorUtil.getSimpleNameAsString;
 
 public class FieldAnalyzer implements Supplier<String> {
 
