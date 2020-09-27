@@ -127,7 +127,7 @@
     </build>
 
     <modules>
-        <module>artemis</module>
+        <module>artemis-lite</module>
     </modules>
 
     <repositories>

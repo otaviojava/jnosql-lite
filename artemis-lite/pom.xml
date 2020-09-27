@@ -27,7 +27,7 @@
 
 
     <groupId>org.eclipse.jnosql.lite.artemis</groupId>
-    <artifactId>artemis-parent</artifactId>
+    <artifactId>artemis-lite-parent</artifactId>
     <packaging>pom</packaging>
 
     <modules>
