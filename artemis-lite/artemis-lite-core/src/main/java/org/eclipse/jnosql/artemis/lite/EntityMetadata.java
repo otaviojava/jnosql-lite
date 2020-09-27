@@ -16,6 +16,7 @@ package org.eclipse.jnosql.artemis.lite;
 
 
 
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,21 +41,57 @@ public interface EntityMetadata {
      */
     String getClassName();
 
+    /**
+     * @return the fields name
+     */
     List<String> getFieldsName();
+
     /**
      * @return The class
      */
     Class<?> getClassInstance();
 
+    /**
+     * @return The fields from this class
+     */
     List<FieldMetadata> getFields();
 
+    /**
+     * Creates a new instance
+     * @param <T> the instance type
+     * @return a new instance of this class
+     */
     <T> T newInstance();
 
+    /**
+     * Gets the native column name from the Java field name
+     *
+     * @param javaField the java field
+     * @return the column name or column
+     * @throws NullPointerException when javaField is null
+     */
     String getColumnField(String javaField);
 
+    /**
+     * Gets the {@link FieldMetadata} from the java field name
+     * @param javaField the java field
+     * @return the field otherwise {@link Optional#empty()}
+     * @throws NullPointerException when the javaField is null
+     */
     Optional<FieldMetadata> getFieldMapping(String javaField);
 
+    /**
+     * Returns a Fields grouped by the name
+     *
+     * @return a {@link FieldMetadata} grouped by
+     * {@link FieldMetadata#getName()}
+     * @see FieldMetadata#getName()
+     */
     Map<String, FieldMetadata> getFieldsGroupByName();
 
+    /**
+     * Returns the field that has {@link jakarta.nosql.mapping.Id} annotation
+     * @return the field with ID annotation
+     */
     Optional<FieldMetadata> getId();
 }
