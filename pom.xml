@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~
+  ~  Copyright (c) 2017 Otávio Santana and others
+  ~   All rights reserved. This program and the accompanying materials
+  ~   are made available under the terms of the Eclipse Public License v1.0
+  ~   and Apache License v2.0 which accompanies this distribution.
+  ~   The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+  ~   and the Apache License v2.0 is available at http://www.opensource.org/licenses/apache2.0.php.
+  ~
+  ~   You may elect to redistribute this code under either of these licenses.
+  ~
+  ~   Contributors:
+  ~
+  ~   Otavio Santana
+  ~
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>jakarta.nosql</groupId>
+        <artifactId>jakarta-nosql-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.eclipse.jnosql.lite</groupId>
+    <artifactId>jnosql-parent</artifactId>
+
+    <packaging>pom</packaging>
+
+    <description>An experimental implementation that uses Java Annotation Processing instead of Reflection.</description>
+    <url>http://jnosql.org/</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+        <license>
+            <name>The Eclipse Public License v1.0</name>
+            <url>http://www.eclipse.org/legal/epl-v10.html</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/eclipse/jnosql.git</connection>
+        <developerConnection>scm:git:ssh://github.com:eclipse/jnosql.git</developerConnection>
+        <url>https://github.com/eclipse/jnosql</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>JNoSQL Developers</name>
+            <email>jnosql-dev@eclipse.org</email>
+            <organization>Eclipse JNoSQL</organization>
+            <organizationUrl>https://dev.eclipse.org/mailman/listinfo/jnosql-dev</organizationUrl>
+        </developer>
+    </developers>
+
+    <properties>
+        <checkstyle.excludes>**/diana/query/**</checkstyle.excludes>
+        <hamcrest-all.version>1.3</hamcrest-all.version>
+        <owb.version>2.0.3</owb.version>
+        <testcontainers.version>1.14.2</testcontainers.version>
+        <weld.se.core.version>3.1.4.Final</weld.se.core.version>
+        <yasson.version>1.0.7</yasson.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse</groupId>
+            <artifactId>yasson</artifactId>
+            <version>${yasson.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>${hamcrest-all.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.rat</groupId>
+                <artifactId>apache-rat-plugin</artifactId>
+                <version>0.12</version>
+                <configuration>
+                    <includes>
+                        <include>src/**/*.java</include>
+                        <include>src/**/*.xml</include>
+                        <include>pom.xml</include>
+                    </includes>
+                    <excludes>
+                    </excludes>
+                    <licenses>
+                        <license implementation="org.apache.rat.analysis.license.SimplePatternBasedLicense">
+                            <licenseFamilyCategory>AL20-EPL10</licenseFamilyCategory>
+                            <licenseFamilyName>Apache License, 2.0 and Eclipse Public License, 1.0</licenseFamilyName>
+                            <patterns>
+                                <pattern>Apache License v2.0</pattern>
+                                <pattern>Eclipse Public License v1.0</pattern>
+                            </patterns>
+                        </license>
+                    </licenses>
+                    <licenseFamilies>
+                        <licenseFamily implementation="org.apache.rat.license.SimpleLicenseFamily">
+                            <familyName>Apache License, 2.0 and Eclipse Public License, 1.0</familyName>
+                        </licenseFamily>
+                    </licenseFamilies>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <modules>
+        <module>artemis</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>oss.sonatype.org-snapshot</id>
+            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>
