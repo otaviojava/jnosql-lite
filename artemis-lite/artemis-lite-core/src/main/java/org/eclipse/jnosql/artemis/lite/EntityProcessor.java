@@ -3,8 +3,8 @@ package org.eclipse.jnosql.artemis.lite;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import org.soujava.medatadata.api.Column;
-import org.soujava.medatadata.api.Id;
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Id;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 import static javax.lang.model.element.Modifier.PROTECTED;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
-@SupportedAnnotationTypes("org.soujava.medatadata.api.Entity")
+@SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
 public class EntityProcessor extends AbstractProcessor {
 
     private static final EnumSet<Modifier> MODIFIERS = EnumSet.of(PUBLIC, PROTECTED);
     private static final String TEMPLATE = "classmappings.mustache";
     static final Predicate<Element> IS_CONSTRUCTOR = el -> el.getKind() == ElementKind.CONSTRUCTOR;
-    static final Predicate<String> IS_BLANK = String::isBlank;
+    static final Predicate<String> IS_BLANK = s -> s.trim().isEmpty();
     static final Predicate<String> IS_NOT_BLANK = IS_BLANK.negate();
     static final Predicate<Element> PUBLIC_PRIVATE = el -> el.getModifiers().stream().anyMatch(m -> MODIFIERS.contains(m));
     static final Predicate<Element> DEFAULT_MODIFIER = el -> el.getModifiers().isEmpty();
@@ -85,6 +85,7 @@ public class EntityProcessor extends AbstractProcessor {
             template.execute(writer, metadata);
         }
     }
+
     private void createProcessorMap() throws IOException {
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = filer.createSourceFile("org.soujava.metadata.processor.ProcessorMap");
