@@ -28,7 +28,6 @@ import static com.google.testing.compile.Compiler.javac;
 
 public class CompilerTest {
 
-
     @Test
     public void shouldCompile() throws IOException {
 
@@ -91,7 +90,6 @@ public class CompilerTest {
                 .compile(javaFileObject);
         assertThat(compilation).succeeded();
     }
-
 
     @Test
     public void shouldReturnAccessorIssue()  {

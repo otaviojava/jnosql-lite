@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.soujava.example.model;
+package org.eclipse.jnosql.artemis.lite;
 
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Column;
