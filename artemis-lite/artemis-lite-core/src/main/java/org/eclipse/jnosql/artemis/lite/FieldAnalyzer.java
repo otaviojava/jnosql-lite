@@ -17,8 +17,8 @@ package org.eclipse.jnosql.artemis.lite;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import org.soujava.medatadata.api.Column;
-import org.soujava.medatadata.api.Id;
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Id;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
