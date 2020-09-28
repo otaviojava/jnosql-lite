@@ -38,7 +38,7 @@ public class EntityProcessor extends AbstractProcessor {
     private static final EnumSet<Modifier> MODIFIERS = EnumSet.of(PUBLIC, PROTECTED);
     private static final String TEMPLATE = "classmappings.mustache";
     static final Predicate<Element> IS_CONSTRUCTOR = el -> el.getKind() == ElementKind.CONSTRUCTOR;
-    static final Predicate<String> IS_BLANK = s -> s.trim().isEmpty();
+    static final Predicate<String> IS_BLANK = String::isBlank;
     static final Predicate<String> IS_NOT_BLANK = IS_BLANK.negate();
     static final Predicate<Element> PUBLIC_PRIVATE = el -> el.getModifiers().stream().anyMatch(m -> MODIFIERS.contains(m));
     static final Predicate<Element> DEFAULT_MODIFIER = el -> el.getModifiers().isEmpty();
@@ -85,7 +85,6 @@ public class EntityProcessor extends AbstractProcessor {
             template.execute(writer, metadata);
         }
     }
-
     private void createProcessorMap() throws IOException {
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = filer.createSourceFile("org.soujava.metadata.processor.ProcessorMap");
