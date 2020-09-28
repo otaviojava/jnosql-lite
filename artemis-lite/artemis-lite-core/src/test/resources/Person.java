@@ -15,7 +15,7 @@
 package org.soujava.example.model;
 
 
-import org.soujava.medatadata.api.Entity;
+import jakarta.nosql.mapping.Entity;
 
 @Entity("table")
 public class Person {

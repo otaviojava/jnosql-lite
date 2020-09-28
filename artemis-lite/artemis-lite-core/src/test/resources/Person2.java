@@ -15,8 +15,8 @@
 package org.soujava.example.model;
 
 
-import org.soujava.medatadata.api.Entity;
-import org.soujava.medatadata.api.Column;
+import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Column;
 
 @Entity
 public class Person2 {

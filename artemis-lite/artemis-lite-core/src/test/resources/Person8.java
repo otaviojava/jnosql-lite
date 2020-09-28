@@ -14,11 +14,13 @@
  */
 package org.soujava.example.model;
 
-import org.soujava.medatadata.api.Entity;
+import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Column;
 
 @Entity("table")
 public class Person8 {
 
+    @Column
     private String name;
 
     protected String getName() {
