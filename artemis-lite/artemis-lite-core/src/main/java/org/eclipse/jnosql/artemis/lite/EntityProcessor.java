@@ -30,18 +30,13 @@ import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Writer;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static javax.lang.model.element.Modifier.PROTECTED;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -83,7 +78,6 @@ public class EntityProcessor extends AbstractProcessor {
         try {
             if (!entities.isEmpty()) {
                 createClassMapping(entities);
-                createProcessorMap();
             }
         } catch (IOException exception) {
             error(exception);
@@ -97,18 +91,6 @@ public class EntityProcessor extends AbstractProcessor {
         JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified());
         try (Writer writer = fileObject.openWriter()) {
             template.execute(writer, metadata);
-        }
-    }
-    private void createProcessorMap() throws IOException {
-        Filer filer = processingEnv.getFiler();
-        JavaFileObject fileObject = filer.createSourceFile("org.soujava.metadata.processor.ProcessorMap");
-        try (Writer writer = fileObject.openWriter()) {
-            final InputStream stream = EntityProcessor.class
-                    .getClassLoader()
-                    .getResourceAsStream("ProcessorMap.java");
-            String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
-                    .collect(Collectors.joining("\n"));
-            writer.append(source);
         }
     }
 
