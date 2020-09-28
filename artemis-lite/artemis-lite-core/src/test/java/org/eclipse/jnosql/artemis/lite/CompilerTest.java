@@ -58,7 +58,7 @@ public class CompilerTest {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person3.java");
 
         Compilation compilation = javac()
-                .withClasspathFrom(Entity.class.getClassLoader())
+                .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
                 .compile(javaFileObject);
@@ -71,7 +71,7 @@ public class CompilerTest {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person5.java");
 
         Compilation compilation = javac()
-                .withClasspathFrom(Entity.class.getClassLoader())
+                .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
                 .compile(javaFileObject);
