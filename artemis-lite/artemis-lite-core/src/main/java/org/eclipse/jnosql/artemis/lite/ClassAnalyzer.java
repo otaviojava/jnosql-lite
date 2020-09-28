@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 
 public class ClassAnalyzer implements Supplier<String> {
 
-    private static Logger LOGGER = Logger.getLogger(ClassAnalyzer.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ClassAnalyzer.class.getName());
     private static final String NEW_INSTANCE = "entitymetadata.mustache";
 
     private final Element entity;
@@ -100,7 +100,7 @@ public class ClassAnalyzer implements Supplier<String> {
         final Entity annotation = element.getAnnotation(Entity.class);
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
-        String entityName = annotation.value() == "" ? sourceClassName : annotation.value();
+        String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
         return new EntityModel(packageName, sourceClassName, entityName, fields);
     }
 
