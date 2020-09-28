@@ -46,7 +46,7 @@ public class CompilerTest {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person2.java");
         Assertions.assertThrows(RuntimeException.class, () ->
                 javac()
-                        .withClasspathFrom(Entity.class.getClassLoader())
+                        .withClasspathFrom(this.getClass().getClassLoader())
                         .withOptions()
                         .withProcessors(new EntityProcessor())
                         .compile(javaFileObject));
@@ -84,7 +84,7 @@ public class CompilerTest {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person6.java");
 
         Compilation compilation = javac()
-                .withClasspathFrom(Entity.class.getClassLoader())
+                .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
                 .compile(javaFileObject);
@@ -96,7 +96,7 @@ public class CompilerTest {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person4.java");
         Assertions.assertThrows(RuntimeException.class, () ->
                 javac()
-                        .withClasspathFrom(Entity.class.getClassLoader())
+                        .withClasspathFrom(this.getClass().getClassLoader())
                         .withOptions()
                         .withProcessors(new EntityProcessor())
                         .compile(javaFileObject));
@@ -108,7 +108,7 @@ public class CompilerTest {
         final JavaFileObject javaFileObject2 = JavaFileObjects.forResource("Person5.java");
 
         Compilation compilation = javac()
-                .withClasspathFrom(Entity.class.getClassLoader())
+                .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
                 .compile(javaFileObject, javaFileObject2);
@@ -119,7 +119,7 @@ public class CompilerTest {
     public void shouldCompileDefaultPackage() throws IOException {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person7.java");
         Compilation compilation = javac()
-                .withClasspathFrom(Entity.class.getClassLoader())
+                .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
                 .compile(javaFileObject);
@@ -130,7 +130,7 @@ public class CompilerTest {
     public void shouldCompileProtected() throws IOException {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person8.java");
         Compilation compilation = javac()
-                .withClasspathFrom(Entity.class.getClassLoader())
+                .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
                 .compile(javaFileObject);
