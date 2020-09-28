@@ -45,11 +45,6 @@
         </license>
     </licenses>
 
-    <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-    </properties>
-
 
     <scm>
         <connection>scm:git:git://github.com/eclipse/jnosql-lite.git</connection>
@@ -72,6 +67,8 @@
         <testcontainers.version>1.14.2</testcontainers.version>
         <weld.se.core.version>3.1.4.Final</weld.se.core.version>
         <yasson.version>1.0.7</yasson.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
