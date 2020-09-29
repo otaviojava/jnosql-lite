@@ -34,7 +34,7 @@ final class MetadataAppenderClass {
     private static final String METADATA = "metadata";
     private final ProcessingEnvironment processingEnv;
 
-    MetadataAppenderClass(ProcessingEnvironment processingEnv) {
+    private MetadataAppenderClass(ProcessingEnvironment processingEnv) {
         this.processingEnv = processingEnv;
     }
 
@@ -63,5 +63,10 @@ final class MetadataAppenderClass {
                     .collect(Collectors.joining("\n"));
             writer.append(source);
         }
+    }
+
+    public static void append(ProcessingEnvironment processingEnv) throws IOException, URISyntaxException {
+        MetadataAppenderClass appender = new MetadataAppenderClass(processingEnv);
+        appender.append();
     }
 }
