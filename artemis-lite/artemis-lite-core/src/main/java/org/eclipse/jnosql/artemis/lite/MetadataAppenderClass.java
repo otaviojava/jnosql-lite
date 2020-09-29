@@ -28,17 +28,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-final class MetadataClassLoader {
+final class MetadataAppenderClass {
 
     private static final String PACKAGE = "org.eclipse.jnosql.artemis.lite.metadata.";
     private static final String METADATA = "metadata";
     private final ProcessingEnvironment processingEnv;
 
-    MetadataClassLoader(ProcessingEnvironment processingEnv) {
+    MetadataAppenderClass(ProcessingEnvironment processingEnv) {
         this.processingEnv = processingEnv;
     }
 
-    void load() throws IOException, URISyntaxException {
+    void append() throws IOException, URISyntaxException {
         URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
         Stream<Path> walk = Files.walk(Paths.get(url.toURI()));
         List<String> paths = walk.collect(Collectors.toList())
@@ -54,12 +54,11 @@ final class MetadataClassLoader {
 
     private void loadClass(String file) throws IOException {
         Filer filer = processingEnv.getFiler();
-        String fileName = file.substring(0, file.lastIndexOf("."));
-        JavaFileObject fileObject = filer.createSourceFile(PACKAGE + fileName);
+        JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
         try (Writer writer = fileObject.openWriter()) {
-            final InputStream stream = MetadataClassLoader.class
+            final InputStream stream = MetadataAppenderClass.class
                     .getClassLoader()
-                    .getResourceAsStream("ProcessorMap.java");
+                    .getResourceAsStream(METADATA + "/" + file + ".java");
             String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
                     .collect(Collectors.joining("\n"));
             writer.append(source);

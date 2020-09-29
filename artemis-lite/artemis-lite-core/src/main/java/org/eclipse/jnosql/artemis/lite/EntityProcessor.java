@@ -32,18 +32,11 @@ import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.*;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static javax.lang.model.element.Modifier.PROTECTED;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -85,7 +78,7 @@ public class EntityProcessor extends AbstractProcessor {
         try {
             if (!entities.isEmpty()) {
                 createClassMapping(entities);
-                new MetadataClassLoader(processingEnv).load();
+                new MetadataAppenderClass(processingEnv).append();
 
             }
         } catch (IOException | URISyntaxException exception) {
