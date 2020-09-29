@@ -88,7 +88,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/classes/</outputDirectory>
+                            <outputDirectory>${basedir}/target/classes/metadata/</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>src/main/java/org/eclipse/jnosql/artemis/lite/metadata/</directory>
