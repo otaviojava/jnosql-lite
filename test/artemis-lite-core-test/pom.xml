@@ -49,6 +49,7 @@
             <groupId>org.eclipse.jnosql.lite.artemis</groupId>
             <artifactId>artemis-lite-core</artifactId>
             <version>${jakarta.nosql.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

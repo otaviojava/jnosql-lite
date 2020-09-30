@@ -12,31 +12,35 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite.test;
+package org.eclipse.jnosql.artemis.lite;
+
 
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Id;
 
-@Entity
-public class Person {
+@Entity("kind")
+public class Animal {
+
+    @Id
+    private String name;
 
     @Column
-    private String name;
+    private String color;
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    void setName(String name) {
         this.name = name;
     }
 
-    private Person() {}
+    public String getColor() {
+        return color;
+    }
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "name='" + name + '\'' +
-                '}';
+    void setColor(String color) {
+        this.color = color;
     }
 }
