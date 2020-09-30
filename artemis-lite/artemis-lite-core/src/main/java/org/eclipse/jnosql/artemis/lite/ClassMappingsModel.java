@@ -29,6 +29,6 @@ public class ClassMappingsModel extends BaseMappingModel {
     }
 
     public String getQualified() {
-        return "org.soujava.metadata.processor.DefaultClassMappings";
+        return "org.eclipse.jnosql.artemis.lite.DefaultClassMappings";
     }
 }
