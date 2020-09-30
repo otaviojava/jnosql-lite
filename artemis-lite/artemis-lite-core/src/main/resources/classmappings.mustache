@@ -12,7 +12,7 @@
 *
 *   Otavio Santana
 */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.artemis.lite.metadata;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public final class DefaultClassMappings implements ClassMappings {
         return entities.stream()
                 .filter(e -> classEntity.equals(e.getClassInstance()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("classEntity not found"));
+                .orElseThrow(() -> new ClassInformationNotFoundException("classEntity not found"));
     }
 
     @Override
@@ -50,7 +50,7 @@ public final class DefaultClassMappings implements ClassMappings {
         return entities.stream()
                 .filter(e -> name.equals(e.getName()))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("classEntity not found"));
+                .orElseThrow(() -> new ClassInformationNotFoundException("classEntity not found"));
     }
 
     @Override
