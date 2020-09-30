@@ -19,19 +19,28 @@ import jakarta.nosql.mapping.MappingException;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.tools.JavaFileObject;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Writer;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
+import java.util.Collections;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 final class MetadataAppender {
 
+    private static final Logger LOGGER = Logger.getLogger(MetadataAppender.class.getName());
     private static final String PACKAGE = "org.eclipse.jnosql.artemis.lite.metadata.";
     private static final String METADATA = "metadata";
     private final ProcessingEnvironment processingEnv;
@@ -42,15 +51,24 @@ final class MetadataAppender {
 
     void append() throws IOException, URISyntaxException {
         URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
-        if (Objects.isNull(url)) {
-            throw new ValidationException("The metadata resource not found");
-        }
-        Stream<Path> path = Files.walk(Paths.get(url.toURI()));
+        LOGGER.info("URL folder: " + url.toString());
+        LOGGER.info("URI folder: " + url.toURI().toString());
+        Stream<Path> path = Files.walk(getPath(url));
         path.map(Path::getFileName)
                 .map(Path::toString)
                 .filter(s -> s.contains(".java"))
                 .map(s -> s.substring(0, s.lastIndexOf(".")))
                 .forEach(this::loadClass);
+    }
+
+    private Path getPath(URL url) throws IOException, URISyntaxException {
+        URI uri = url.toURI();
+        if ("jar".equals(uri.getScheme())) {
+            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap(), null);
+            return fileSystem.getPath("/" + METADATA);
+        } else {
+            return Paths.get(uri);
+        }
     }
 
     private void loadClass(String file) {
