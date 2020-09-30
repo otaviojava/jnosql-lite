@@ -86,4 +86,21 @@ public class AnimalTest {
         Assertions.assertNotNull(groupByName.get("_id"));
         Assertions.assertNotNull(groupByName.get("color"));
     }
+
+    @Test
+    public void shouldGetter() {
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Animal animal = new Animal();
+        animal.setColor("blue");
+        animal.setName("dog");
+
+        String name = this.entityMetadata.getColumnField("name");
+        String color = this.entityMetadata.getColumnField("color");
+        FieldMetadata fieldName = groupByName.get(name);
+        FieldMetadata fieldColor = groupByName.get(color);
+
+        Assertions.assertEquals("blue", fieldColor.read(animal));
+        Assertions.assertEquals("dog", fieldName.read(animal));
+    }
+
 }
