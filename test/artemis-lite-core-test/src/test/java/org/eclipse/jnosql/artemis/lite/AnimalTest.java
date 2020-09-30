@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class AnimalTest {
@@ -78,4 +79,11 @@ public class AnimalTest {
         Assertions.assertTrue(fields.contains("color"));
     }
 
+    @Test
+    public void shouldGetFieldsGroupByName() {
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Assertions.assertNotNull(groupByName);
+        Assertions.assertNotNull(groupByName.get("_id"));
+        Assertions.assertNotNull(groupByName.get("color"));
+    }
 }
