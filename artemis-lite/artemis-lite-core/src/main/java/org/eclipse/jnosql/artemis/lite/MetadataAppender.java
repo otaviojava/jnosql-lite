@@ -29,13 +29,13 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-final class MetadataAppenderClass {
+final class MetadataAppender {
 
     private static final String PACKAGE = "org.eclipse.jnosql.artemis.lite.metadata.";
     private static final String METADATA = "metadata";
     private final ProcessingEnvironment processingEnv;
 
-    private MetadataAppenderClass(ProcessingEnvironment processingEnv) {
+    private MetadataAppender(ProcessingEnvironment processingEnv) {
         this.processingEnv = processingEnv;
     }
 
@@ -54,7 +54,7 @@ final class MetadataAppenderClass {
             Filer filer = processingEnv.getFiler();
             JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
             try (Writer writer = fileObject.openWriter()) {
-                final InputStream stream = MetadataAppenderClass.class
+                final InputStream stream = MetadataAppender.class
                         .getClassLoader()
                         .getResourceAsStream(METADATA + "/" + file + ".java");
                 String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
@@ -67,7 +67,7 @@ final class MetadataAppenderClass {
     }
 
     public static void append(ProcessingEnvironment processingEnv) throws IOException, URISyntaxException {
-        MetadataAppenderClass appender = new MetadataAppenderClass(processingEnv);
+        MetadataAppender appender = new MetadataAppender(processingEnv);
         appender.append();
     }
 }

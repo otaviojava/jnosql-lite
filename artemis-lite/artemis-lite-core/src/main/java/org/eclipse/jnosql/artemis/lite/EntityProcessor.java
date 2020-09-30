@@ -78,7 +78,7 @@ public class EntityProcessor extends AbstractProcessor {
         try {
             if (!entities.isEmpty()) {
                 createClassMapping(entities);
-                MetadataAppenderClass.append(processingEnv);
+                MetadataAppender.append(processingEnv);
             }
         } catch (IOException | URISyntaxException exception) {
             error(exception);
