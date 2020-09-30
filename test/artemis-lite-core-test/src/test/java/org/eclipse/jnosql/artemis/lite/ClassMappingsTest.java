@@ -40,6 +40,13 @@ public class ClassMappingsTest {
         Assertions.assertNotNull(entityMetadata);
         Assertions.assertEquals(Animal.class, entityMetadata.getClassInstance());
         Assertions.assertEquals(Car.class, mappings.get(Car.class).getClassInstance());
-        Assertions.assertEquals(Car.class, mappings.get(Car.class).getClassInstance());
+        Assertions.assertEquals(Person.class, mappings.get(Person.class).getClassInstance());
+    }
+
+    @Test
+    public void shouldReturnFromName() {
+        Assertions.assertEquals(Animal.class, mappings.findByName("kind").getClassInstance());
+        Assertions.assertEquals(Car.class, mappings.findByName("car").getClassInstance());
+        Assertions.assertEquals(Person.class, mappings.findByName("Person").getClassInstance());
     }
 }
