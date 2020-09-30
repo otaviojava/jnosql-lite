@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.artemis.lite;
 
 import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import org.junit.jupiter.api.Assertions;
