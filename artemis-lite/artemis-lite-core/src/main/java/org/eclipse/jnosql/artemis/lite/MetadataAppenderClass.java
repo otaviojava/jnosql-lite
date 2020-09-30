@@ -14,6 +14,8 @@
  */
 package org.eclipse.jnosql.artemis.lite;
 
+import jakarta.nosql.mapping.MappingException;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.tools.JavaFileObject;
@@ -41,27 +43,27 @@ final class MetadataAppenderClass {
     void append() throws IOException, URISyntaxException {
         URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
         Stream<Path> walk = Files.walk(Paths.get(url.toURI()));
-        List<String> paths = walk.collect(Collectors.toList())
-                .stream().map(Path::getFileName)
+        walk.map(Path::getFileName)
                 .map(Path::toString)
                 .filter(s -> s.contains(".java"))
                 .map(s -> s.substring(0, s.lastIndexOf(".")))
-                .collect(Collectors.toList());
-        for (String path : paths) {
-            loadClass(path);
-        }
+                .forEach(this::loadClass);
     }
 
-    private void loadClass(String file) throws IOException {
-        Filer filer = processingEnv.getFiler();
-        JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
-        try (Writer writer = fileObject.openWriter()) {
-            final InputStream stream = MetadataAppenderClass.class
-                    .getClassLoader()
-                    .getResourceAsStream(METADATA + "/" + file + ".java");
-            String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
-                    .collect(Collectors.joining("\n"));
-            writer.append(source);
+    private void loadClass(String file) {
+        try {
+            Filer filer = processingEnv.getFiler();
+            JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
+            try (Writer writer = fileObject.openWriter()) {
+                final InputStream stream = MetadataAppenderClass.class
+                        .getClassLoader()
+                        .getResourceAsStream(METADATA + "/" + file + ".java");
+                String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
+                        .collect(Collectors.joining("\n"));
+                writer.append(source);
+            }
+        } catch (IOException exp) {
+            throw new MappingException("There is an issue while it is loading the class: " + file, exp);
         }
     }
 
