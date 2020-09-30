@@ -37,6 +37,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.logging.Logger;
 
 import static javax.lang.model.element.Modifier.PROTECTED;
 import static javax.lang.model.element.Modifier.PUBLIC;
@@ -44,6 +45,7 @@ import static javax.lang.model.element.Modifier.PUBLIC;
 @SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
 public class EntityProcessor extends AbstractProcessor {
 
+    private static final Logger LOGGER = Logger.getLogger(EntityProcessor.class.getName());
     private static final EnumSet<Modifier> MODIFIERS = EnumSet.of(PUBLIC, PROTECTED);
     private static final String TEMPLATE = "classmappings.mustache";
     static final Predicate<Element> IS_CONSTRUCTOR = el -> el.getKind() == ElementKind.CONSTRUCTOR;
@@ -67,6 +69,8 @@ public class EntityProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
 
+        LOGGER.info("Starting the entity processor");
+
         final List<String> entities = new ArrayList<>();
         for (TypeElement annotation : annotations) {
             roundEnv.getElementsAnnotatedWith(annotation)
@@ -83,6 +87,7 @@ public class EntityProcessor extends AbstractProcessor {
         } catch (IOException | URISyntaxException exception) {
             error(exception);
         }
+        LOGGER.info("Finished the entity processor");
         return false;
     }
 
