@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AnimalTest {
@@ -60,6 +61,21 @@ public class AnimalTest {
     public void shouldGetId() {
         Optional<FieldMetadata> id = this.entityMetadata.getId();
         Assertions.assertTrue(id.isPresent());
+    }
+
+    @Test
+    public void shouldCreateNewInstance() {
+        Animal animal = entityMetadata.newInstance();
+        Assertions.assertNotNull(animal);
+        Assertions.assertTrue(animal instanceof Animal);
+    }
+
+    @Test
+    public void shouldGetFieldsName() {
+        List<String> fields = entityMetadata.getFieldsName();
+        Assertions.assertEquals(2, fields.size());
+        Assertions.assertTrue(fields.contains("name"));
+        Assertions.assertTrue(fields.contains("color"));
     }
 
 }
