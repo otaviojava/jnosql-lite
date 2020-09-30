@@ -26,6 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -41,6 +42,9 @@ final class MetadataAppender {
 
     void append() throws IOException, URISyntaxException {
         URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
+        if (Objects.isNull(url)) {
+            throw new ValidationException("The metadata resource not found");
+        }
         Stream<Path> path = Files.walk(Paths.get(url.toURI()));
         path.map(Path::getFileName)
                 .map(Path::toString)
