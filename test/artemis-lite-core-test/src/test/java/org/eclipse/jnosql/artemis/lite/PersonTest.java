@@ -123,19 +123,28 @@ public class PersonTest {
     @Test
     public void shouldSetter() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
-        Animal animal = new Animal();
+        Person person = new Person();
+        Animal ada = new Animal();
+        ada.setName("Ada");
+        ada.setColor("black");
 
-        String name = this.entityMetadata.getColumnField("name");
-        String color = this.entityMetadata.getColumnField("color");
-        FieldMetadata fieldName = groupByName.get(name);
-        FieldMetadata fieldColor = groupByName.get(color);
+        FieldMetadata id = groupByName.get("_id");
+        FieldMetadata username = groupByName.get("native");
+        FieldMetadata email = groupByName.get("email");
+        FieldMetadata contacts = groupByName.get("contacts");
+        FieldMetadata pet = groupByName.get("pet");
 
+        id.write(person, 1L);
+        username.write(person, "otaviojava");
+        email.write(person, "otavio@java.com");
+        contacts.write(person, List.of("Poliana", "Maria"));
+        pet.write(person, ada);
 
-        fieldColor.write(animal, "blue");
-        fieldName.write(animal, "ada");
-        Assertions.assertEquals("blue", fieldColor.read(animal));
-        Assertions.assertEquals("ada", fieldName.read(animal));
-
+        Assertions.assertEquals(1L, id.read(person));
+        Assertions.assertEquals("otaviojava", username.read(person));
+        Assertions.assertEquals("otavio@java.com", email.read(person));
+        Assertions.assertEquals(List.of("Poliana", "Maria"), contacts.read(person));
+        Assertions.assertEquals(ada, pet.read(person));
     }
 
 }
