@@ -1,0 +1,69 @@
+/*
+*  Copyright (c) 2020 Otávio Santana and others
+*   All rights reserved. This program and the accompanying materials
+*   are made available under the terms of the Eclipse Public License v1.0
+*   and Apache License v2.0 which accompanies this distribution.
+*   The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+*   and the Apache License v2.0 is available at http://www.opensource.org/licenses/apache2.0.php.
+*
+*   You may elect to redistribute this code under either of these licenses.
+*
+*   Contributors:
+*
+*   Otavio Santana
+*/
+package {{packageName}};
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Collections;
+import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
+import javax.annotation.processing.Generated;
+
+@Generated(value= "JNoSQL Lite FieldMetadata Generator", date = "{{now}}")
+public final class {{className}} implements FieldMetadata {
+
+  private Set<Class<?>> arguments;
+
+  public {{className}}() {
+    this.arguments = new HashSet<>();
+    {{#arguments}}
+    this.arguments.add({{.}}.class);
+    {{/arguments}}
+  }
+
+  @Override
+   public boolean isId() {
+    return {{id}};
+  }
+
+  @Override
+  public String getName() {
+    return "{{name}}";
+  }
+
+  @Override
+  public String getFieldName() {
+    return "{{fieldName}}";
+  }
+
+   @Override
+   public void write(Object bean, Object value) {
+    (({{entity}}) bean).{{writer}}(({{type}})value);
+   }
+
+   @Override
+   public Object read(Object bean) {
+    return (({{entity}}) bean).{{reader}}();
+   }
+
+   @Override
+   public Class<?> getType()  {
+    return {{type}}.class;
+   }
+
+   @Override
+   public Set<Class<?>> getArguments() {
+    return Collections.unmodifiableSet(arguments);
+   }
+}
