@@ -104,4 +104,22 @@ public class AnimalTest {
         Assertions.assertEquals("dog", fieldName.read(animal));
     }
 
+    @Test
+    public void shouldSetter() {
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Animal animal = new Animal();
+
+        String name = this.entityMetadata.getColumnField("name");
+        String color = this.entityMetadata.getColumnField("color");
+        FieldMetadata fieldName = groupByName.get(name);
+        FieldMetadata fieldColor = groupByName.get(color);
+
+
+        fieldColor.write(animal, "blue");
+        fieldName.write(animal, "ada");
+        Assertions.assertEquals("blue", fieldColor.read(animal));
+        Assertions.assertEquals("ada", fieldName.read(animal));
+
+    }
+
 }
