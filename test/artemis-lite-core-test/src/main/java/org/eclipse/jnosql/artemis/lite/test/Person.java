@@ -12,23 +12,31 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.artemis.lite.test;
 
-import java.util.List;
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Entity;
 
-public class ClassMappingsModel extends BaseMappingModel {
+@Entity
+public class Person {
 
-    private final List<String> entities;
+    @Column
+    private String name;
 
-    public ClassMappingsModel(List<String> entities) {
-        this.entities = entities;
+    public String getName() {
+        return name;
     }
 
-    public List<String> getEntities() {
-        return entities;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getQualified() {
-        return "org.soujava.metadata.processor.DefaultClassMappings";
+    private Person() {}
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
