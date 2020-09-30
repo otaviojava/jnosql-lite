@@ -69,7 +69,6 @@ public class EntityProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
 
-        LOGGER.info("Starting the entity processor");
 
         final List<String> entities = new ArrayList<>();
         for (TypeElement annotation : annotations) {
@@ -88,7 +87,6 @@ public class EntityProcessor extends AbstractProcessor {
         } catch (IOException | URISyntaxException exception) {
             error(exception);
         }
-        LOGGER.info("Finished the entity processor");
         return false;
     }
 
