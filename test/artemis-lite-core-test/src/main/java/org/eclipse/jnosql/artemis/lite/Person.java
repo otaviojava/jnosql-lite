@@ -35,13 +35,8 @@ public class Person {
     @Column
     private List<String> contacts;
 
-    public Person() {
-    }
-
-    public Person(String username, String email) {
-        this.username = username;
-        this.email = email;
-    }
+    @Column
+    private Animal pet;
 
     public String getUsername() {
         return username;
@@ -73,5 +68,13 @@ public class Person {
 
     public void setContacts(List<String> contacts) {
         this.contacts = contacts;
+    }
+
+    public Animal getPet() {
+        return pet;
+    }
+
+    public void setPet(Animal pet) {
+        this.pet = pet;
     }
 }
