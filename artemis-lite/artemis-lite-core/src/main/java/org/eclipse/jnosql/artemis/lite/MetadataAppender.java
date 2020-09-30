@@ -41,8 +41,8 @@ final class MetadataAppender {
 
     void append() throws IOException, URISyntaxException {
         URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
-        Stream<Path> walk = Files.walk(Paths.get(url.toURI()));
-        walk.map(Path::getFileName)
+        Stream<Path> path = Files.walk(Paths.get(url.toURI()));
+        path.map(Path::getFileName)
                 .map(Path::toString)
                 .filter(s -> s.contains(".java"))
                 .map(s -> s.substring(0, s.lastIndexOf(".")))
