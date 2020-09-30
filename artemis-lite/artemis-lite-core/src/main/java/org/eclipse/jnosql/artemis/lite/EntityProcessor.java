@@ -82,6 +82,7 @@ public class EntityProcessor extends AbstractProcessor {
         try {
             if (!entities.isEmpty()) {
                 createClassMapping(entities);
+                LOGGER.info("Appending the metadata interfaces");
                 MetadataAppender.append(processingEnv);
             }
         } catch (IOException | URISyntaxException exception) {
@@ -92,6 +93,7 @@ public class EntityProcessor extends AbstractProcessor {
     }
 
     private void createClassMapping(List<String> entities) throws IOException {
+        LOGGER.info("Creating mapping class");
         ClassMappingsModel metadata = new ClassMappingsModel(entities);
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified());
