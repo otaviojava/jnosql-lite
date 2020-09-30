@@ -131,6 +131,7 @@
 
     <modules>
         <module>artemis-lite</module>
+        <module>test</module>
     </modules>
 
     <repositories>
