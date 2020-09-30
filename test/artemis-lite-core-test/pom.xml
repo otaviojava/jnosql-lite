@@ -18,12 +18,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.eclipse.jnosql.lite.artemis</groupId>
-        <artifactId>artemis-lite-parent</artifactId>
+        <groupId>org.eclipse.jnosql.lite.test</groupId>
+        <artifactId>artemis-lite-test-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>artemis-lite-core</artifactId>
+    <artifactId>artemis-lite-core-test</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -45,24 +45,7 @@
             <artifactId>mapping-core</artifactId>
             <version>${jakarta.nosql.version}</version>
         </dependency>
-        <dependency>
-            <groupId>jakarta.nosql.tck.mapping</groupId>
-            <artifactId>mapping-tck-core</artifactId>
-            <version>${jakarta.nosql.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.testing.compile</groupId>
-            <artifactId>compile-testing</artifactId>
-            <version>0.18</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.spullara.mustache.java</groupId>
-            <artifactId>compiler</artifactId>
-            <version>0.9.6</version>
-        </dependency>
-    </dependencies>
+      </dependencies>
 
     <build>
         <plugins>
