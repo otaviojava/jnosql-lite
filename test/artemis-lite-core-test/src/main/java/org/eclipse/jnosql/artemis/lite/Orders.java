@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class ShoppingCar {
+public class Orders {
 
     @Column
     private String user;
@@ -53,7 +53,7 @@ public class ShoppingCar {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        ShoppingCar that = (ShoppingCar) o;
+        Orders that = (Orders) o;
         return Objects.equals(user, that.user);
     }
 
