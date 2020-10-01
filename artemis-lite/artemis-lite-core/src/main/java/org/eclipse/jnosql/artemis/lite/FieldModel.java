@@ -126,7 +126,7 @@ public class FieldModel extends BaseMappingModel {
         private String fieldName;
         private boolean id;
         private List<String> arguments;
-        private String converter;
+        private String converter = "null";
 
         private FieldMetaDataBuilder() {
         }
@@ -176,11 +176,10 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
-        public FieldMetaDataBuilder withConverter(String converter) {
-            this.converter = converter;
+        public FieldMetaDataBuilder withConverter(Class<?> converter) {
+            this.converter = String.format("new %d();", converter.getName());
             return this;
         }
-
 
         public FieldModel build() {
             return new FieldModel(packageName, name, type, entity, reader, writer, fieldName, id, arguments, converter);
