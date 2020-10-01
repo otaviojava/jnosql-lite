@@ -18,23 +18,33 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Collections;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
+import jakarta.nosql.mapping.AttributeConverter;
 import javax.annotation.processing.Generated;
+import java.util.Optional;
 
 @Generated(value= "JNoSQL Lite FieldMetadata Generator", date = "{{now}}")
 public final class {{className}} implements FieldMetadata {
 
-  private Set<Class<?>> arguments;
+  private final Set<Class<?>> arguments;
+
+  private final AttributeConverter<?, ?> converter;
 
   public {{className}}() {
     this.arguments = new HashSet<>();
     {{#arguments}}
     this.arguments.add({{.}}.class);
     {{/arguments}}
+    this.converter = {{converter}}
   }
 
   @Override
    public boolean isId() {
     return {{id}};
+  }
+
+  @Override
+  public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> getConverter() {
+    return (Optional<X>) Optional.ofNullable(converter);
   }
 
   @Override
