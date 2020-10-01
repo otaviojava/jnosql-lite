@@ -18,6 +18,7 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Convert;
 import jakarta.nosql.mapping.Id;
 
 import javax.annotation.processing.Filer;
@@ -113,10 +114,12 @@ public class FieldAnalyzer implements Supplier<String> {
 
         Column column = field.getAnnotation(Column.class);
         Id id = field.getAnnotation(Id.class);
+        Convert convert = field.getAnnotation(Convert.class);
         final boolean isId = id != null;
         final String packageName = getPackageName(entity);
         final String entityName = getSimpleNameAsString(this.entity);
         final String name = getName(fieldName, column, id);
+
 
         final String getMethod = accessors.stream()
                 .map(ELEMENT_TO_STRING)
@@ -139,6 +142,7 @@ public class FieldAnalyzer implements Supplier<String> {
                 .withFieldName(fieldName)
                 .withId(isId)
                 .withArguments(arguments)
+                .withConverter(convert)
                 .build();
     }
 
