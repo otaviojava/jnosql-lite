@@ -37,11 +37,9 @@ public interface FieldMetadata {
     /**
      * Returns the converter instance
      * @param <X> the type of the entity attribute
-     * @param <Y> the type of the database column
-     * @param <T> the Converter
      * @return the converter if present
      */
-    <X, Y, T extends AttributeConverter<X, Y>> Optional<X> getConverter();
+    <X extends AttributeConverter<?, ?>> Optional<X> getConverter();
 
     /**
      * Returns the Java Fields name.
