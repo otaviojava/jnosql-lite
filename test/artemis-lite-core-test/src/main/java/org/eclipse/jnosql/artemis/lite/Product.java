@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.artemis.lite;
 
 import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Convert;
 import jakarta.nosql.mapping.Entity;
 
 @Entity
@@ -24,6 +25,7 @@ public class Product {
     private String name;
 
     @Column
+    @Convert(MoneyConverter.class)
     private Money value;
 
     public String getName() {
