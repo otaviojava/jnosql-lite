@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.artemis.lite;
 
+import jakarta.nosql.mapping.AttributeConverter;
 import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
@@ -134,8 +135,27 @@ public class OrdersTest {
     @Test
     public void shouldReturnGenerics() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
-        FieldMetadata contacts = groupByName.get("items");
-        Set<Class<?>> arguments = contacts.getArguments();
+        FieldMetadata items = groupByName.get("items");
+        Set<Class<?>> arguments = items.getArguments();
         Assertions.assertArrayEquals(new Class<?>[]{Product.class}, arguments.toArray());
+    }
+
+    @Test
+    public void shouldReturnConverter() {
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        FieldMetadata items = groupByName.get("items");
+        Set<Class<?>> arguments = items.getArguments();
+        Class<?> argument = arguments.stream().findFirst().get();
+        EntityMetadata product = this.mappings.get(argument);
+        FieldMetadata value = product.getFieldMapping("value").get();
+        Optional<AttributeConverter<Money, String>> converter = value.getConverter();
+        Assertions.assertNotNull(converter);
+        Assertions.assertTrue(converter.isPresent());
+
+        AttributeConverter<Money, String> attributeConverter =  converter.get();
+        Assertions.assertNotNull(converter);
+        Money money = new Money("USD", BigDecimal.TEN);
+        String test = attributeConverter.convertToDatabaseColumn(money);
+        Assertions.assertNotNull(test);
     }
 }
