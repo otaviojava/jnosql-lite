@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.artemis.lite;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FieldModel extends BaseMappingModel {
 
@@ -177,7 +178,9 @@ public class FieldModel extends BaseMappingModel {
         }
 
         public FieldMetaDataBuilder withConverter(Class<?> converter) {
-            this.converter = String.format("new %d();", converter.getName());
+            if (Objects.nonNull(converter)) {
+                this.converter = String.format("new %d();", converter.getName());
+            }
             return this;
         }
 
