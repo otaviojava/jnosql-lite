@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,7 +49,7 @@ public class OrdersTest {
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(Person.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(Orders.class.getSimpleName(), entityMetadata.getSimpleName());
     }
 
     @Test
@@ -76,76 +78,57 @@ public class OrdersTest {
     @Test
     public void shouldGetFieldsName() {
         List<String> fields = entityMetadata.getFieldsName();
-        Assertions.assertEquals(5, fields.size());
-        Assertions.assertTrue(fields.contains("id"));
-        Assertions.assertTrue(fields.contains("username"));
-        Assertions.assertTrue(fields.contains("email"));
-        Assertions.assertTrue(fields.contains("contacts"));
-        Assertions.assertTrue(fields.contains("pet"));
+        Assertions.assertEquals(2, fields.size());
+        Assertions.assertTrue(fields.contains("user"));
+        Assertions.assertTrue(fields.contains("items"));
     }
 
     @Test
     public void shouldGetFieldsGroupByName() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
         Assertions.assertNotNull(groupByName);
-        Assertions.assertNotNull(groupByName.get("_id"));
-        Assertions.assertNotNull(groupByName.get("native"));
-        Assertions.assertNotNull(groupByName.get("email"));
-        Assertions.assertNotNull(groupByName.get("contacts"));
-        Assertions.assertNotNull(groupByName.get("pet"));
+        Assertions.assertNotNull(groupByName.get("user"));
+        Assertions.assertNotNull(groupByName.get("items"));
     }
 
     @Test
     public void shouldGetter() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
-        Person person = new Person();
-        person.setId(1L);
-        person.setUsername("otaviojava");
-        person.setEmail("otavio@java.com");
-        person.setContacts(List.of("Poliana", "Maria"));
-        Animal ada = new Animal();
-        ada.setName("Ada");
-        ada.setColor("black");
-        person.setPet(ada);
+        Orders orders = new Orders();
+        orders.setUser("Poliana");
 
-        FieldMetadata id = groupByName.get("_id");
-        FieldMetadata username = groupByName.get("native");
-        FieldMetadata email = groupByName.get("email");
-        FieldMetadata contacts = groupByName.get("contacts");
-        FieldMetadata pet = groupByName.get("pet");
+        Money money = new Money("USD", BigDecimal.TEN);
+        Product product = new Product();
+        product.setName("table");
+        product.setValue(money);
+        orders.setItems(Collections.singletonList(product));
 
-        Assertions.assertEquals(1L, id.read(person));
-        Assertions.assertEquals("otaviojava", username.read(person));
-        Assertions.assertEquals("otavio@java.com", email.read(person));
-        Assertions.assertEquals(List.of("Poliana", "Maria"), contacts.read(person));
-        Assertions.assertEquals(ada, pet.read(person));
+
+        FieldMetadata user = groupByName.get("user");
+        FieldMetadata items = groupByName.get("items");
+
+        Assertions.assertEquals("Poliana", user.read(orders));
+        Assertions.assertEquals(Collections.singletonList(product), items.read(orders));
     }
 
     @Test
     public void shouldSetter() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
-        Person person = new Person();
-        Animal ada = new Animal();
-        ada.setName("Ada");
-        ada.setColor("black");
+        Orders orders = new Orders();
 
-        FieldMetadata id = groupByName.get("_id");
-        FieldMetadata username = groupByName.get("native");
-        FieldMetadata email = groupByName.get("email");
-        FieldMetadata contacts = groupByName.get("contacts");
-        FieldMetadata pet = groupByName.get("pet");
+        Money money = new Money("USD", BigDecimal.TEN);
+        Product product = new Product();
+        product.setName("table");
+        product.setValue(money);
 
-        id.write(person, 1L);
-        username.write(person, "otaviojava");
-        email.write(person, "otavio@java.com");
-        contacts.write(person, List.of("Poliana", "Maria"));
-        pet.write(person, ada);
+        FieldMetadata user = groupByName.get("user");
+        FieldMetadata items = groupByName.get("items");
 
-        Assertions.assertEquals(1L, id.read(person));
-        Assertions.assertEquals("otaviojava", username.read(person));
-        Assertions.assertEquals("otavio@java.com", email.read(person));
-        Assertions.assertEquals(List.of("Poliana", "Maria"), contacts.read(person));
-        Assertions.assertEquals(ada, pet.read(person));
+        user.write(orders, "Poliana");
+        items.write(orders, Collections.singletonList(product));
+
+        Assertions.assertEquals("Poliana", user.read(orders));
+        Assertions.assertEquals(Collections.singletonList(product), items.read(orders));
     }
 
     @Test
