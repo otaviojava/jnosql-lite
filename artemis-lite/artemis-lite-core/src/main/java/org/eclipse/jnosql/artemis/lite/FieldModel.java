@@ -16,6 +16,8 @@ package org.eclipse.jnosql.artemis.lite;
 
 import jakarta.nosql.mapping.Convert;
 
+import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.TypeMirror;
 import java.util.List;
 import java.util.Objects;
 
@@ -181,7 +183,13 @@ public class FieldModel extends BaseMappingModel {
 
         public FieldMetaDataBuilder withConverter(Convert converter) {
             if (Objects.nonNull(converter)) {
-                this.converter = String.format("new %d();", converter.value().getName());
+                try{
+                    this.converter = String.format("new %s();", converter.value().getName());
+                }catch (MirroredTypeException exception) {
+                    TypeMirror typeMirror = exception.getTypeMirror();
+                    this.converter = String.format("new %s();", typeMirror);
+                }
+
             }
             return this;
         }
