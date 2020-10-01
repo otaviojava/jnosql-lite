@@ -27,12 +27,14 @@ public class FieldModel extends BaseMappingModel {
     private final String fieldName;
     private final boolean id;
     private final List<String> arguments;
+    private final String converter;
 
     FieldModel(String packageName, String name,
                String type, String entity,
                String reader, String writer, String fieldName,
                boolean id,
-               List<String> arguments) {
+               List<String> arguments,
+               String converter) {
         this.packageName = packageName;
         this.name = name;
         this.type = type;
@@ -42,6 +44,7 @@ public class FieldModel extends BaseMappingModel {
         this.fieldName = fieldName;
         this.id = id;
         this.arguments = arguments;
+        this.converter = converter;
     }
 
     public String getPackageName() {
@@ -88,6 +91,10 @@ public class FieldModel extends BaseMappingModel {
         return arguments;
     }
 
+    public String getConverter() {
+        return converter;
+    }
+
     @Override
     public String toString() {
         return "FieldModel{" +
@@ -99,6 +106,8 @@ public class FieldModel extends BaseMappingModel {
                 ", writer='" + writer + '\'' +
                 ", fieldName='" + fieldName + '\'' +
                 ", id=" + id +
+                ", arguments=" + arguments +
+                ", converter='" + converter + '\'' +
                 '}';
     }
 
@@ -116,7 +125,8 @@ public class FieldModel extends BaseMappingModel {
         private String writer;
         private String fieldName;
         private boolean id;
-        List<String> arguments;
+        private List<String> arguments;
+        private String converter;
 
         private FieldMetaDataBuilder() {
         }
@@ -166,8 +176,14 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
+        public FieldMetaDataBuilder withConverter(String converter) {
+            this.converter = converter;
+            return this;
+        }
+
+
         public FieldModel build() {
-            return new FieldModel(packageName, name, type, entity, reader, writer, fieldName, id, arguments);
+            return new FieldModel(packageName, name, type, entity, reader, writer, fieldName, id, arguments, converter);
         }
     }
 }
