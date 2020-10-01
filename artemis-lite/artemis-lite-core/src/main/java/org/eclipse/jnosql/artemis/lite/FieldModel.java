@@ -187,7 +187,7 @@ public class FieldModel extends BaseMappingModel {
                     this.converter = String.format("new %s();", converter.value().getName());
                 }catch (MirroredTypeException exception) {
                     TypeMirror typeMirror = exception.getTypeMirror();
-                    this.converter = String.format("new %s();", typeMirror);
+                    this.converter = String.format("new %s()", typeMirror);
                 }
 
             }
