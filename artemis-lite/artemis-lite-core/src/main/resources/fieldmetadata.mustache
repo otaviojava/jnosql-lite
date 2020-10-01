@@ -34,7 +34,7 @@ public final class {{className}} implements FieldMetadata {
     {{#arguments}}
     this.arguments.add({{.}}.class);
     {{/arguments}}
-    this.converter = {{converter}}
+    this.converter = {{converter}};
   }
 
   @Override
