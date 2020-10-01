@@ -28,6 +28,13 @@ public class Money {
         this.bigDecimal = bigDecimal;
     }
 
+    public static Money of(String dbData) {
+        String[] values = dbData.split(" ");
+        String currency = values[0];
+        BigDecimal value = BigDecimal.valueOf(Double.parseDouble(values[1]));
+        return new Money(currency, value);
+    }
+
     public String getCurrency() {
         return currency;
     }
@@ -56,9 +63,6 @@ public class Money {
 
     @Override
     public String toString() {
-        return "Money{" +
-                "currency='" + currency + '\'' +
-                ", bigDecimal=" + bigDecimal +
-                '}';
+        return currency + " " + bigDecimal.toString();
     }
 }
