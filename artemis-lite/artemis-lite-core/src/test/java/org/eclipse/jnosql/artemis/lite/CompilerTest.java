@@ -137,5 +137,16 @@ public class CompilerTest {
         assertThat(compilation).succeeded();
     }
 
+    @Test
+    public void shouldUseConverter() {
+        final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person9.java");
+        Compilation compilation = javac()
+                .withClasspathFrom(this.getClass().getClassLoader())
+                .withOptions()
+                .withProcessors(new EntityProcessor())
+                .compile(javaFileObject);
+        assertThat(compilation).succeeded();
+    }
+
 
 }
