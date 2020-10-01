@@ -15,6 +15,9 @@
 package org.eclipse.jnosql.artemis.lite.metadata;
 
 
+import jakarta.nosql.mapping.AttributeConverter;
+
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -31,6 +34,14 @@ public interface FieldMetadata {
      */
     boolean isId();
 
+    /**
+     * Returns the converter class
+     * @param <X> the type of the entity attribute
+     * @param <Y> the type of the database column
+     * @param <T> the Converter
+     * @return the converter if present
+     */
+    <X, Y, T extends AttributeConverter<X, Y>> Optional<Class<? extends AttributeConverter<X, Y>>> getConverter();
     /**
      * Returns the Java Fields name.
      * {@link java.lang.reflect.Field#getName()}
