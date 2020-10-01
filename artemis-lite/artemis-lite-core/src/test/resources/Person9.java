@@ -26,6 +26,7 @@ public class Person9 {
     private String name;
 
     @Convert(StringIntegerConverter.class)
+    @Column
     private Integer age;
 
     protected String getName() {
@@ -34,6 +35,14 @@ public class Person9 {
 
     protected void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
     @Override
