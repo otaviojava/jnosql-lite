@@ -115,8 +115,8 @@ class DocumentFieldMetadata implements FieldMetadata {
     private boolean isEmbeddableElement(ClassMappings mappings) {
         Set<Class<?>> arguments = getArguments();
         if (!arguments.isEmpty()) {
-            Class<?> aClass = arguments.stream().findFirst().get();
-
+            Class<?> entity = arguments.stream().findFirst().get();
+            return !mappings.findByClass(entity).isEmpty();
         }
         return false;
     }
