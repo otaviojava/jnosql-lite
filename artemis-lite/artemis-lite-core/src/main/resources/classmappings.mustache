@@ -66,4 +66,12 @@ public final class DefaultClassMappings implements ClassMappings {
                 .filter(e -> name.equals(e.getClassName()))
                 .findFirst();
     }
+
+   @Override
+   public Optional<EntityMetadata> findByClassName(Class<?> classEntity) {
+       Objects.requireNonNull(classEntity, "classEntity is required");
+       return entities.stream()
+               .filter(e -> classEntity.equals(e.getClassInstance()))
+               .findFirst();
+   }
 }
