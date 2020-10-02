@@ -16,8 +16,16 @@ package org.eclipse.jnosql.artemis.lite.document;
 
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
 
 public class LiteDocumentEntityConverter implements DocumentEntityConverter {
+
+    private final ClassMappings mappings;
+
+    public LiteDocumentEntityConverter() {
+        this.mappings = new DefaultClassMappings();
+    }
 
     @Override
     public DocumentEntity toDocument(Object entityInstance) {
