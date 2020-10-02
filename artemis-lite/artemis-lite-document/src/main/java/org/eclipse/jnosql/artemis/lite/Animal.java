@@ -14,5 +14,8 @@
  */
 package org.eclipse.jnosql.artemis.lite;
 
+import jakarta.nosql.mapping.Entity;
+
+@Entity
 public class Animal {
 }

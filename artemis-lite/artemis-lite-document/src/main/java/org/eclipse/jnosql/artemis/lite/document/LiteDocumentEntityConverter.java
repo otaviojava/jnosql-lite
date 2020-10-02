@@ -16,9 +16,9 @@ package org.eclipse.jnosql.artemis.lite.document;
 
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import org.eclipse.jnosql.artemis.document.metadata.ClassMappings;
-import org.eclipse.jnosql.artemis.document.metadata.DefaultClassMappings;
-import org.eclipse.jnosql.artemis.document.metadata.EntityMetadata;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
 
 import java.util.List;
 

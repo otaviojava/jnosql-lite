@@ -18,8 +18,8 @@ package org.eclipse.jnosql.artemis.lite.document;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import org.eclipse.jnosql.artemis.document.metadata.ClassMappings;
-import org.eclipse.jnosql.artemis.document.metadata.FieldMetadata;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldType;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldTypeUtil;
 
@@ -93,7 +93,7 @@ class DocumentFieldMetadata implements FieldMetadata {
         return this.read() != null;
     }
 
-    public <X, Y> List<Document> toDocument(DocumentEntityConverter converter, org.eclipse.jnosql.artemis.document.metadata.ClassMappings mappings) {
+    public <X, Y> List<Document> toDocument(DocumentEntityConverter converter, ClassMappings mappings) {
         FieldType fieldType = FieldTypeUtil.of(this, mappings);
         if (FieldType.EMBEDDED_ENTITY.equals(fieldType)) {
             return singletonList(Document.of(getName(), converter.toDocument(this.read()).getDocuments()));
@@ -108,7 +108,7 @@ class DocumentFieldMetadata implements FieldMetadata {
         return singletonList(Document.of(getName(), this.read()));
     }
 
-    private boolean isEmbeddableCollection(FieldType fieldType, org.eclipse.jnosql.artemis.document.metadata.ClassMappings mappings) {
+    private boolean isEmbeddableCollection(FieldType fieldType, ClassMappings mappings) {
         return FieldType.COLLECTION.equals(fieldType) && isEmbeddableElement(mappings);
     }
 
