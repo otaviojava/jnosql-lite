@@ -19,6 +19,8 @@ package org.eclipse.jnosql.artemis.lite.document;
 import jakarta.nosql.mapping.AttributeConverter;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 
+import javax.swing.text.Document;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,7 +30,7 @@ class DocumentFieldMetadata implements FieldMetadata {
 
     private final Object entity;
 
-    DocumentFieldMetadata(FieldMetadata field, Object entity) {
+    private DocumentFieldMetadata(FieldMetadata field, Object entity) {
         this.field = field;
         this.entity = entity;
     }
@@ -81,4 +83,26 @@ class DocumentFieldMetadata implements FieldMetadata {
     public Set<Class<?>> getArguments() {
         return field.getArguments();
     }
+
+    public boolean isNotEmpty() {
+        return this.read() != null;
+    }
+
+    public <X, Y> List<Document> toDocument() {
+
+    }
+
+    @Override
+    public String toString() {
+        return "DocumentFieldMetadata{" +
+                "field=" + field +
+                ", entity=" + entity +
+                '}';
+    }
+
+    static DocumentFieldMetadata of(FieldMetadata field, Object entity) {
+        return new DocumentFieldMetadata(field, entity);
+    }
+
+
 }
