@@ -58,4 +58,13 @@ public interface ClassMappings {
      * @throws NullPointerException              when the name is null
      */
     Optional<EntityMetadata> findByClassName(String name);
+
+    /**
+     * Returns the {@link EntityMetadata} instance from {@link Class#getName()}
+     *
+     * @param classEntity the {@link Class}
+     * @return the {@link EntityMetadata} from name otherwise {@link Optional#empty()}
+     * @throws NullPointerException              when the classEntity is null
+     */
+    Optional<EntityMetadata> findByClass(Class<?> classEntity);
 }
