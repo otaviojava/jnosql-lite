@@ -12,13 +12,13 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite.document;
+package org.eclipse.jnosql.artemis.document.document;
 
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
-import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
-import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
+import org.eclipse.jnosql.artemis.document.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.document.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.artemis.document.metadata.EntityMetadata;
 
 import java.util.List;
 

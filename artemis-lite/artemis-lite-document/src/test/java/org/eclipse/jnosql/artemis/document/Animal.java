@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite.document;
+package org.eclipse.jnosql.artemis.document;
 
 import jakarta.nosql.mapping.Entity;
 
