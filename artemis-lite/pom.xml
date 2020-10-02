@@ -32,6 +32,7 @@
 
     <modules>
         <module>artemis-lite-core</module>
+        <module>artemis-lite-document</module>
     </modules>
 
     <dependencies>
