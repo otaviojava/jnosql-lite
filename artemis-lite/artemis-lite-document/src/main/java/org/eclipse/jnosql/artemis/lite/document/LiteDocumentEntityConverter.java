@@ -18,6 +18,11 @@ import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
 import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
+
+import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 public class LiteDocumentEntityConverter implements DocumentEntityConverter {
 
@@ -29,7 +34,16 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
 
     @Override
     public DocumentEntity toDocument(Object entityInstance) {
-        return null;
+        requireNonNull(entityInstance, "Object is required");
+        EntityMetadata mapping = mappings.get(entityInstance.getClass());
+        DocumentEntity entity = DocumentEntity.of(mapping.getName());
+        mapping.getFields().stream()
+                .map(f -> DocumentFieldMetadata.of(f, entityInstance))
+                .filter(DocumentFieldMetadata::isNotEmpty)
+                .map(f -> f.toDocument(this, this.mappings))
+                .flatMap(List::stream)
+                .forEach(entity::add);
+        return entity;
     }
 
     @Override
@@ -46,4 +60,5 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
     public <T> T toEntity(DocumentEntity entity) {
         return null;
     }
+
 }
