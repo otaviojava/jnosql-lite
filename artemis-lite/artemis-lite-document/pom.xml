@@ -32,18 +32,19 @@
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jnosql.diana</groupId>
-            <artifactId>diana-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jnosql.diana</groupId>
-            <artifactId>diana-query</artifactId>
+            <artifactId>diana-document</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.nosql.mapping</groupId>
-            <artifactId>mapping-core</artifactId>
+            <artifactId>mapping-document</artifactId>
             <version>${jakarta.nosql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jnosql.lite.artemis</groupId>
+            <artifactId>artemis-lite-core</artifactId>
+            <version>${jakarta.nosql.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.nosql.tck.mapping</groupId>
@@ -56,11 +57,6 @@
             <artifactId>compile-testing</artifactId>
             <version>0.18</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.spullara.mustache.java</groupId>
-            <artifactId>compiler</artifactId>
-            <version>0.9.6</version>
         </dependency>
     </dependencies>
 
