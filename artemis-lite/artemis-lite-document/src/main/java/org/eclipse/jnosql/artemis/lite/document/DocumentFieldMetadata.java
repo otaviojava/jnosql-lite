@@ -16,13 +16,20 @@
 package org.eclipse.jnosql.artemis.lite.document;
 
 
+import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
+import jakarta.nosql.mapping.document.DocumentEntityConverter;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
+import org.eclipse.jnosql.artemis.lite.metadata.FieldType;
+import org.eclipse.jnosql.artemis.lite.metadata.FieldTypeUtil;
 
-import javax.swing.text.Document;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static java.util.Collections.singletonList;
 
 class DocumentFieldMetadata implements FieldMetadata {
 
@@ -88,8 +95,40 @@ class DocumentFieldMetadata implements FieldMetadata {
         return this.read() != null;
     }
 
-    public <X, Y> List<Document> toDocument() {
+    public <X, Y> List<Document> toDocument(DocumentEntityConverter converter, ClassMappings mappings) {
+        FieldType fieldType = FieldTypeUtil.of(this, mappings);
+        if (FieldType.EMBEDDED_ENTITY.equals(fieldType)) {
+            return singletonList(Document.of(getName(), converter.toDocument(this.read()).getDocuments()));
+        } else if (isEmbeddableCollection(fieldType, mappings)) {
+            return singletonList(Document.of(getName(), getDocuments(converter)));
+        }
+        Optional<AttributeConverter<X, Y>> optionalConverter = this.getConverter();
+        if (optionalConverter.isPresent()) {
+            AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
+            return singletonList(Document.of(getName(), attributeConverter.convertToDatabaseColumn((X) this.read())));
+        }
+        return singletonList(Document.of(getName(), this.read()));
+    }
 
+    private boolean isEmbeddableCollection(FieldType fieldType, ClassMappings mappings) {
+        return FieldType.COLLECTION.equals(fieldType) && isEmbeddableElement(mappings);
+    }
+
+    private boolean isEmbeddableElement(ClassMappings mappings) {
+        Set<Class<?>> arguments = getArguments();
+        if (!arguments.isEmpty()) {
+            Class<?> aClass = arguments.stream().findFirst().get();
+
+        }
+        return false;
+    }
+
+    private List<List<Document>> getDocuments(DocumentEntityConverter converter) {
+        List<List<Document>> documents = new ArrayList<>();
+        for (Object element : (Iterable) this.read()) {
+            documents.add(converter.toDocument(element).getDocuments());
+        }
+        return documents;
     }
 
     @Override
