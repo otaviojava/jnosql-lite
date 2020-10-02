@@ -1,4 +1,3 @@
-
 /*
  *  Copyright (c) 2020 Otávio Santana and others
  *   All rights reserved. This program and the accompanying materials
@@ -13,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.document.document;
+package org.eclipse.jnosql.artemis.lite.document;
 
 
 import jakarta.nosql.document.Document;
