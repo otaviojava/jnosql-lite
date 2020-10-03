@@ -34,7 +34,6 @@ public class AppointmentBook {
     @Column
     private List<Contact> contacts = new ArrayList<>();
 
-
     AppointmentBook() {
     }
 
@@ -46,9 +45,16 @@ public class AppointmentBook {
         return id;
     }
 
+    void setId(String id) {
+        this.id = id;
+    }
 
     public List<Contact> getContacts() {
         return contacts;
+    }
+
+    void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
     }
 
     public void add(Contact contact) {
