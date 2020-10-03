@@ -14,16 +14,15 @@
  */
 package org.eclipse.jnosql.artemis.lite;
 
-
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 
 @Entity
-public class Person {
+public class Actor {
 
     @Id
     private long id;
@@ -39,6 +38,25 @@ public class Person {
 
     private String ignore;
 
+    @Column
+    private Map<String, String> movieCharacter;
+
+    @Column
+    private Map<String, Integer> movieRating;
+
+    Actor(long id, String name, int age, List<String> phones, String ignore, Map<String, String> movieCharacter,
+          Map<String, Integer> movieRating) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.phones = phones;
+        this.ignore = ignore;
+        this.movieCharacter = movieCharacter;
+        this.movieRating = movieRating;
+    }
+
+    Actor() {
+    }
 
     public long getId() {
         return id;
@@ -72,60 +90,31 @@ public class Person {
         this.phones = phones;
     }
 
-    public void setIgnore(String ignore) {
-        this.ignore = ignore;
-    }
-
     public String getIgnore() {
         return ignore;
     }
 
-    public boolean isAdult() {
-        return age > 21;
-    }
-
-    Person() {
-    }
-
-    Person(long id, String name, int age, List<String> phones, String ignore) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.phones = phones;
+    public void setIgnore(String ignore) {
         this.ignore = ignore;
     }
 
-    @Override
-    public String toString() {
-        return  "Person{" + "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", phones=" + phones +
-                ", ignore='" + ignore + '\'' +
-                '}';
+    public Map<String, String> getMovieCharacter() {
+        return movieCharacter;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Person person = (Person) o;
-        return id == person.id &&
-                age == person.age &&
-                Objects.equals(name, person.name) &&
-                Objects.equals(phones, person.phones);
+    public void setMovieCharacter(Map<String, String> movieCharacter) {
+        this.movieCharacter = movieCharacter;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, age, phones, ignore);
+    public Map<String, Integer> getMovieRating() {
+        return movieRating;
     }
 
-    public static PersonBuilder builder() {
-        return new PersonBuilder();
+    public void setMovieRating(Map<String, Integer> movieRating) {
+        this.movieRating = movieRating;
+    }
+
+    public static ActorBuilder actorBuilder() {
+        return new ActorBuilder();
     }
 }
