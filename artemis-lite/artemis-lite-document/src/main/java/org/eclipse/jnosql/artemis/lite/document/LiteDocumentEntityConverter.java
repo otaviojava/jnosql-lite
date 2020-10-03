@@ -48,16 +48,21 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
 
     @Override
     public <T> T toEntity(Class<T> entityClass, DocumentEntity entity) {
+        requireNonNull(entityClass, "entityClass is required");
+        requireNonNull(entity, "entity is required");
         return null;
     }
 
     @Override
     public <T> T toEntity(T entityInstance, DocumentEntity entity) {
+        requireNonNull(entityInstance, "entityInstance is required");
+        requireNonNull(entity, "entity is required");
         return null;
     }
 
     @Override
     public <T> T toEntity(DocumentEntity entity) {
+        requireNonNull(entity, "entity is required");
         return null;
     }
 
