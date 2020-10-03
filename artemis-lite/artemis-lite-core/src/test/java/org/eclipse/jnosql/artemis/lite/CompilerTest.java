@@ -148,5 +148,17 @@ public class CompilerTest {
         assertThat(compilation).succeeded();
     }
 
+    @Test
+    public void shouldReadFatherClass() {
+        final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person10.java");
+        final JavaFileObject javaFileObject2 = JavaFileObjects.forResource("Director.java");
+        Compilation compilation = javac()
+                .withClasspathFrom(this.getClass().getClassLoader())
+                .withOptions()
+                .withProcessors(new EntityProcessor())
+                .compile(javaFileObject, javaFileObject2);
+        assertThat(compilation).succeeded();
+    }
+
 
 }
