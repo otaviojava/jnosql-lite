@@ -44,7 +44,11 @@ public final class FieldTypeUtil {
         Class<?> type = field.getType();
         Optional<EntityMetadata> entityMetadata = mappings.findByClass(type);
         if (!entityMetadata.isEmpty()) {
-            return FieldType.EMBEDDED_ENTITY;
+            return entityMetadata
+                    .map(EntityMetadata::isEmbedded)
+                    .orElse(false)
+                    ? FieldType.EMBEDDED : FieldType.EMBEDDED_ENTITY;
+
         }
 
         return FieldType.DEFAULT;
