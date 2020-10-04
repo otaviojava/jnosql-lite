@@ -85,10 +85,4 @@ public interface FieldMetadata {
      * @return the field arguments
      */
     Set<Class<?>> getArguments();
-
-    /**
-     * Checks if the field has the {@link jakarta.nosql.mapping.Embeddable} annotation
-     * @return true if has the {@link jakarta.nosql.mapping.Embeddable}
-     */
-    boolean isEmbeddable();
 }
