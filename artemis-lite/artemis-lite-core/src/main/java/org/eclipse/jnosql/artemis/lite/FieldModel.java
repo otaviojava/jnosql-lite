@@ -33,13 +33,15 @@ public class FieldModel extends BaseMappingModel {
     private final boolean id;
     private final List<String> arguments;
     private final String converter;
+    private final boolean embedded;
 
     FieldModel(String packageName, String name,
                String type, String entity,
                String reader, String writer, String fieldName,
                boolean id,
                List<String> arguments,
-               String converter) {
+               String converter,
+               boolean embedded) {
         this.packageName = packageName;
         this.name = name;
         this.type = type;
@@ -50,6 +52,7 @@ public class FieldModel extends BaseMappingModel {
         this.id = id;
         this.arguments = arguments;
         this.converter = converter;
+        this.embedded = embedded;
     }
 
     public String getPackageName() {
@@ -100,6 +103,10 @@ public class FieldModel extends BaseMappingModel {
         return converter;
     }
 
+    public boolean isEmbedded() {
+        return embedded;
+    }
+
     @Override
     public String toString() {
         return "FieldModel{" +
@@ -113,6 +120,7 @@ public class FieldModel extends BaseMappingModel {
                 ", id=" + id +
                 ", arguments=" + arguments +
                 ", converter='" + converter + '\'' +
+                ", embedded=" + embedded +
                 '}';
     }
 
@@ -131,7 +139,9 @@ public class FieldModel extends BaseMappingModel {
         private String fieldName;
         private boolean id;
         private List<String> arguments;
+        private boolean embedded;
         private String converter = "null";
+
 
         private FieldMetaDataBuilder() {
         }
@@ -181,11 +191,16 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
+        public FieldMetaDataBuilder withEmbedded(boolean embedded) {
+            this.embedded = embedded;
+            return this;
+        }
+
         public FieldMetaDataBuilder withConverter(Convert converter) {
             if (Objects.nonNull(converter)) {
-                try{
+                try {
                     this.converter = String.format("new %s();", converter.value().getName());
-                }catch (MirroredTypeException exception) {
+                } catch (MirroredTypeException exception) {
                     TypeMirror typeMirror = exception.getTypeMirror();
                     this.converter = String.format("new %s()", typeMirror);
                 }
@@ -195,7 +210,9 @@ public class FieldModel extends BaseMappingModel {
         }
 
         public FieldModel build() {
-            return new FieldModel(packageName, name, type, entity, reader, writer, fieldName, id, arguments, converter);
+            return new FieldModel(packageName, name, type,
+                    entity, reader, writer, fieldName,
+                    id, arguments, converter, embedded);
         }
     }
 }
