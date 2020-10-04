@@ -41,6 +41,9 @@ public final class FieldTypeUtil {
         if (Map.class.isAssignableFrom(field.getType())) {
             return FieldType.MAP;
         }
+        if (field.isEmbeddable()) {
+            return FieldType.EMBEDDED;
+        }
         Class<?> type = field.getType();
         Optional<EntityMetadata> entityMetadata = mappings.findByClass(type);
         if (!entityMetadata.isEmpty()) {
