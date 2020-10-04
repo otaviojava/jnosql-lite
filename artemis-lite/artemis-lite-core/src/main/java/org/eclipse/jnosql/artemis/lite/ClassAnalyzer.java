@@ -18,19 +18,23 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.MappedSuperclass;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ClassAnalyzer implements Supplier<String> {
 
@@ -75,8 +79,16 @@ public class ClassAnalyzer implements Supplier<String> {
 
     private String analyze(TypeElement typeElement) throws IOException {
 
-        final List<String> fields = processingEnv.getElementUtils()
-                .getAllMembers(typeElement).stream()
+        TypeElement superclass = (TypeElement) typeElement.getSuperclass();
+        Stream<? extends Element> superElements = Stream.empty();
+        if (Objects.nonNull(superclass.getAnnotation(MappedSuperclass.class))) {
+            superElements = processingEnv.getElementUtils()
+                    .getAllMembers(superclass).stream();
+        }
+        Stream<? extends Element> elements = processingEnv.getElementUtils()
+                .getAllMembers(typeElement).stream();
+
+        final List<String> fields = Stream.concat(elements, superElements)
                 .filter(EntityProcessor.IS_FIELD.and(EntityProcessor.HAS_ANNOTATION))
                 .map(f -> new FieldAnalyzer(f, processingEnv, typeElement))
                 .map(FieldAnalyzer::get)
