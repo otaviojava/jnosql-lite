@@ -94,4 +94,10 @@ public interface EntityMetadata {
      * @return the field with ID annotation
      */
     Optional<FieldMetadata> getId();
+
+    /**
+     * Returns true if the class has the {@link jakarta.nosql.mapping.Embeddable} annotation
+     * @return true if has {@link jakarta.nosql.mapping.Embeddable} annotation
+     */
+    boolean isEmbedded();
 }
