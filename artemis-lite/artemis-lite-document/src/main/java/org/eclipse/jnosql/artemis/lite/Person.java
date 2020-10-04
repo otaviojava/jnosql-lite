@@ -18,11 +18,13 @@ package org.eclipse.jnosql.artemis.lite;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
+import jakarta.nosql.mapping.MappedSuperclass;
 
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@MappedSuperclass
 public class Person {
 
     @Id

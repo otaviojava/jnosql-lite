@@ -16,27 +16,12 @@ package org.eclipse.jnosql.artemis.lite;
 
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
 
 import java.util.List;
 import java.util.Map;
 
 @Entity
-public class Actor {
-
-    @Id
-    private long id;
-
-    @Column
-    private String name;
-
-    @Column
-    private int age;
-
-    @Column
-    private List<String> phones;
-
-    private String ignore;
+public class Actor extends Person{
 
     @Column
     private Map<String, String> movieCharacter;
@@ -46,56 +31,12 @@ public class Actor {
 
     Actor(long id, String name, int age, List<String> phones, String ignore, Map<String, String> movieCharacter,
           Map<String, Integer> movieRating) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
-        this.phones = phones;
-        this.ignore = ignore;
+        super(id, name, age, phones, ignore);
         this.movieCharacter = movieCharacter;
         this.movieRating = movieRating;
     }
 
     Actor() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public List<String> getPhones() {
-        return phones;
-    }
-
-    public void setPhones(List<String> phones) {
-        this.phones = phones;
-    }
-
-    public String getIgnore() {
-        return ignore;
-    }
-
-    public void setIgnore(String ignore) {
-        this.ignore = ignore;
     }
 
     public Map<String, String> getMovieCharacter() {

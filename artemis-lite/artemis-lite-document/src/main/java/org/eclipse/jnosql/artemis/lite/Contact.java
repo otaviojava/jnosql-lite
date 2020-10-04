@@ -17,9 +17,11 @@ package org.eclipse.jnosql.artemis.lite;
 
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Embeddable;
+import jakarta.nosql.mapping.Entity;
 
 import java.util.Objects;
 
+@Entity
 @Embeddable
 public final class Contact {
 

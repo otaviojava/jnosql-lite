@@ -14,49 +14,55 @@
  */
 package org.eclipse.jnosql.artemis.lite;
 
-
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
-@Entity
-public class AppointmentBook {
-
-    @Id
-    private String id;
+@Entity("movie")
+public class Movie {
 
     @Column
-    private List<Contact> contacts = new ArrayList<>();
+    private String title;
 
-    AppointmentBook() {
+    @Column
+    private long year;
+
+    @Column
+    private Set<String> actors;
+
+    Movie() {
     }
 
-    public AppointmentBook(String id) {
-        this.id = id;
+    public Movie(String title, long year, Set<String> actors) {
+        this.title = title;
+        this.year = year;
+        this.actors = actors;
     }
 
-    public String getId() {
-        return id;
+    public String getTitle() {
+        return title;
     }
 
-    void setId(String id) {
-        this.id = id;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public List<Contact> getContacts() {
-        return contacts;
+    public long getYear() {
+        return year;
     }
 
-    void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
+    public void setYear(long year) {
+        this.year = year;
     }
 
-    public void add(Contact contact) {
-        this.contacts.add(contact);
+    public Set<String> getActors() {
+        return actors;
+    }
+
+    public void setActors(Set<String> actors) {
+        this.actors = actors;
     }
 
     @Override
@@ -67,19 +73,23 @@ public class AppointmentBook {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        AppointmentBook appointmentBook = (AppointmentBook) o;
-        return Objects.equals(id, appointmentBook.id);
+        Movie movie = (Movie) o;
+        return year == movie.year &&
+                Objects.equals(title, movie.title) &&
+                Objects.equals(actors, movie.actors);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hash(title, year, actors);
     }
 
     @Override
     public String toString() {
-        return  "AppointmentBook{" + "id='" + id + '\'' +
-                ", contacts=" + contacts +
+        return "Movie{" +
+                "title='" + title + '\'' +
+                ", year=" + year +
+                ", actors=" + actors +
                 '}';
     }
 }
