@@ -26,11 +26,15 @@ public class EntityModel extends BaseMappingModel {
 
     private final List<String> fields;
 
-    public EntityModel(String packageName, String entity, String name, List<String> fields) {
+    private final boolean embedded;
+
+    public EntityModel(String packageName, String entity, String name,
+                       List<String> fields, boolean embedded) {
         this.packageName = packageName;
         this.entity = entity;
         this.name = name;
         this.fields = fields;
+        this.embedded = embedded;
     }
 
     public String getPackageName() {
@@ -61,12 +65,18 @@ public class EntityModel extends BaseMappingModel {
         return fields;
     }
 
+    public boolean isEmbedded() {
+        return embedded;
+    }
+
     @Override
     public String toString() {
-        return "EntityMetadata{" +
+        return "EntityModel{" +
                 "packageName='" + packageName + '\'' +
-                ", sourceClassName='" + entity + '\'' +
-                ", entityName='" + name + '\'' +
+                ", entity='" + entity + '\'' +
+                ", name='" + name + '\'' +
+                ", fields=" + fields +
+                ", embedded=" + embedded +
                 '}';
     }
 }
