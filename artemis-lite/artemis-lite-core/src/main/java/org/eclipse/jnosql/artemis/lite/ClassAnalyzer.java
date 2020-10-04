@@ -111,10 +111,11 @@ public class ClassAnalyzer implements Supplier<String> {
 
     private EntityModel getMetadata(TypeElement element, List<String> fields) {
         final Entity annotation = element.getAnnotation(Entity.class);
+        final  boolean embedded = Objects.nonNull(element.getAnnotation(MappedSuperclass.class));
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
         String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
-        return new EntityModel(packageName, sourceClassName, entityName, fields);
+        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded);
     }
 
     private void error(IOException exception) {

@@ -109,4 +109,9 @@ private final List<FieldMetadata> fields;
     .filter(FieldMetadata::isId)
     .findFirst();
     }
+
+    @Override
+    public boolean isEmbedded() {
+    return {{embedded}};
+    }
 }
