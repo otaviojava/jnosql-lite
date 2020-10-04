@@ -19,7 +19,6 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Convert;
-import jakarta.nosql.mapping.Embeddable;
 import jakarta.nosql.mapping.Id;
 
 import javax.annotation.processing.Filer;
