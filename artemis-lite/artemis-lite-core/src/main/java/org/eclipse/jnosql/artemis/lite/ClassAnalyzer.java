@@ -24,6 +24,7 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
@@ -79,7 +80,8 @@ public class ClassAnalyzer implements Supplier<String> {
 
     private String analyze(TypeElement typeElement) throws IOException {
 
-        TypeElement superclass = (TypeElement) typeElement.getSuperclass();
+        TypeElement superclass =
+                (TypeElement) ((DeclaredType) typeElement.getSuperclass()).asElement();
         Stream<? extends Element> superElements = Stream.empty();
         if (Objects.nonNull(superclass.getAnnotation(MappedSuperclass.class))) {
             superElements = processingEnv.getElementUtils()
