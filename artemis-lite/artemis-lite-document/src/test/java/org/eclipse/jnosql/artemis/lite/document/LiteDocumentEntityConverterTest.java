@@ -382,7 +382,6 @@ class LiteDocumentEntityConverterTest {
 
     }
 
-
     @Test
     public void shouldConvertAndDoNotUseUnmodifiableCollection() {
         DocumentEntity entity = DocumentEntity.of("vendors");

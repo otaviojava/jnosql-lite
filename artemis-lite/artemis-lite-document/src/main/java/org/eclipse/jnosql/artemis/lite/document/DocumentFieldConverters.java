@@ -121,8 +121,7 @@ class DocumentFieldConverters {
                 switch (FieldTypeUtil.of(field, mappings)) {
                     case COLLECTION:
                     case MAP:
-                        TypeSupplier<?> typeSupplier = () -> DocumentLiteParameterizedType.of(field);
-                        field.write(instance, value.get(typeSupplier));
+                        field.write(instance, value.get(() -> DocumentLiteParameterizedType.of(field)));
                         return;
                     default:
                         field.write(instance, value.get(field.getType()));
