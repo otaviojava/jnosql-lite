@@ -112,7 +112,7 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
 
             FieldMetadata field = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(field, mappings);
-            DocumentFieldConverter fieldConverter = converterFactory.get(field, type);
+            DocumentFieldConverter fieldConverter = converterFactory.get(field, type, mappings);
             fieldConverter.convert(instance, documents, document, field, this, mappings);
         };
     }
