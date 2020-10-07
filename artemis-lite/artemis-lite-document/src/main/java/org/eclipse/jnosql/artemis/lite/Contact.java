@@ -55,6 +55,18 @@ public final class Contact {
         return information;
     }
 
+    public void setType(ContactType type) {
+        this.type = type;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
