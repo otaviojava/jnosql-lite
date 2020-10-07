@@ -19,10 +19,9 @@ import jakarta.nosql.TypeReference;
 import jakarta.nosql.Value;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldType;
-import org.eclipse.jnosql.artemis.reflection.FieldMapping;
-import org.eclipse.jnosql.artemis.reflection.GenericFieldMapping;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -33,10 +32,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import static org.eclipse.jnosql.artemis.reflection.FieldType.COLLECTION;
-import static org.eclipse.jnosql.artemis.reflection.FieldType.EMBEDDED;
-import static org.eclipse.jnosql.artemis.reflection.FieldType.EMBEDDED_ENTITY;
-
 class DocumentFieldConverters {
 
     static class DocumentFieldConverterFactory {
@@ -46,20 +41,21 @@ class DocumentFieldConverters {
         private final CollectionEmbeddableConverter embeddableConverter = new CollectionEmbeddableConverter();
         private final SubEntityConverter subEntityConverter = new SubEntityConverter();
 
-        DocumentFieldConverter get(FieldMetadata field, FieldType type) {
+        DocumentFieldConverter get(FieldMetadata field, FieldType type, ClassMappings mappings) {
             if (FieldType.EMBEDDED.equals(type)) {
                 return embeddedFieldConverter;
             } else if (FieldType.EMBEDDED_ENTITY.equals(type)) {
                 return subEntityConverter;
-            } else if (isCollectionEmbeddable(field, type)) {
+            } else if (isCollectionEmbeddable(field, type, mappings)) {
                 return embeddableConverter;
             } else {
                 return defaultConverter;
             }
         }
 
-        private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type) {
-            return FieldType.COLLECTION.equals(type) && ((GenericFieldMapping) field).isEmbeddable();
+        private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type, ClassMappings mappings) {
+            return FieldType.COLLECTION.equals(type) &&
+                    !mappings.findByClass(field.getType()).isEmpty();
         }
     }
 
@@ -67,7 +63,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
-                                      FieldMapping field, AbstractDocumentEntityConverter converter) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
 
             if (document.isPresent()) {
                 Document sudDocument = document.get();
@@ -98,7 +94,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
-                                      FieldMapping field, AbstractDocumentEntityConverter converter) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
 
             Field nativeField = field.getNativeField();
             Object subEntity = converter.toEntity(nativeField.getType(), documents);
@@ -111,16 +107,16 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
-                                      FieldMapping field, AbstractDocumentEntityConverter converter) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
             Value value = document.get().getValue();
 
-            Optional<Class<? extends AttributeConverter<X, Y>>> optionalConverter = field.getConverter();
+            Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
             if (optionalConverter.isPresent()) {
-                AttributeConverter<X, Y> attributeConverter = converter.getConverters().get(optionalConverter.get());
+                AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
                 Object attributeConverted = attributeConverter.convertToEntityAttribute((Y) value.get());
-                field.write(instance, field.getValue(Value.of(attributeConverted)));
+                field.write(instance, Value.of(attributeConverted).get(field.getType()));
             } else {
-                field.write(instance, field.getValue(value));
+                field.write(instance, value.get(field.getType()));
             }
         }
     }
@@ -129,11 +125,11 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
-                                      FieldMapping field, AbstractDocumentEntityConverter converter) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
             document.ifPresent(convertDocument(instance, field, converter));
         }
 
-        private <T> Consumer<Document> convertDocument(T instance, FieldMapping field, AbstractDocumentEntityConverter converter) {
+        private <T> Consumer<Document> convertDocument(T instance, FieldMetadata field, LiteDocumentEntityConverter converter) {
             return document -> {
                 GenericFieldMapping genericField = (GenericFieldMapping) field;
                 Collection collection = genericField.getCollectionInstance();

@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.artemis.lite.document;
 
 import jakarta.nosql.document.Document;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 
 import java.util.List;
@@ -23,5 +24,5 @@ import java.util.Optional;
 interface DocumentFieldConverter {
 
     <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document, FieldMetadata field,
-                           LiteDocumentEntityConverter converter);
+                           LiteDocumentEntityConverter converter, ClassMappings mappings);
 }
