@@ -19,7 +19,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * A collection supplier to create an {@link Collection} by SPI
+ * A collection supplier to create an {@link Collection}
+ *
  * @param <T> the collection instance
  */
 public interface CollectionSupplier<T extends Collection<?>> extends Supplier<T>, Predicate<Class<?>> {
