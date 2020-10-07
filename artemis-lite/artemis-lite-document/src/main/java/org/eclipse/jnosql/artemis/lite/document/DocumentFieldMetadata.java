@@ -26,7 +26,6 @@ import org.eclipse.jnosql.artemis.lite.metadata.FieldTypeUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import static java.util.Collections.singletonList;
 
@@ -85,7 +84,7 @@ class DocumentFieldMetadata implements FieldMetadata {
     }
 
     @Override
-    public Set<Class<?>> getArguments() {
+    public List<Class<?>> getArguments() {
         return field.getArguments();
     }
 
@@ -116,7 +115,7 @@ class DocumentFieldMetadata implements FieldMetadata {
     }
 
     private boolean isEmbeddableElement(ClassMappings mappings) {
-        Set<Class<?>> arguments = getArguments();
+        List<Class<?>> arguments = getArguments();
         if (!arguments.isEmpty()) {
             Class<?> entity = arguments.stream().findFirst().get();
             return !mappings.findByClass(entity).isEmpty();
