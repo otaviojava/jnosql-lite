@@ -19,7 +19,9 @@ import jakarta.nosql.TypeReference;
 import jakarta.nosql.Value;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
+import jakarta.nosql.mapping.MappingException;
 import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.CollectionSupplier;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldType;
 
@@ -129,11 +131,15 @@ class DocumentFieldConverters {
 
         private <T> Consumer<Document> convertDocument(T instance, FieldMetadata field, LiteDocumentEntityConverter converter) {
             return document -> {
-                GenericFieldMapping genericField = (GenericFieldMapping) field;
-                Collection collection = genericField.getCollectionInstance();
+
+                CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
+                Collection collection = supplier.get();
                 List<List<Document>> embeddable = (List<List<Document>>) document.get();
                 for (List<Document> documentList : embeddable) {
-                    Object element = converter.toEntity(genericField.getElementType(), documentList);
+                    Set<Class<?>> arguments = field.getArguments();
+                    Class<?> type = arguments.stream().findFirst().orElseThrow(() -> new MappingException("There is an issue in the field: "
+                            + field.getName() + " in the class " + instance.getClass()));
+                    Object element = converter.toEntity(type, documentList);
                     collection.add(element);
                 }
                 field.write(instance, collection);
