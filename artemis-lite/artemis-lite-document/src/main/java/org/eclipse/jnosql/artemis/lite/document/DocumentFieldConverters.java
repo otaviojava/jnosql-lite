@@ -23,7 +23,6 @@ import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldType;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -75,16 +74,16 @@ class DocumentFieldConverters {
                     for (Map.Entry entry : (Set<Map.Entry>) map.entrySet()) {
                         embeddedDocument.add(Document.of(entry.getKey().toString(), entry.getValue()));
                     }
-                    field.write(instance, converter.toEntity(field.getNativeField().getType(), embeddedDocument));
+                    field.write(instance, converter.toEntity(field.getType(), embeddedDocument));
 
                 } else {
-                    field.write(instance, converter.toEntity(field.getNativeField().getType(),
+                    field.write(instance, converter.toEntity(field.getType(),
                             sudDocument.get(new TypeReference<List<Document>>() {
                             })));
                 }
 
             } else {
-                field.write(instance, converter.toEntity(field.getNativeField().getType(), documents));
+                field.write(instance, converter.toEntity(field.getType(), documents));
             }
         }
     }
@@ -96,8 +95,7 @@ class DocumentFieldConverters {
         public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
 
-            Field nativeField = field.getNativeField();
-            Object subEntity = converter.toEntity(nativeField.getType(), documents);
+            Object subEntity = converter.toEntity(field.getType(), documents);
             field.write(instance, subEntity);
 
         }
