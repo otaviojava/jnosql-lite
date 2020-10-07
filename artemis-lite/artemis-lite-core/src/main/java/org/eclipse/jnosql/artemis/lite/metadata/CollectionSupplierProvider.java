@@ -31,6 +31,9 @@ final class CollectionSupplierProvider {
         SUPPLIER.add(new TreeSetSupplier());
     }
 
+    private CollectionSupplierProvider() {
+    }
+
     static CollectionSupplier<?> find(Class<?> collectionType) {
         return SUPPLIER.stream()
                 .filter(c -> c.test(collectionType))
