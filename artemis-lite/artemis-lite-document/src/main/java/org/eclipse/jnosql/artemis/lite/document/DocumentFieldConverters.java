@@ -16,6 +16,7 @@ package org.eclipse.jnosql.artemis.lite.document;
 
 
 import jakarta.nosql.TypeReference;
+import jakarta.nosql.TypeSupplier;
 import jakarta.nosql.Value;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
@@ -24,6 +25,7 @@ import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.CollectionSupplier;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldType;
+import org.eclipse.jnosql.artemis.lite.metadata.FieldTypeUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -116,7 +118,17 @@ class DocumentFieldConverters {
                 Object attributeConverted = attributeConverter.convertToEntityAttribute((Y) value.get());
                 field.write(instance, Value.of(attributeConverted).get(field.getType()));
             } else {
-                field.write(instance, value.get(field.getType()));
+                switch (FieldTypeUtil.of(field, mappings)) {
+                    case COLLECTION:
+                    case MAP:
+                        TypeSupplier<?> typeSupplier = () -> DocumentLiteParameterizedType.of(field);
+                        field.write(instance, value.get(typeSupplier));
+                        return;
+                    default:
+                        field.write(instance, value.get(field.getType()));
+                        return;
+                }
+
             }
         }
     }
