@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.artemis.lite.metadata;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -24,4 +25,9 @@ import java.util.function.Supplier;
  * @param <T> the collection instance
  */
 public interface CollectionSupplier<T extends Collection<?>> extends Supplier<T>, Predicate<Class<?>> {
+
+    static CollectionSupplier<?> find(Class<?> collectionType) {
+        Objects.requireNonNull(collectionType, "collectionType is required");
+        return CollectionSupplierProvider.find(collectionType);
+    }
 }
