@@ -73,7 +73,7 @@ public final class {{className}} implements FieldMetadata {
    }
 
    @Override
-   public Set<Class<?>> getArguments() {
-    return Collections.unmodifiableSet(arguments);
+   public List<Class<?>> getArguments() {
+    return Collections.unmodifiableList(arguments);
    }
 }
