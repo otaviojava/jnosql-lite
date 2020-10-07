@@ -17,8 +17,8 @@ package org.eclipse.jnosql.artemis.lite.metadata;
 
 import jakarta.nosql.mapping.AttributeConverter;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 /**
  * This class represents the information from
@@ -84,5 +84,5 @@ public interface FieldMetadata {
      * Returns the parameters in the field.
      * @return the field arguments
      */
-    Set<Class<?>> getArguments();
+    List<Class<?>> getArguments();
 }
