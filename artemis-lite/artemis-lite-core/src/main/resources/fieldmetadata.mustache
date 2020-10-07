@@ -14,8 +14,8 @@
 */
 package {{packageName}};
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Collections;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 import jakarta.nosql.mapping.AttributeConverter;
@@ -25,12 +25,12 @@ import java.util.Optional;
 @Generated(value= "JNoSQL Lite FieldMetadata Generator", date = "{{now}}")
 public final class {{className}} implements FieldMetadata {
 
-  private final Set<Class<?>> arguments;
+  private final List<Class<?>> arguments;
 
   private final AttributeConverter<?, ?> converter;
 
   public {{className}}() {
-    this.arguments = new HashSet<>();
+    this.arguments = new ArrayList<>();
     {{#arguments}}
     this.arguments.add({{.}}.class);
     {{/arguments}}
