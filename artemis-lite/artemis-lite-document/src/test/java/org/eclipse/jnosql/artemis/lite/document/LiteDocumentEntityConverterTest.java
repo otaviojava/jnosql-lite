@@ -261,7 +261,7 @@ class LiteDocumentEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertToDocumentWhenHaConverter() {
+    public void shouldConvertToDocumentWhenHasConverter() {
         Worker worker = new Worker();
         Job job = new Job();
         job.setCity("Sao Paulo");
