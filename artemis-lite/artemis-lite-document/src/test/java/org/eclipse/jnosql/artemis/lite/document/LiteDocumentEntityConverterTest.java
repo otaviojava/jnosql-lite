@@ -335,7 +335,6 @@ class LiteDocumentEntityConverterTest {
 
     }
 
-
     @Test
     public void shouldConvertSubEntity() {
         ZipCode zipcode = new ZipCode();
