@@ -162,13 +162,12 @@ public class CompilerTest {
 
     @Test
     public void shouldIdentifyAsEmbeddable() {
-        final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person10.java");
-        final JavaFileObject javaFileObject2 = JavaFileObjects.forResource("Director.java");
+        final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person11.java");
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
-                .compile(javaFileObject, javaFileObject2);
+                .compile(javaFileObject);
         assertThat(compilation).succeeded();
     }
 

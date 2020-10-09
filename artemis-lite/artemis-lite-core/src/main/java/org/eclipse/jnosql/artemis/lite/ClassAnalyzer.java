@@ -17,6 +17,7 @@ package org.eclipse.jnosql.artemis.lite;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import jakarta.nosql.mapping.Embeddable;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.MappedSuperclass;
 
@@ -111,7 +112,7 @@ public class ClassAnalyzer implements Supplier<String> {
 
     private EntityModel getMetadata(TypeElement element, List<String> fields) {
         final Entity annotation = element.getAnnotation(Entity.class);
-        final  boolean embedded = Objects.nonNull(element.getAnnotation(MappedSuperclass.class));
+        final  boolean embedded = Objects.nonNull(element.getAnnotation(Embeddable.class));
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
         String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
