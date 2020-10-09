@@ -19,12 +19,17 @@ import jakarta.nosql.document.DocumentCollectionManager;
 import jakarta.nosql.document.DocumentDeleteQuery;
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.document.DocumentQuery;
+import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.IdNotFoundException;
 import jakarta.nosql.mapping.Page;
 import jakarta.nosql.mapping.PreparedStatement;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
 import jakarta.nosql.mapping.document.DocumentQueryPagination;
 import jakarta.nosql.mapping.document.DocumentTemplate;
+import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
+import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
 
 import java.time.Duration;
 import java.util.Iterator;
@@ -43,15 +48,19 @@ public class LiteDocumentTemplate implements DocumentTemplate {
 
     private final DocumentCollectionManager manager;
 
+    private final ClassMappings mappings;
+
     public LiteDocumentTemplate(DocumentCollectionManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteDocumentEntityConverter();
+        this.mappings = new DefaultClassMappings();
     }
 
     @Override
     public <T> T insert(T entity) {
         requireNonNull(entity, "entity is required");
-        return getWorkflow().flow(entity, insert);
+        DocumentEntity documentEntity = this.converter.toDocument(entity);
+        return converter.toEntity(entity, manager.insert(documentEntity));
     }
 
 
@@ -59,7 +68,8 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     public <T> T insert(T entity, Duration ttl) {
         requireNonNull(entity, "entity is required");
         requireNonNull(ttl, "ttl is required");
-        return getWorkflow().flow(entity, e -> getManager().insert(e, ttl));
+        DocumentEntity documentEntity = this.converter.toDocument(entity);
+        return converter.toEntity(entity, manager.insert(documentEntity, ttl));
     }
 
     @Override
@@ -81,7 +91,8 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     @Override
     public <T> T update(T entity) {
         requireNonNull(entity, "entity is required");
-        return getWorkflow().flow(entity, update);
+        DocumentEntity documentEntity = this.converter.toDocument(entity);
+        return converter.toEntity(entity, manager.update(documentEntity));
     }
 
     @Override
@@ -94,8 +105,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     @Override
     public void delete(DocumentDeleteQuery query) {
         requireNonNull(query, "query is required");
-        getPersistManager().firePreDeleteQuery(query);
-        getManager().delete(query);
+        this.manager.delete(query);
     }
 
     @Override
@@ -117,11 +127,11 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         Objects.requireNonNull(query, "query is required");
         final Stream<T> entities = select(query);
         final Iterator<T> iterator = entities.iterator();
-        if(!iterator.hasNext()) {
+        if (!iterator.hasNext()) {
             return Optional.empty();
         }
         final T entity = iterator.next();
-        if(!iterator.hasNext()) {
+        if (!iterator.hasNext()) {
             return Optional.of(entity);
         }
         throw new NonUniqueResultException("No unique result found to the query: " + query);
@@ -131,14 +141,13 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     public <T, K> Optional<T> find(Class<T> entityClass, K id) {
         requireNonNull(entityClass, "entityClass is required");
         requireNonNull(id, "id is required");
-        ClassMapping classMapping = getClassMappings().get(entityClass);
-        FieldMapping idField = classMapping.getId()
+        EntityMetadata entityMetadata = mappings.get(entityClass);
+        FieldMetadata idField = entityMetadata.getId()
                 .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
-
-        Object value = ConverterUtil.getValue(id, classMapping, idField.getFieldName(), getConverters());
-        DocumentQuery query = DocumentQuery.select().from(classMapping.getName())
+        Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
+        Object value = converter.map(c -> c.convertToDatabaseColumn(id)).orElse(id);
+        DocumentQuery query = DocumentQuery.select().from(entityMetadata.getName())
                 .where(idField.getName()).eq(value).build();
-
         return singleResult(query);
     }
 
@@ -146,15 +155,13 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     public <T, K> void delete(Class<T> entityClass, K id) {
         requireNonNull(entityClass, "entityClass is required");
         requireNonNull(id, "id is required");
-
-        ClassMapping classMapping = getClassMappings().get(entityClass);
-        FieldMapping idField = classMapping.getId()
+        EntityMetadata entityMetadata = mappings.get(entityClass);
+        FieldMetadata idField = entityMetadata.getId()
                 .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
-
-        Object value = ConverterUtil.getValue(id, classMapping, idField.getFieldName(), getConverters());
-        DocumentDeleteQuery query = DocumentDeleteQuery.delete().from(classMapping.getName())
+        Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
+        Object value = converter.map(c -> c.convertToDatabaseColumn(id)).orElse(id);
+        DocumentDeleteQuery query = DocumentDeleteQuery.delete().from(entityMetadata.getName())
                 .where(idField.getName()).eq(value).build();
-
         delete(query);
     }
 
@@ -184,23 +191,22 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         return new DocumentPreparedStatement(PARSER.prepare(query, getManager(), getObserver()), getConverter());
     }
 
-
     @Override
     public long count(String documentCollection) {
-        return getManager().count(documentCollection);
+        return this.manager.count(documentCollection);
     }
 
+    @Override
     public <T> long count(Class<T> entityClass) {
         requireNonNull(entityClass, "entityClass is required");
-        ClassMapping classMapping = getClassMappings().get(entityClass);
-        return getManager().count(classMapping.getName());
+        EntityMetadata entityMetadata = mappings.get(entityClass);
+        return this.manager.count(entityMetadata.getName());
     }
 
     private <T> Stream<T> executeQuery(DocumentQuery query) {
         requireNonNull(query, "query is required");
-        getPersistManager().firePreQuery(query);
-        Stream<DocumentEntity> entities = getManager().select(query);
-        Function<DocumentEntity, T> function = e -> getConverter().toEntity(e);
+        Stream<DocumentEntity> entities = this.manager.select(query);
+        Function<DocumentEntity, T> function = e -> this.converter.toEntity(e);
         return entities.map(function);
     }
 
