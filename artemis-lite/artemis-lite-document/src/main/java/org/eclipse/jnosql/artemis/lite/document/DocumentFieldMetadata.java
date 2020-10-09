@@ -95,7 +95,7 @@ class DocumentFieldMetadata implements FieldMetadata {
     public <X, Y> List<Document> toDocument(DocumentEntityConverter converter, ClassMappings mappings) {
         FieldType fieldType = FieldTypeUtil.of(this, mappings);
 
-        if (FieldType.EMBEDDED.equals(getType())) {
+        if (FieldType.EMBEDDED.equals(fieldType)) {
             return converter.toDocument(read()).getDocuments();
         } else if (FieldType.SUB_ENTITY.equals(fieldType)) {
             return singletonList(Document.of(getName(), converter.toDocument(this.read()).getDocuments()));
