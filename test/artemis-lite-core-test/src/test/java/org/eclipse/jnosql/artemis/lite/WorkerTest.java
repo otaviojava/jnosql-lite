@@ -26,7 +26,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class WorkerTest {
 
@@ -161,7 +160,7 @@ public class WorkerTest {
     public void shouldReturnGenerics() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
         FieldMetadata contacts = groupByName.get("contacts");
-        Set<Class<?>> arguments = contacts.getArguments();
+        List<Class<?>> arguments = contacts.getArguments();
         Assertions.assertArrayEquals(new Class<?>[]{String.class}, arguments.toArray());
     }
 }

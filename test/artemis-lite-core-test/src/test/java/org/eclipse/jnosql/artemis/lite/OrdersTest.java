@@ -136,7 +136,7 @@ public class OrdersTest {
     public void shouldReturnGenerics() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
         FieldMetadata items = groupByName.get("items");
-        Set<Class<?>> arguments = items.getArguments();
+        List<Class<?>> arguments = items.getArguments();
         Assertions.assertArrayEquals(new Class<?>[]{Product.class}, arguments.toArray());
     }
 
@@ -144,7 +144,7 @@ public class OrdersTest {
     public void shouldReturnConverter() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
         FieldMetadata items = groupByName.get("items");
-        Set<Class<?>> arguments = items.getArguments();
+        List<Class<?>> arguments = items.getArguments();
         Class<?> argument = arguments.stream().findFirst().get();
         EntityMetadata product = this.mappings.get(argument);
         FieldMetadata value = product.getFieldMapping("value").get();
