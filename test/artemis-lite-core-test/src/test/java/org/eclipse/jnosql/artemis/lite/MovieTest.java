@@ -110,18 +110,21 @@ public class MovieTest {
     @Test
     public void shouldSetter() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
-        Animal animal = new Animal();
+        Movie movie = new Movie();
 
-        String name = this.entityMetadata.getColumnField("name");
-        String color = this.entityMetadata.getColumnField("color");
-        FieldMetadata fieldName = groupByName.get(name);
-        FieldMetadata fieldColor = groupByName.get(color);
+        Director sample = new Director();
+        movie.setDirector(sample);
 
+        String title = this.entityMetadata.getColumnField("title");
+        String director = this.entityMetadata.getColumnField("director");
+        FieldMetadata fieldTitle = groupByName.get(title);
+        FieldMetadata fieldDirector = groupByName.get(director);
 
-        fieldColor.write(animal, "blue");
-        fieldName.write(animal, "ada");
-        Assertions.assertEquals("blue", fieldColor.read(animal));
-        Assertions.assertEquals("ada", fieldName.read(animal));
+        fieldTitle.write(movie, "Movie");
+        fieldDirector.write(movie, sample);
+        Assertions.assertEquals(sample, fieldDirector.read(movie));
+        Assertions.assertEquals("Movie", fieldTitle.read(movie));
+
 
     }
 
