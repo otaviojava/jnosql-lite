@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.artemis.lite.document;
 
 import jakarta.nosql.NonUniqueResultException;
+import jakarta.nosql.Value;
 import jakarta.nosql.document.DocumentCollectionManager;
 import jakarta.nosql.document.DocumentDeleteQuery;
 import jakarta.nosql.document.DocumentEntity;
@@ -152,7 +153,8 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         FieldMetadata idField = entityMetadata.getId()
                 .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
         Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
-        Object value = converter.map(c -> c.convertToDatabaseColumn(id)).orElse(id);
+        Object value = converter.map(c -> c.convertToDatabaseColumn(id))
+                .orElse(Value.of(id).get(idField.getType()));
         DocumentQuery query = DocumentQuery.select().from(entityMetadata.getName())
                 .where(idField.getName()).eq(value).build();
         return singleResult(query);
@@ -166,7 +168,8 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         FieldMetadata idField = entityMetadata.getId()
                 .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
         Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
-        Object value = converter.map(c -> c.convertToDatabaseColumn(id)).orElse(id);
+        Object value = converter.map(c -> c.convertToDatabaseColumn(id))
+                .orElse(Value.of(id).get(idField.getType()));
         DocumentDeleteQuery query = DocumentDeleteQuery.delete().from(entityMetadata.getName())
                 .where(idField.getName()).eq(value).build();
         delete(query);
