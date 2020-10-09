@@ -15,7 +15,6 @@
 package org.eclipse.jnosql.artemis.lite.document;
 
 import jakarta.nosql.NonUniqueResultException;
-import jakarta.nosql.ServiceLoaderProvider;
 import jakarta.nosql.document.DocumentCollectionManager;
 import jakarta.nosql.document.DocumentDeleteQuery;
 import jakarta.nosql.document.DocumentEntity;
