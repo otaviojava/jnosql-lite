@@ -96,7 +96,7 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
         final Predicate<String> isElementType = k -> {
             FieldMetadata fieldMetadata = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(fieldMetadata, mappings);
-            return FieldType.EMBEDDED.equals(type) || FieldType.EMBEDDED_ENTITY.equals(type);
+            return FieldType.EMBEDDED.equals(type) || FieldType.SUB_ENTITY.equals(type);
         };
 
         fieldsGroupByName.keySet().stream()

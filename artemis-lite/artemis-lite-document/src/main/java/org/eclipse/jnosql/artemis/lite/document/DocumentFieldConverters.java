@@ -16,7 +16,6 @@ package org.eclipse.jnosql.artemis.lite.document;
 
 
 import jakarta.nosql.TypeReference;
-import jakarta.nosql.TypeSupplier;
 import jakarta.nosql.Value;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
@@ -47,7 +46,7 @@ class DocumentFieldConverters {
         DocumentFieldConverter get(FieldMetadata field, FieldType type, ClassMappings mappings) {
             if (FieldType.EMBEDDED.equals(type)) {
                 return embeddedFieldConverter;
-            } else if (FieldType.EMBEDDED_ENTITY.equals(type)) {
+            } else if (FieldType.SUB_ENTITY.equals(type)) {
                 return subEntityConverter;
             } else if (isCollectionEmbeddable(field, type, mappings)) {
                 return embeddableConverter;
