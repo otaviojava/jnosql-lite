@@ -47,7 +47,7 @@ public final class FieldTypeUtil {
             return entityMetadata
                     .map(EntityMetadata::isEmbedded)
                     .orElse(false)
-                    ? FieldType.EMBEDDED : FieldType.EMBEDDED_ENTITY;
+                    ? FieldType.EMBEDDED : FieldType.SUB_ENTITY;
 
         }
 
