@@ -15,10 +15,13 @@
 package org.eclipse.jnosql.artemis.lite.document;
 
 import jakarta.nosql.NonUniqueResultException;
+import jakarta.nosql.ServiceLoaderProvider;
 import jakarta.nosql.document.DocumentCollectionManager;
 import jakarta.nosql.document.DocumentDeleteQuery;
 import jakarta.nosql.document.DocumentEntity;
+import jakarta.nosql.document.DocumentObserverParser;
 import jakarta.nosql.document.DocumentQuery;
+import jakarta.nosql.document.DocumentQueryParser;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.IdNotFoundException;
 import jakarta.nosql.mapping.Page;
@@ -30,6 +33,7 @@ import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
+import org.eclipse.jnosql.diana.document.query.DefaultDocumentQueryParser;
 
 import java.time.Duration;
 import java.util.Iterator;
@@ -44,16 +48,21 @@ import static java.util.Objects.requireNonNull;
 
 public class LiteDocumentTemplate implements DocumentTemplate {
 
+    private static final DocumentQueryParser PARSER = new DefaultDocumentQueryParser();
+
     private final DocumentEntityConverter converter;
 
     private final DocumentCollectionManager manager;
 
     private final ClassMappings mappings;
 
+    private final DocumentObserverParser observerParser;
+
     public LiteDocumentTemplate(DocumentCollectionManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteDocumentEntityConverter();
         this.mappings = new DefaultClassMappings();
+        this.observerParser = new LiteDocumentMapperObserver(this.mappings);
     }
 
     @Override
@@ -121,7 +130,6 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         return new DocumentPage<>(this, entities, query);
     }
 
-
     @Override
     public <T> Optional<T> singleResult(DocumentQuery query) {
         Objects.requireNonNull(query, "query is required");
@@ -168,7 +176,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     @Override
     public <T> Stream<T> query(String query) {
         requireNonNull(query, "query is required");
-        return PARSER.query(query, getManager(), getObserver()).map(c -> (T) getConverter().toEntity(c));
+        return PARSER.query(query, this.manager, this.observerParser).map(c -> (T) this.converter.toEntity(c));
     }
 
     @Override
@@ -188,7 +196,8 @@ public class LiteDocumentTemplate implements DocumentTemplate {
 
     @Override
     public PreparedStatement prepare(String query) {
-        return new DocumentPreparedStatement(PARSER.prepare(query, getManager(), getObserver()), getConverter());
+        return new DocumentPreparedStatement(PARSER.prepare(query, this.manager, this.observerParser),
+                this.converter);
     }
 
     @Override
