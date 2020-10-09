@@ -15,14 +15,14 @@
 package org.eclipse.jnosql.artemis.lite;
 
 
+import jakarta.nosql.mapping.Embeddable;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.MappedSuperclass;
 
 @Entity
-@MappedSuperclass
-public class Person10 {
+@Embeddable
+public class Person11 {
 
     @Id
     private Long id;
