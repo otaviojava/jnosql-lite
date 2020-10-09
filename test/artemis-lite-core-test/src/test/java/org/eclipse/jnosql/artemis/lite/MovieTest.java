@@ -36,7 +36,7 @@ public class MovieTest {
     @BeforeEach
     public void setUp() {
         this.mappings = new DefaultClassMappings();
-        this.entityMetadata = this.mappings.get(Animal.class);
+        this.entityMetadata = this.mappings.get(Movie.class);
     }
 
     @Test
@@ -98,13 +98,13 @@ public class MovieTest {
         sample.setName("Director name");
         movie.setDirector(sample);
 
-        String name = this.entityMetadata.getColumnField("name");
+        String title = this.entityMetadata.getColumnField("title");
         String director = this.entityMetadata.getColumnField("director");
-        FieldMetadata fieldName = groupByName.get(name);
+        FieldMetadata fieldTitle = groupByName.get(title);
         FieldMetadata fieldDirector = groupByName.get(director);
 
-        Assertions.assertEquals("Movie", fieldDirector.read(movie));
-        Assertions.assertEquals("sample", fieldName.read(movie));
+        Assertions.assertEquals(sample, fieldDirector.read(movie));
+        Assertions.assertEquals("Movie", fieldTitle.read(movie));
     }
 
     @Test
