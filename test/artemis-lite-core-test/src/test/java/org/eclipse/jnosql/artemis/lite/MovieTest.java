@@ -28,7 +28,6 @@ import java.util.Optional;
 
 public class MovieTest {
 
-
     private ClassMappings mappings;
 
     private EntityMetadata entityMetadata;
@@ -125,7 +124,16 @@ public class MovieTest {
         Assertions.assertEquals(sample, fieldDirector.read(movie));
         Assertions.assertEquals("Movie", fieldTitle.read(movie));
 
+    }
 
+    @Test
+    public void shouldReturnEmbeddedAsTrue() {
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        String director = this.entityMetadata.getColumnField("director");
+        FieldMetadata fieldDirector = groupByName.get(director);
+        Class<?> type = fieldDirector.getType();
+        EntityMetadata entityMetadata = mappings.findByClass(type).get();
+        Assertions.assertTrue(entityMetadata.isEmbedded());
     }
 
 }
