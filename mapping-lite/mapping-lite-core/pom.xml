@@ -18,12 +18,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.eclipse.jnosql.lite.artemis</groupId>
-        <artifactId>artemis-lite-parent</artifactId>
+        <groupId>org.eclipse.jnosql.lite.mapping</groupId>
+        <artifactId>mapping-lite-parent</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>artemis-lite-core</artifactId>
+    <artifactId>mapping-lite-core</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -31,13 +31,13 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.jnosql.diana</groupId>
-            <artifactId>diana-core</artifactId>
+            <groupId>org.eclipse.jnosql.communication</groupId>
+            <artifactId>communication-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jnosql.diana</groupId>
-            <artifactId>diana-query</artifactId>
+            <groupId>org.eclipse.jnosql.communication</groupId>
+            <artifactId>communication-query</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
