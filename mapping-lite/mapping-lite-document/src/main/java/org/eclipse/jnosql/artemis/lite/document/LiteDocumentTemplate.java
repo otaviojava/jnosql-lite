@@ -33,7 +33,7 @@ import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
-import org.eclipse.jnosql.diana.document.query.DefaultDocumentQueryParser;
+import org.eclipse.jnosql.communication.document.query.DefaultDocumentQueryParser;
 
 import java.time.Duration;
 import java.util.Iterator;
