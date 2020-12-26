@@ -26,13 +26,13 @@
     </parent>
 
 
-    <groupId>org.eclipse.jnosql.lite.artemis</groupId>
-    <artifactId>artemis-lite-parent</artifactId>
+    <groupId>org.eclipse.jnosql.lite.mapping</groupId>
+    <artifactId>mapping-lite-parent</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>artemis-lite-core</module>
-        <module>artemis-lite-document</module>
+        <module>mapping-lite-core</module>
+        <module>mapping-lite-document</module>
     </modules>
 
     <dependencies>
