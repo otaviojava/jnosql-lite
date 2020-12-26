@@ -27,7 +27,7 @@
 
 
     <groupId>org.eclipse.jnosql.lite.test</groupId>
-    <artifactId>artemis-lite-test-parent</artifactId>
+    <artifactId>mapping-lite-test-parent</artifactId>
     <packaging>pom</packaging>
 
     <modules>
