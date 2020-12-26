@@ -130,7 +130,7 @@
     </build>
 
     <modules>
-        <module>artemis-lite</module>
+        <module>mapping-lite</module>
         <module>test</module>
     </modules>
 
