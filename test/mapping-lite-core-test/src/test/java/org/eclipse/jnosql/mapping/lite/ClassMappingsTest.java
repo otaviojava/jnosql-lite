@@ -14,11 +14,9 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
-import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
-import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
-import org.eclipse.jnosql.mapping.lite.Car;
-import org.eclipse.jnosql.mapping.lite.Person;
+import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
