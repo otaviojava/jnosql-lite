@@ -16,7 +16,6 @@ package org.eclipse.jnosql.mapping.lite.document;
 
 import jakarta.nosql.mapping.Repository;
 import jakarta.nosql.mapping.document.DocumentTemplate;
-import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
 
