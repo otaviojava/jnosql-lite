@@ -33,7 +33,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
-public abstract class AbstractRepository<T,K> implements Repository<T, K> {
+public abstract class AbstractLiteDocumentRepository<T,K> implements Repository<T, K> {
 
     protected abstract DocumentTemplate getTemplate();
 
