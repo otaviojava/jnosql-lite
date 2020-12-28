@@ -12,26 +12,38 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
-import jakarta.nosql.mapping.AttributeConverter;
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Id;
 
-import java.util.Objects;
+@Entity("car")
+public class Car {
 
-public class MoneyConverter implements AttributeConverter<Money, String> {
-    @Override
-    public String convertToDatabaseColumn(Money attribute) {
-        if (Objects.nonNull(attribute)) {
-            return attribute.toString();
-        }
-        return null;
+    @Id
+    private String name;
+
+    @Column
+    private String model;
+
+    Car() {
     }
 
-    @Override
-    public Money convertToEntityAttribute(String dbData) {
-        if (Objects.nonNull(dbData)) {
-            return Money.of(dbData);
-        }
-        return null;
+
+    String getName() {
+        return name;
+    }
+
+    void setName(String name) {
+        this.name = name;
+    }
+
+    protected String getModel() {
+        return model;
+    }
+
+    protected void setModel(String model) {
+        this.model = model;
     }
 }

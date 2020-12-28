@@ -12,41 +12,35 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
 import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Convert;
 import jakarta.nosql.mapping.Entity;
 
 @Entity
-public class Movie {
+public class Product {
 
     @Column
-    private String title;
+    private String name;
 
     @Column
-    private Director director;
+    @Convert(MoneyConverter.class)
+    private Money value;
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Director getDirector() {
-        return director;
+    public Money getValue() {
+        return value;
     }
 
-    public void setDirector(Director director) {
-        this.director = director;
-    }
-
-    @Override
-    public String toString() {
-        return "Movie{" +
-                "title='" + title + '\'' +
-                ", director=" + director +
-                '}';
+    public void setValue(Money value) {
+        this.value = value;
     }
 }

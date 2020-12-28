@@ -12,29 +12,24 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
-import jakarta.nosql.mapping.Embeddable;
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Convert;
 import jakarta.nosql.mapping.Entity;
 
 @Entity
-@Embeddable
-public class Director {
+public class Worker extends Person {
 
-    private String name;
+    @Column
+    @Convert(MoneyConverter.class)
+    private Money salary;
 
-    public String getName() {
-        return name;
+    public Money getSalary() {
+        return salary;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Director{" +
-                "name='" + name + '\'' +
-                '}';
+    public void setSalary(Money salary) {
+        this.salary = salary;
     }
 }

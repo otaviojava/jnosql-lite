@@ -12,38 +12,29 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
-import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Embeddable;
 import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
 
-@Entity("car")
-public class Car {
+@Entity
+@Embeddable
+public class Director {
 
-    @Id
     private String name;
 
-    @Column
-    private String model;
-
-    Car() {
-    }
-
-
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    protected String getModel() {
-        return model;
-    }
-
-    protected void setModel(String model) {
-        this.model = model;
+    @Override
+    public String toString() {
+        return "Director{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }

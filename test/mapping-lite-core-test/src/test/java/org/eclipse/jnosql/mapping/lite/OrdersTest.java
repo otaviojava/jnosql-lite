@@ -12,13 +12,16 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
 import jakarta.nosql.mapping.AttributeConverter;
 import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.artemis.lite.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.lite.Money;
+import org.eclipse.jnosql.mapping.lite.Orders;
+import org.eclipse.jnosql.mapping.lite.Product;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +31,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class OrdersTest {
 

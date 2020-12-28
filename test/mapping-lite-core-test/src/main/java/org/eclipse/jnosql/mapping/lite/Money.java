@@ -12,40 +12,36 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
-
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Id;
-
+import java.math.BigDecimal;
 import java.util.Objects;
 
-@Entity("kind")
-public class Animal {
+public class Money {
 
-    @Id
-    private String name;
+    private final String currency;
 
-    @Column
-    private String color;
+    private final BigDecimal bigDecimal;
 
-    public String getName() {
-        return name;
+    public Money(String currency, BigDecimal bigDecimal) {
+        this.currency = currency;
+        this.bigDecimal = bigDecimal;
     }
 
-    void setName(String name) {
-        this.name = name;
+    public static Money of(String dbData) {
+        String[] values = dbData.split(" ");
+        String currency = values[0];
+        BigDecimal value = BigDecimal.valueOf(Double.parseDouble(values[1]));
+        return new Money(currency, value);
     }
 
-    public String getColor() {
-        return color;
+    public String getCurrency() {
+        return currency;
     }
 
-    void setColor(String color) {
-        this.color = color;
+    public BigDecimal getBigDecimal() {
+        return bigDecimal;
     }
-
 
     @Override
     public boolean equals(Object o) {
@@ -55,21 +51,18 @@ public class Animal {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Animal animal = (Animal) o;
-        return Objects.equals(name, animal.name) &&
-                Objects.equals(color, animal.color);
+        Money money = (Money) o;
+        return Objects.equals(currency, money.currency) &&
+                Objects.equals(bigDecimal, money.bigDecimal);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, color);
+        return Objects.hash(currency, bigDecimal);
     }
 
     @Override
     public String toString() {
-        return "Animal{" +
-                "name='" + name + '\'' +
-                ", color='" + color + '\'' +
-                '}';
+        return currency + " " + bigDecimal.toString();
     }
 }

@@ -12,38 +12,40 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
+
 
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Id;
 
-import java.util.List;
 import java.util.Objects;
 
-@Entity
-public class Orders {
+@Entity("kind")
+public class Animal {
+
+    @Id
+    private String name;
 
     @Column
-    private String user;
+    private String color;
 
-    @Column
-    private List<Product> items;
-
-    public String getUser() {
-        return user;
+    public String getName() {
+        return name;
     }
 
-    public void setUser(String user) {
-        this.user = user;
+    void setName(String name) {
+        this.name = name;
     }
 
-    public List<Product> getItems() {
-        return items;
+    public String getColor() {
+        return color;
     }
 
-    public void setItems(List<Product> items) {
-        this.items = items;
+    void setColor(String color) {
+        this.color = color;
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -53,12 +55,21 @@ public class Orders {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Orders that = (Orders) o;
-        return Objects.equals(user, that.user);
+        Animal animal = (Animal) o;
+        return Objects.equals(name, animal.name) &&
+                Objects.equals(color, animal.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(user);
+        return Objects.hash(name, color);
+    }
+
+    @Override
+    public String toString() {
+        return "Animal{" +
+                "name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
     }
 }

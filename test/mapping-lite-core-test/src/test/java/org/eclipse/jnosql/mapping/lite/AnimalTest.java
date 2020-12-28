@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
 import org.eclipse.jnosql.artemis.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.artemis.lite.metadata.DefaultClassMappings;
