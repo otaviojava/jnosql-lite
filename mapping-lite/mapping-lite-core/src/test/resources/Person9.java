@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.artemis.lite;
+package org.eclipse.jnosql.mapping.lite;
 
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.Column;

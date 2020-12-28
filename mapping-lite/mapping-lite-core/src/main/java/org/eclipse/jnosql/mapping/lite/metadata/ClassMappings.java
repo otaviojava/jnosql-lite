@@ -17,7 +17,7 @@ package org.eclipse.jnosql.mapping.lite.metadata;
 import java.util.Optional;
 
 /**
- * This class contains all the class in cached way to be used inside artemis.
+ * This class contains all the class in cached way to be used inside mapping.
  */
 public interface ClassMappings {
 
