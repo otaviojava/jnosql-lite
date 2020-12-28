@@ -41,7 +41,7 @@ import java.util.stream.Stream;
 final class MetadataAppender {
 
     private static final Logger LOGGER = Logger.getLogger(MetadataAppender.class.getName());
-    private static final String PACKAGE = "org.eclipse.jnosql.artemis.lite.metadata.";
+    private static final String PACKAGE = "org.eclipse.jnosql.mapping.lite.metadata.";
     private static final String METADATA = "metadata";
     private final ProcessingEnvironment processingEnv;
 
