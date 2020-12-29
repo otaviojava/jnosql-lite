@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.mapping.lite.entities;
 
 import java.math.BigDecimal;
 import java.util.Objects;

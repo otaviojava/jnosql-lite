@@ -12,48 +12,33 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.mapping.lite.entities;
 
 import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Convert;
 import jakarta.nosql.mapping.Entity;
 
 @Entity
-public class Worker {
+public class ZipCode {
 
     @Column
-    private String name;
+    private String zip;
 
     @Column
-    private Job job;
+    private String plusFour;
 
-    @Column("money")
-    @Convert(MoneyConverter.class)
-    private Money salary;
-
-    public String getName() {
-        return name;
+    public String getZip() {
+        return zip;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setZip(String zip) {
+        this.zip = zip;
     }
 
-    public Job getJob() {
-        return job;
+    public String getPlusFour() {
+        return plusFour;
     }
 
-    public void setJob(Job job) {
-        this.job = job;
+    public void setPlusFour(String plusFour) {
+        this.plusFour = plusFour;
     }
-
-    public Money getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Money salary) {
-        this.salary = salary;
-    }
-
-
 }

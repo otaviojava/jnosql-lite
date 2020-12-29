@@ -12,19 +12,8 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.mapping.lite.entities;
 
-import jakarta.nosql.mapping.AttributeConverter;
-
-public class MoneyConverter implements AttributeConverter<Money, String> {
-
-    @Override
-    public String convertToDatabaseColumn(Money attribute) {
-        return attribute.toString();
-    }
-
-    @Override
-    public Money convertToEntityAttribute(String dbData) {
-        return Money.parse(dbData);
-    }
+public enum ContactType {
+    MOBILE, PHONE, EMAIL;
 }
