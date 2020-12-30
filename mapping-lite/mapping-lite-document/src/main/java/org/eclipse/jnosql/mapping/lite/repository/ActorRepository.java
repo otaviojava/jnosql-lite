@@ -2,6 +2,7 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import jakarta.nosql.mapping.Repository;
 import jakarta.nosql.mapping.document.DocumentTemplate;
+import org.eclipse.jnosql.mapping.lite.document.AbstractLiteDocumentRepository;
 import org.eclipse.jnosql.mapping.lite.entities.Actor;
 import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
