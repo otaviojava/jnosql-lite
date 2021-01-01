@@ -20,7 +20,6 @@ import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
-import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -36,8 +35,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
 
-@RepositoryLite
-public class ActorRepository<T,K> implements Repository<T, K> {
+public class ActorRepository implements Repository<Actor, Long> {
 
     private final DocumentTemplate template;
 
@@ -58,10 +56,10 @@ public class ActorRepository<T,K> implements Repository<T, K> {
     }
 
     @Override
-    public <S extends T> S save(S entity) {
+    public <S extends Actor> S save(S entity) {
         Objects.requireNonNull(entity, "Entity is required");
         Object id = getIdField().read(entity);
-        if (nonNull(id) && existsById((K) id)) {
+        if (nonNull(id) && existsById((Long) id)) {
             return getTemplate().update(entity);
         } else {
             return getTemplate().insert(entity);
@@ -69,31 +67,31 @@ public class ActorRepository<T,K> implements Repository<T, K> {
     }
 
     @Override
-    public <S extends T> Iterable<S> save(Iterable<S> entities) {
+    public <S extends Actor> Iterable<S> save(Iterable<S> entities) {
         requireNonNull(entities, "entities is required");
         return StreamSupport.stream(entities.spliterator(), false).map(this::save).collect(toList());
     }
 
     @Override
-    public void deleteById(K id) {
+    public void deleteById(Long id) {
         requireNonNull(id, "is is required");
         getTemplate().delete(getEntityClass(), id);
     }
 
     @Override
-    public void deleteById(Iterable<K> ids) {
+    public void deleteById(Iterable<Long> ids) {
         requireNonNull(ids, "ids is required");
         ids.forEach(this::deleteById);
     }
 
     @Override
-    public Optional<T> findById(K id) {
+    public Optional<Actor> findById(Long id) {
         requireNonNull(id, "id is required");
         return getTemplate().find(getEntityClass(), id);
     }
 
     @Override
-    public Iterable<T> findById(Iterable<K> ids) {
+    public Iterable<Actor> findById(Iterable<Long> ids) {
         requireNonNull(ids, "ids is required");
         return (Iterable) stream(ids.spliterator(), false)
                 .flatMap(optionalToStream()).collect(Collectors.toList());
@@ -111,17 +109,17 @@ public class ActorRepository<T,K> implements Repository<T, K> {
 
     private Function optionalToStream() {
         return id -> {
-            Optional entity = this.findById((K) id);
+            Optional entity = this.findById((Long) id);
             return entity.isPresent() ? Stream.of(entity.get()) : Stream.empty();
         };
     }
 
     @Override
-    public boolean existsById(K id) {
+    public boolean existsById(Long id) {
         return findById(id).isPresent();
     }
 
-    private Class<T> getEntityClass() {
-        return (Class<T>) getClassMapping().getClassInstance();
+    private Class<Actor> getEntityClass() {
+        return (Class<Actor>) getClassMapping().getClassInstance();
     }
 }
