@@ -14,8 +14,15 @@
  */
 package org.eclipse.jnosql.mapping.lite.metadata;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
 /**
  * This annotation enables a repository in JNoSQL lite.
  */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
 public @interface RepositoryLite {
 }
