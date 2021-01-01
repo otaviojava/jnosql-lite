@@ -22,6 +22,8 @@ import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 
+import java.util.Objects;
+
 public class ActorRepository extends AbstractLiteDocumentRepository<Actor, Long>
         implements Repository<Actor, Long> {
 
@@ -30,7 +32,7 @@ public class ActorRepository extends AbstractLiteDocumentRepository<Actor, Long>
     private final EntityMetadata metadata;
 
     public ActorRepository(DocumentTemplate template) {
-        this.template = template;
+        this.template = Objects.requireNonNull(template, "template is required");
         ClassMappings mappings = new DefaultClassMappings();
         this.metadata = mappings.get(Actor.class);
     }
