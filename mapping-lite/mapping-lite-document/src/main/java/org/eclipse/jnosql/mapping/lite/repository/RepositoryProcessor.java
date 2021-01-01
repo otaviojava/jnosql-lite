@@ -20,8 +20,9 @@ import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
-@SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
+@SupportedAnnotationTypes("org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite")
 public class RepositoryProcessor extends AbstractProcessor {
+
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         return false;
