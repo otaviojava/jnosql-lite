@@ -24,7 +24,8 @@ import java.util.Set;
 public class RepositoryProcessor extends AbstractProcessor {
 
     @Override
-    public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+    public boolean process(Set<? extends TypeElement> annotations,
+                           RoundEnvironment roundEnv) {
         return false;
     }
 }
