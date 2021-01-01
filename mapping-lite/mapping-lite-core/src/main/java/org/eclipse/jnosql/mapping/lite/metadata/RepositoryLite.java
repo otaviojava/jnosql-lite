@@ -14,5 +14,8 @@
  */
 package org.eclipse.jnosql.mapping.lite.metadata;
 
+/**
+ * This annotation enables a repository in JNoSQL lite.
+ */
 public @interface RepositoryLite {
 }
