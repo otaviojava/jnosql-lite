@@ -12,66 +12,41 @@
 *
 *   Otavio Santana
 */
-package org.eclipse.jnosql.mapping.lite.metadata;
+package {{package}};
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.nosql.mapping.Repository;
+import jakarta.nosql.mapping.document.DocumentTemplate;
+import org.eclipse.jnosql.mapping.lite.document.AbstractLiteDocumentRepository;
+import org.eclipse.jnosql.mapping.lite.entities.Actor;
+import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
+import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import java.util.Objects;
-import java.util.Optional;
 
 import javax.annotation.processing.Generated;
 
-@Generated(value= "JNoSQL Lite ClassMappings Generator", date = "{{now}}")
-public final class DefaultClassMappings implements ClassMappings {
+@Generated(value= "JNoSQL Lite Repository Generator", date = "{{now}}")
+public class {{entityType}}Repository extends AbstractLiteDocumentRepository<{{entityType}}, {{keyType}}>
+implements Repository<{{entityType}}, {{keyType}}> {
 
-    private final List<EntityMetadata> entities;
+    private final DocumentTemplate template;
 
-    public DefaultClassMappings() {
-        this.entities = new ArrayList<>();
-    {{#entities}}
-        this.entities.add(new {{.}}());
-    {{/entities}}
+    private final EntityMetadata metadata;
+
+    public ActorRepository(DocumentTemplate template) {
+           this.template = Objects.requireNonNull(template, "template is required");
+            ClassMappings mappings = new DefaultClassMappings();
+            this.metadata = mappings.get({{entityType}}.class);
+    }
+
+
+    @Override
+    protected DocumentTemplate getTemplate() {
+        return template;
     }
 
     @Override
-    public EntityMetadata get(Class<?> classEntity) {
-        Objects.requireNonNull(classEntity, "classEntity is required");
-        return entities.stream()
-                .filter(e -> classEntity.equals(e.getClassInstance()))
-                .findFirst()
-                .orElseThrow(() -> new ClassInformationNotFoundException("classEntity not found"));
+    protected EntityMetadata getClassMapping() {
+        return metadata;
     }
-
-    @Override
-    public EntityMetadata findByName(String name) {
-        Objects.requireNonNull(name, "name is required");
-        return entities.stream()
-                .filter(e -> name.equals(e.getName()))
-                .findFirst()
-                .orElseThrow(() -> new ClassInformationNotFoundException("classEntity not found"));
-    }
-
-    @Override
-    public Optional<EntityMetadata> findBySimpleName(String name) {
-        Objects.requireNonNull(name, "name is required");
-        return entities.stream()
-                .filter(e -> name.equals(e.getSimpleName()))
-                .findFirst();
-    }
-
-    @Override
-    public Optional<EntityMetadata> findByClassName(String name) {
-        Objects.requireNonNull(name, "name is required");
-        return entities.stream()
-                .filter(e -> name.equals(e.getClassName()))
-                .findFirst();
-    }
-
-   @Override
-   public Optional<EntityMetadata> findByClass(Class<?> classEntity) {
-       Objects.requireNonNull(classEntity, "classEntity is required");
-       return entities.stream()
-               .filter(e -> classEntity.equals(e.getClassInstance()))
-               .findFirst();
-   }
 }
