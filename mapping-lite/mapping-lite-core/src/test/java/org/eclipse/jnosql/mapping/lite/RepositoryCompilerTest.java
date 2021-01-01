@@ -16,10 +16,9 @@ package org.eclipse.jnosql.mapping.lite;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
-import org.junit.jupiter.api.Assertions;
+import org.eclipse.jnosql.mapping.lite.repository.RepositoryProcessor;
 import org.junit.jupiter.api.Test;
 
-import javax.tools.JavaFileObject;
 import java.io.IOException;
 
 import static com.google.testing.compile.CompilationSubject.assertThat;
