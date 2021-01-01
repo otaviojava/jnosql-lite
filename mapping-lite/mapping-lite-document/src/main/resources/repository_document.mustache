@@ -25,28 +25,17 @@ import java.util.Objects;
 
 import javax.annotation.processing.Generated;
 
-@Generated(value= "JNoSQL Lite Repository Generator", date = "{{now}}")
-public class {{entityType}}Repository extends AbstractLiteDocumentRepository<{{entityType}}, {{keyType}}>
+@Generated(value= "JNoSQL Lite Document Repository Generator", date = "{{now}}")
+public class {{entityType}}DocumentRepository extends AbstractLiteDocumentRepository<{{entityType}}, {{keyType}}>
 implements Repository<{{entityType}}, {{keyType}}> {
 
     private final DocumentTemplate template;
 
     private final EntityMetadata metadata;
 
-    public ActorRepository(DocumentTemplate template) {
+    public {{entityType}}(DocumentTemplate template) {
            this.template = Objects.requireNonNull(template, "template is required");
             ClassMappings mappings = new DefaultClassMappings();
             this.metadata = mappings.get({{entityType}}.class);
     }
 
-
-    @Override
-    protected DocumentTemplate getTemplate() {
-        return template;
-    }
-
-    @Override
-    protected EntityMetadata getClassMapping() {
-        return metadata;
-    }
-}
