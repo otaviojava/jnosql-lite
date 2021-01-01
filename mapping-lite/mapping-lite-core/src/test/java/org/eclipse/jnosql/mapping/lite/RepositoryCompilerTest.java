@@ -30,26 +30,15 @@ public class RepositoryCompilerTest {
     @Test
     public void shouldCompile() throws IOException {
 
-        final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person.java");
-
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
                 .withProcessors(new RepositoryProcessor())
-                .compile(javaFileObject);
+                .compile(JavaFileObjects.forResource("Person10.java"),
+                        JavaFileObjects.forResource("Person10Repository.java"));
         assertThat(compilation).succeeded();
     }
 
-    @Test
-    public void shouldReturnConstructorIssue() throws IOException {
-        final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person2.java");
-        Assertions.assertThrows(RuntimeException.class, () ->
-                javac()
-                        .withClasspathFrom(this.getClass().getClassLoader())
-                        .withOptions()
-                        .withProcessors(new EntityProcessor())
-                        .compile(javaFileObject));
-    }
 
 }
