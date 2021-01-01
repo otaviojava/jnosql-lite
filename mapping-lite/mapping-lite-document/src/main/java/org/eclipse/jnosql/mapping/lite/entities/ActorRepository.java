@@ -21,6 +21,7 @@ import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
 
+import javax.annotation.processing.Generated;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -34,7 +35,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
-
+@Generated(value= "JNoSQL Lite Document Repository Generator", date = "{{now}}")
 public class ActorRepository implements Repository<Actor, Long> {
 
     private final DocumentTemplate template;
