@@ -36,6 +36,7 @@ public class RepositoryCompilerTest {
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new EntityProcessor())
+                .withProcessors(new RepositoryProcessor())
                 .compile(javaFileObject);
         assertThat(compilation).succeeded();
     }
