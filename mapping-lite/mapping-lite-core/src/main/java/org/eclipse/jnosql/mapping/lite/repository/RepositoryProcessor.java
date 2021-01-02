@@ -17,24 +17,19 @@ package org.eclipse.jnosql.mapping.lite.repository;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import org.eclipse.jnosql.mapping.lite.ClassAnalyzer;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
 
 @SupportedAnnotationTypes("org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite")
 public class RepositoryProcessor extends AbstractProcessor {
 
-    private static final Logger LOGGER = Logger.getLogger(RepositoryProcessor.class.getName());
     private static final String TEMPLATE = "repository_document.mustache";
     private final Mustache template;
 
