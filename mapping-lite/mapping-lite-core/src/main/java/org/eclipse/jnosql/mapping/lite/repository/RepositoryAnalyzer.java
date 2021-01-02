@@ -18,11 +18,8 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.tools.Diagnostic;
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 final class RepositoryAnalyzer implements Supplier<String> {
-
-    private static final Logger LOGGER = Logger.getLogger(RepositoryAnalyzer.class.getName());
 
     private final Element entity;
 
@@ -36,7 +33,6 @@ final class RepositoryAnalyzer implements Supplier<String> {
     @Override
     public String get() {
         RepositoryElement element = RepositoryElement.of(entity, processingEnv);
-        LOGGER.info("The class is not a valid repository, it must extends Repository from Jakarta NoSQL");
         return null;
     }
 
