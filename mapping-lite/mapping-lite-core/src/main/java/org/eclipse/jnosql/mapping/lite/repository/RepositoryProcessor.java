@@ -23,6 +23,9 @@ import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,11 +47,15 @@ public class RepositoryProcessor extends AbstractProcessor {
                            RoundEnvironment roundEnv) {
 
         final List<String> repositories = new ArrayList<>();
-        for (TypeElement annotation : annotations) {
-            roundEnv.getElementsAnnotatedWith(annotation)
-                    .stream().map(e -> new RepositoryAnalyzer(e, processingEnv))
-                    .map(RepositoryAnalyzer::get)
-                    .forEach(repositories::add);
+        try {
+            for (TypeElement annotation : annotations) {
+                roundEnv.getElementsAnnotatedWith(annotation)
+                        .stream().map(e -> new RepositoryAnalyzer(e, processingEnv))
+                        .map(RepositoryAnalyzer::get)
+                        .forEach(repositories::add);
+            }
+        } catch (Exception exception) {
+            error(exception);
         }
         return false;
     }
@@ -56,5 +63,10 @@ public class RepositoryProcessor extends AbstractProcessor {
     private Mustache createTemplate() {
         MustacheFactory factory = new DefaultMustacheFactory();
         return factory.compile(TEMPLATE);
+    }
+
+    private void error(Exception exception) {
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "failed to write extension file: "
+                + exception.getMessage());
     }
 }
