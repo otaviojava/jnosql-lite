@@ -20,7 +20,7 @@ import javax.lang.model.element.TypeElement;
 
 import static java.util.Locale.ENGLISH;
 
-final class ProcessorUtil {
+public final class ProcessorUtil {
 
     private ProcessorUtil() {
     }
@@ -37,7 +37,7 @@ final class ProcessorUtil {
         return name.substring(0, 1).toUpperCase(ENGLISH) + name.substring(1);
     }
 
-    static boolean isTypeElement(Element element) {
+   public static boolean isTypeElement(Element element) {
         return element instanceof TypeElement;
     }
 }

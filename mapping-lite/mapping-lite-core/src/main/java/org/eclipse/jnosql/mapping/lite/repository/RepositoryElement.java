@@ -22,17 +22,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-final class RepositoryUtil {
+import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.isTypeElement;
 
-    private RepositoryUtil() {
-    }
+class RepositoryElement {
 
 
-    static boolean isTypeElement(Element element) {
-        return element instanceof TypeElement;
-    }
-
-    static Optional<TypeElement> valid(Element element) {
+    static RepositoryElement of(Element element) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;
             List<? extends TypeMirror> interfaces = typeElement.getInterfaces();
@@ -47,7 +42,6 @@ final class RepositoryUtil {
                 }
             }
         }
-
-        return Optional.empty();
+        throw new RuntimeException("");
     }
 }
