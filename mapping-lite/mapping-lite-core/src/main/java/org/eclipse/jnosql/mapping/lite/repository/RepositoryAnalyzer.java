@@ -14,12 +14,20 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import jakarta.nosql.mapping.Repository;
+
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 final class RepositoryAnalyzer implements Supplier<String> {
 
@@ -38,7 +46,23 @@ final class RepositoryAnalyzer implements Supplier<String> {
     public String get() {
         if (RepositoryUtil.isTypeElement(entity)) {
             TypeElement typeElement = (TypeElement) entity;
+
             LOGGER.info("Processing the interface repository: " + typeElement);
+            List<? extends TypeMirror> interfaces = typeElement.getInterfaces();
+            if (!interfaces.isEmpty()) {
+                TypeMirror typeMirror = interfaces.get(0);
+                if (typeMirror instanceof DeclaredType) {
+                    DeclaredType declaredType = (DeclaredType) typeMirror;
+                    List<String> collect = declaredType.getTypeArguments().stream()
+                            .map(TypeMirror::toString)
+                            .collect(Collectors.toList());
+                    System.out.println("" + collect);
+                }
+            }
+
+            if (ElementKind.INTERFACE.equals(typeElement.getKind()) && interfaces.contains(Repository.class)) {
+                LOGGER.info("Valid element");
+            }
         } else {
             LOGGER.info("The class is not a valid repository, it must extends Repository from Jakarta NoSQL");
         }
