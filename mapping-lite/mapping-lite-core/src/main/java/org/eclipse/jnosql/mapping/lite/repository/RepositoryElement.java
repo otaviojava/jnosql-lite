@@ -14,35 +14,49 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import jakarta.nosql.mapping.Repository;
+import org.eclipse.jnosql.mapping.lite.ValidationException;
+
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.isTypeElement;
+import static org.eclipse.jnosql.mapping.lite.repository.RepositoryUtil.findRepository;
 
 class RepositoryElement {
 
+    private final ProcessingEnvironment processingEnv;
+
+    private final Element element;
+
+    private final String entityType;
+
+    private final String keyType;
+
+    public RepositoryElement(ProcessingEnvironment processingEnv, Element element,
+                             String entityType, String keyType) {
+        this.processingEnv = processingEnv;
+        this.element = element;
+        this.entityType = entityType;
+        this.keyType = keyType;
+    }
 
     static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;
-            Optional<TypeMirror> mirror = RepositoryUtil.findRepository(typeElement.getInterfaces(), processingEnv);
+            Optional<TypeMirror> mirror = findRepository(typeElement.getInterfaces(), processingEnv);
             if (!mirror.isEmpty()) {
                 TypeMirror typeMirror = mirror.get();
-                if (typeMirror instanceof DeclaredType) {
-                    DeclaredType declaredType = (DeclaredType) typeMirror;
-                    List<String> collect = declaredType.getTypeArguments().stream()
-                            .map(TypeMirror::toString)
-                            .collect(Collectors.toList());
-                    System.out.println("" + collect);
-                }
+                List<String> parameters = RepositoryUtil.findParameters(typeMirror);
+                String entityType = parameters.get(0);
+                String keyType = parameters.get(1);
+                return new RepositoryElement(processingEnv, element, entityType, keyType);
             }
         }
-        throw new RuntimeException("");
+        throw new ValidationException("The interface " + element.toString() + "must extends " + Repository.class.getName());
     }
 }

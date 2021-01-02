@@ -17,24 +17,34 @@ package org.eclipse.jnosql.mapping.lite.repository;
 import jakarta.nosql.mapping.Repository;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 final class RepositoryUtil {
 
     static Optional<TypeMirror> findRepository(List<? extends TypeMirror> interfaces,
                                                ProcessingEnvironment processingEnv) {
-
         for (TypeMirror mirror : interfaces) {
             TypeElement element = (TypeElement) processingEnv.getTypeUtils().asElement(mirror);
             if (Repository.class.getName().equals(element.getQualifiedName().toString())) {
                 return Optional.of(mirror);
             }
         }
-
         return Optional.empty();
+    }
+
+    static List<String> findParameters(TypeMirror repository) {
+        if (repository instanceof DeclaredType) {
+            DeclaredType declaredType = (DeclaredType) repository;
+            return declaredType.getTypeArguments().stream()
+                    .map(TypeMirror::toString)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 }
