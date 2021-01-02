@@ -45,6 +45,10 @@ class RepositoryElement {
         this.keyType = keyType;
     }
 
+    public String getClassName() {
+        return element.getKind().name();
+    }
+
     static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;
@@ -59,4 +63,5 @@ class RepositoryElement {
         }
         throw new ValidationException("The interface " + element.toString() + "must extends " + Repository.class.getName());
     }
+
 }

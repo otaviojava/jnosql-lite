@@ -16,7 +16,6 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
-import javax.tools.Diagnostic;
 import java.util.function.Supplier;
 
 final class RepositoryAnalyzer implements Supplier<String> {
@@ -33,13 +32,8 @@ final class RepositoryAnalyzer implements Supplier<String> {
     @Override
     public String get() {
         RepositoryElement element = RepositoryElement.of(entity, processingEnv);
-        return null;
+
+        return element.getClassName();
     }
 
-
-    private void error(Exception exception, String entity) {
-        String message = String.format("The class is not a valid repository, it " +
-                "must extends Repository from Jakarta NoSQL", entity);
-        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message);
-    }
 }
