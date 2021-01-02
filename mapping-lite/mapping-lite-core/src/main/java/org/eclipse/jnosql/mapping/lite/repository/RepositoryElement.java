@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
@@ -27,12 +28,12 @@ import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.isTypeElement;
 class RepositoryElement {
 
 
-    static RepositoryElement of(Element element) {
+    static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;
-            List<? extends TypeMirror> interfaces = typeElement.getInterfaces();
-            if (!interfaces.isEmpty()) {
-                TypeMirror typeMirror = interfaces.get(0);
+            Optional<TypeMirror> mirror = RepositoryUtil.findRepository(typeElement.getInterfaces(), processingEnv);
+            if (!mirror.isEmpty()) {
+                TypeMirror typeMirror = mirror.get();
                 if (typeMirror instanceof DeclaredType) {
                     DeclaredType declaredType = (DeclaredType) typeMirror;
                     List<String> collect = declaredType.getTypeArguments().stream()

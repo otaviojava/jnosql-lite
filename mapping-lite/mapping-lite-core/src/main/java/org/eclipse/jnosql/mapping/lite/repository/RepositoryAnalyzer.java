@@ -14,21 +14,11 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
-import jakarta.nosql.mapping.Repository;
-
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Types;
 import javax.tools.Diagnostic;
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 final class RepositoryAnalyzer implements Supplier<String> {
 
@@ -38,20 +28,15 @@ final class RepositoryAnalyzer implements Supplier<String> {
 
     private final ProcessingEnvironment processingEnv;
 
-    RepositoryAnalyzer(Element entity, ProcessingEnvironment processingEnv) {
-        this.entity = entity;
+    RepositoryAnalyzer(Element repositoryType, ProcessingEnvironment processingEnv) {
+        this.entity = repositoryType;
         this.processingEnv = processingEnv;
     }
 
     @Override
     public String get() {
-        Optional<TypeElement> elementOptional = RepositoryUtil.valid(entity);
-        if (elementOptional.isPresent()) {
-            TypeElement typeElement = elementOptional.get();
-
-        } else {
-            LOGGER.info("The class is not a valid repository, it must extends Repository from Jakarta NoSQL");
-        }
+        RepositoryElement element = RepositoryElement.of(entity, processingEnv);
+        LOGGER.info("The class is not a valid repository, it must extends Repository from Jakarta NoSQL");
         return null;
     }
 
