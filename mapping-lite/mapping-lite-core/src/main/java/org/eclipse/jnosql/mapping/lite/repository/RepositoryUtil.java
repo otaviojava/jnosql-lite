@@ -15,13 +15,15 @@
 package org.eclipse.jnosql.mapping.lite.repository;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 
 final class RepositoryUtil {
 
     private RepositoryUtil() {
     }
 
-    public static boolean isTypeElement(Element entity) {
-        return false;
+
+    static boolean isTypeElement(Element element) {
+        return element instanceof TypeElement;
     }
 }
