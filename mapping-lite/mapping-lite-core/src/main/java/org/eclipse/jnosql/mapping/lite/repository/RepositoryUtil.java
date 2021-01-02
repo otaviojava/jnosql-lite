@@ -16,6 +16,11 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.TypeMirror;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 final class RepositoryUtil {
 
@@ -25,5 +30,24 @@ final class RepositoryUtil {
 
     static boolean isTypeElement(Element element) {
         return element instanceof TypeElement;
+    }
+
+    static Optional<TypeElement> valid(Element element) {
+        if (isTypeElement(element)) {
+            TypeElement typeElement = (TypeElement) element;
+            List<? extends TypeMirror> interfaces = typeElement.getInterfaces();
+            if (!interfaces.isEmpty()) {
+                TypeMirror typeMirror = interfaces.get(0);
+                if (typeMirror instanceof DeclaredType) {
+                    DeclaredType declaredType = (DeclaredType) typeMirror;
+                    List<String> collect = declaredType.getTypeArguments().stream()
+                            .map(TypeMirror::toString)
+                            .collect(Collectors.toList());
+                    System.out.println("" + collect);
+                }
+            }
+        }
+
+        return Optional.empty();
     }
 }
