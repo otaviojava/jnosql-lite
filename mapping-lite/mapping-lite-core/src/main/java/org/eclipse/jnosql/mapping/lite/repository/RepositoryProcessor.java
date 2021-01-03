@@ -22,9 +22,12 @@ import javax.tools.Diagnostic;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @SupportedAnnotationTypes("org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite")
 public class RepositoryProcessor extends AbstractProcessor {
+
+    private static final Logger LOGGER = Logger.getLogger(RepositoryProcessor.class.getName());
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
@@ -40,6 +43,9 @@ public class RepositoryProcessor extends AbstractProcessor {
             }
         } catch (Exception exception) {
             error(exception);
+        }
+        if (!repositories.isEmpty()) {
+            LOGGER.info("Repository processor has finished with those classes generated: " + repositories);
         }
         return false;
     }

@@ -24,8 +24,11 @@ import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.function.Supplier;
+import java.util.logging.Logger;
 
 final class RepositoryAnalyzer implements Supplier<String> {
+
+    private static final Logger LOGGER = Logger.getLogger(RepositoryAnalyzer.class.getName());
 
     private final Element entity;
 
@@ -38,10 +41,12 @@ final class RepositoryAnalyzer implements Supplier<String> {
 
     @Override
     public String get() {
+        LOGGER.info("Starting to process the repository processor with the class ");
         RepositoryElement element = RepositoryElement.of(entity, processingEnv);
         RepositoryTemplateType templateType = RepositoryTemplateType.of(element.getType());
         Filer filer = processingEnv.getFiler();
         RepositoryMetadata metadata = element.getMetadata();
+        LOGGER.info("Starting to generate the generate class to " + metadata.getQualified());
         try {
             JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified(), entity);
             try (Writer writer = fileObject.openWriter()) {
