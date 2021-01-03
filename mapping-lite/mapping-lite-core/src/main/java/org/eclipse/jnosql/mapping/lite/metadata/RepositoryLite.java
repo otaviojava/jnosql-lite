@@ -14,7 +14,6 @@
  */
 package org.eclipse.jnosql.mapping.lite.metadata;
 
-import jakarta.nosql.mapping.Database;
 import jakarta.nosql.mapping.DatabaseType;
 
 import java.lang.annotation.ElementType;
