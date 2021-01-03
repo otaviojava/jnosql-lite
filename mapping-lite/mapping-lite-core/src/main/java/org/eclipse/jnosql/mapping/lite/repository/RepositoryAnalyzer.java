@@ -14,8 +14,11 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.tools.JavaFileObject;
+import java.io.Writer;
 import java.util.function.Supplier;
 
 final class RepositoryAnalyzer implements Supplier<String> {
@@ -33,6 +36,12 @@ final class RepositoryAnalyzer implements Supplier<String> {
     public String get() {
         RepositoryElement element = RepositoryElement.of(entity, processingEnv);
         RepositoryTemplateType template = RepositoryTemplateType.of(element.getType());
+        Filer filer = processingEnv.getFiler();
+        RepositoryMetadata metadata = element.getMetadata();
+        JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified(), entity);
+        try (Writer writer = fileObject.openWriter()) {
+            template.execute(writer, metadata);
+        }
         return element.getClassName();
     }
 
