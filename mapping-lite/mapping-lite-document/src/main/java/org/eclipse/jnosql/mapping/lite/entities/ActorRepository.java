@@ -14,11 +14,11 @@
  */
 package org.eclipse.jnosql.mapping.lite.entities;
 
+import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Repository;
+import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 
-import javax.annotation.processing.Generated;
-
-@Generated(value= "JNoSQL Lite Document Repository Generator", date = "{{now}}")
+@RepositoryLite(DatabaseType.DOCUMENT)
 public interface ActorRepository extends Repository<Actor, Long> {
 
 }
