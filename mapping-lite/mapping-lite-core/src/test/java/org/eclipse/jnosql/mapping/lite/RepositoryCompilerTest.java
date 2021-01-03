@@ -32,8 +32,7 @@ public class RepositoryCompilerTest {
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
-                .withProcessors(new EntityProcessor())
-                .withProcessors(new RepositoryProcessor())
+                .withProcessors(new EntityProcessor(), new RepositoryProcessor())
                 .compile(JavaFileObjects.forResource("Person10.java"),
                         JavaFileObjects.forResource("Person10Repository.java"));
         assertThat(compilation).succeeded();
