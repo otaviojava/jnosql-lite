@@ -25,11 +25,15 @@ final class RepositoryMetadata {
     }
 
     public String getQualified() {
-        return null;
+        return this.getPackage() + '.' + getClassName();
+    }
+
+    public String getClassName() {
+        return this.element.getSimpleName() + "LiteDocument";
     }
 
     public String getPackage() {
-        return null;
+        return element.getPackage();
     }
 
     public LocalDateTime getNow() {

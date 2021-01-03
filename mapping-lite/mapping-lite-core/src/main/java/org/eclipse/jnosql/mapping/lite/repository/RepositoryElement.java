@@ -21,6 +21,7 @@ import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import java.util.List;
@@ -32,12 +33,12 @@ import static org.eclipse.jnosql.mapping.lite.repository.RepositoryUtil.findRepo
 class RepositoryElement {
 
     private final ProcessingEnvironment processingEnv;
-    private final Element element;
+    private final TypeElement element;
     private final String entityType;
     private final String keyType;
     private final DatabaseType type;
 
-    public RepositoryElement(ProcessingEnvironment processingEnv, Element element,
+    public RepositoryElement(ProcessingEnvironment processingEnv, TypeElement element,
                              String entityType, String keyType, DatabaseType type) {
         this.processingEnv = processingEnv;
         this.element = element;
@@ -66,6 +67,16 @@ class RepositoryElement {
         return keyType;
     }
 
+    public String getSimpleName() {
+        return this.element.getSimpleName().toString();
+    }
+
+    public String getPackage() {
+        String qualifiedName = this.element.getQualifiedName().toString();
+        int index = qualifiedName.lastIndexOf('.');
+        return qualifiedName.substring(0, index);
+    }
+
     static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;
@@ -78,7 +89,7 @@ class RepositoryElement {
                 RepositoryLite annotation = typeElement.getAnnotation(RepositoryLite.class);
                 DatabaseType type = Optional.ofNullable(annotation)
                         .map(RepositoryLite::value).orElse(DatabaseType.DOCUMENT);
-                return new RepositoryElement(processingEnv, element, entityType, keyType, type);
+                return new RepositoryElement(processingEnv, typeElement, entityType, keyType, type);
             }
         }
         throw new ValidationException("The interface " + element.toString() + "must extends " + Repository.class.getName());
