@@ -50,6 +50,10 @@ class RepositoryElement {
         return element.toString();
     }
 
+    public DatabaseType getType() {
+        return type;
+    }
+
     static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;

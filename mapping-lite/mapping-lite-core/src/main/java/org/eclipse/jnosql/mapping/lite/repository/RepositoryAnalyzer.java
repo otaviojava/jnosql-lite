@@ -32,7 +32,7 @@ final class RepositoryAnalyzer implements Supplier<String> {
     @Override
     public String get() {
         RepositoryElement element = RepositoryElement.of(entity, processingEnv);
-
+        RepositoryTemplateType template = RepositoryTemplateType.of(element.getType());
         return element.getClassName();
     }
 
