@@ -27,6 +27,9 @@ import java.util.stream.Collectors;
 
 final class RepositoryUtil {
 
+    private RepositoryUtil() {
+    }
+
     static Optional<TypeMirror> findRepository(List<? extends TypeMirror> interfaces,
                                                ProcessingEnvironment processingEnv) {
         for (TypeMirror mirror : interfaces) {
