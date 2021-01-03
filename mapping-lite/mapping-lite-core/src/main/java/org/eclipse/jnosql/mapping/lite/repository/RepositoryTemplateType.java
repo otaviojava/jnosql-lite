@@ -17,10 +17,11 @@ package org.eclipse.jnosql.mapping.lite.repository;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
+import jakarta.nosql.mapping.DatabaseType;
 
 import java.util.function.Supplier;
 
-public enum RepositoryTemplateType implements Supplier<Mustache> {
+enum RepositoryTemplateType implements Supplier<Mustache> {
     DOCUMENT("repository_document.mustache");
 
     private final String fileName;
@@ -31,6 +32,15 @@ public enum RepositoryTemplateType implements Supplier<Mustache> {
         this.fileName = fileName;
         MustacheFactory factory = new DefaultMustacheFactory();
         this.template = factory.compile(fileName);
+    }
+
+    static RepositoryTemplateType of(DatabaseType type) {
+        switch (type) {
+            case DOCUMENT:
+                return DOCUMENT;
+            default:
+                throw new UnsupportedOperationException("There is not template to this database type: " + type);
+        }
     }
 
     @Override
