@@ -14,5 +14,33 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import java.time.LocalDateTime;
+
 final class RepositoryMetadata {
+
+    private final RepositoryElement element;
+
+    public RepositoryMetadata(RepositoryElement element) {
+        this.element = element;
+    }
+
+    public String getQualified() {
+        return null;
+    }
+
+    public String getPackage() {
+        return null;
+    }
+
+    public LocalDateTime getNow() {
+        return LocalDateTime.now();
+    }
+
+    public String getEntityType() {
+        return this.element.getEntityType();
+    }
+
+    public String getKeyType() {
+        return this.element.getKeyType();
+    }
 }
