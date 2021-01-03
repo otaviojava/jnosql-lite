@@ -54,6 +54,18 @@ class RepositoryElement {
         return type;
     }
 
+    public RepositoryMetadata getMetadata() {
+        return new RepositoryMetadata(this);
+    }
+
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public String getKeyType() {
+        return keyType;
+    }
+
     static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;

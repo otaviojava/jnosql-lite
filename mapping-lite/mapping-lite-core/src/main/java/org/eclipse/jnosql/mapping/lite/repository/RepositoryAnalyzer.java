@@ -14,10 +14,14 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import com.github.mustachejava.Mustache;
+import org.eclipse.jnosql.mapping.lite.ValidationException;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.tools.JavaFileObject;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.function.Supplier;
 
@@ -35,12 +39,17 @@ final class RepositoryAnalyzer implements Supplier<String> {
     @Override
     public String get() {
         RepositoryElement element = RepositoryElement.of(entity, processingEnv);
-        RepositoryTemplateType template = RepositoryTemplateType.of(element.getType());
+        RepositoryTemplateType templateType = RepositoryTemplateType.of(element.getType());
         Filer filer = processingEnv.getFiler();
         RepositoryMetadata metadata = element.getMetadata();
-        JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified(), entity);
-        try (Writer writer = fileObject.openWriter()) {
-            template.execute(writer, metadata);
+        try {
+            JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified(), entity);
+            try (Writer writer = fileObject.openWriter()) {
+                Mustache template = templateType.get();
+                template.execute(writer, metadata);
+            }
+        } catch (IOException exp) {
+            throw new ValidationException("There is an issue when try to create the Repository class", exp);
         }
         return element.getClassName();
     }
