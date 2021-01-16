@@ -26,7 +26,7 @@ import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 import java.util.List;
 
 @RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
+public interface Person10RepositoryA extends Repository<Person10, Long> {
 
     List<Person10> findByName(String name);
 }
