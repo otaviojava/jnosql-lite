@@ -26,7 +26,6 @@ public class RepositoryCompilerTest {
 
     @Test
     public void shouldCompile() {
-
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
@@ -36,5 +35,15 @@ public class RepositoryCompilerTest {
         assertThat(compilation).succeeded();
     }
 
+    @Test
+    public void shouldCompileFindByName() {
+        Compilation compilation = javac()
+                .withClasspathFrom(this.getClass().getClassLoader())
+                .withOptions()
+                .withProcessors(new EntityProcessor(), new RepositoryProcessor())
+                .compile(JavaFileObjects.forResource("Person10.java"),
+                        JavaFileObjects.forResource("Person10RepositoryA.java"));
+        assertThat(compilation).succeeded();
+    }
 
 }
