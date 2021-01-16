@@ -36,7 +36,7 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
 
 @Generated(value= "JNoSQL Lite Document Repository Generator", date = "{{now}}")
-public class {{className}} implements Repository<{{entityType}}, {{keyType}}> {
+public class {{className}} implements {{repositoryInterface}}<{{entityType}}, {{keyType}}> {
 
     private final DocumentTemplate template;
 
