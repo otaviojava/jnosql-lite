@@ -47,4 +47,8 @@ final class RepositoryMetadata {
     public String getKeyType() {
         return this.element.getKeyType();
     }
+
+    public String getRepository() {
+        return this.element.getRepository();
+    }
 }
