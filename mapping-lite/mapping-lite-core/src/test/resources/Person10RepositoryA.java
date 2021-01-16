@@ -23,10 +23,11 @@ import jakarta.nosql.mapping.MappedSuperclass;
 import jakarta.nosql.mapping.Repository;
 import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 
-import java.util.List;
+import java.util.stream.Stream;
+
 
 @RepositoryLite(DatabaseType.DOCUMENT)
 public interface Person10RepositoryA extends Repository<Person10, Long> {
 
-    List<Person10> findByName(String name);
+    Stream<Person10> findByName(String name);
 }
