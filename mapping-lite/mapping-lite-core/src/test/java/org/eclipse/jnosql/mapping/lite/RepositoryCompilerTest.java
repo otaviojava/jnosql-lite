@@ -19,15 +19,13 @@ import com.google.testing.compile.JavaFileObjects;
 import org.eclipse.jnosql.mapping.lite.repository.RepositoryProcessor;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
-
 import static com.google.testing.compile.CompilationSubject.assertThat;
 import static com.google.testing.compile.Compiler.javac;
 
 public class RepositoryCompilerTest {
 
     @Test
-    public void shouldCompile() throws IOException {
+    public void shouldCompile() {
 
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
