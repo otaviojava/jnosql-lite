@@ -24,6 +24,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -93,6 +94,7 @@ class RepositoryElement {
                 List<MethodMetadata> methods = typeElement.getEnclosedElements()
                         .stream()
                         .map(e -> MethodMetadata.of(e, processingEnv))
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList());
                 TypeMirror typeMirror = mirror.get();
                 List<String> parameters = RepositoryUtil.findParameters(typeMirror);
