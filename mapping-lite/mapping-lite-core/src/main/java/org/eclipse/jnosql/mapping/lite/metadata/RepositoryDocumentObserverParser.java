@@ -20,19 +20,19 @@ import java.util.Optional;
 
 public class RepositoryDocumentObserverParser implements DocumentObserverParser {
 
-    private final EntityMetadata classMapping;
+    private final EntityMetadata entityMetadata;
 
-    RepositoryDocumentObserverParser(EntityMetadata classMapping) {
-        this.classMapping = classMapping;
+    public RepositoryDocumentObserverParser(EntityMetadata entityMetadata) {
+        this.entityMetadata = entityMetadata;
     }
 
     @Override
     public String fireEntity(String entity) {
-        return classMapping.getName();
+        return entityMetadata.getName();
     }
 
     @Override
     public String fireField(String entity, String field) {
-        return Optional.ofNullable(classMapping.getColumnField(field)).orElse(field);
+        return Optional.ofNullable(entityMetadata.getColumnField(field)).orElse(field);
     }
 }
