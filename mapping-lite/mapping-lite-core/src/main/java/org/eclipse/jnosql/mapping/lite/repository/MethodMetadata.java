@@ -46,6 +46,10 @@ class MethodMetadata {
         return methodName;
     }
 
+    public String getMethodSource() {
+        return null;
+    }
+
     public static MethodMetadata of(Element element, ProcessingEnvironment processingEnv) {
         ElementKind kind = element.getKind();
         if (ElementKind.METHOD.equals(kind)) {
@@ -63,4 +67,6 @@ class MethodMetadata {
         }
         return null;
     }
+
+
 }
