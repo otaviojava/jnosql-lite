@@ -42,6 +42,9 @@ class MethodMetadata {
         this.query = query;
     }
 
+    public String getMethodName() {
+        return methodName;
+    }
 
     public static MethodMetadata of(Element element, ProcessingEnvironment processingEnv) {
         ElementKind kind = element.getKind();
