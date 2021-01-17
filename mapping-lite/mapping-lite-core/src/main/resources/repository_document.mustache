@@ -135,4 +135,6 @@ public class {{className}} implements {{repository}} {
     private Class<{{entityType}}> getEntityClass() {
         return (Class<{{entityType}}>) getClassMapping().getClassInstance();
     }
+
+    {{#methods}}
 }
