@@ -54,6 +54,6 @@ final class RepositoryMetadata {
     }
 
     public List<String> getMethods() {
-        return this.element.
+        return this.element.getMethods();
     }
 }
