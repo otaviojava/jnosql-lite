@@ -88,6 +88,7 @@ class RepositoryElement {
             TypeElement typeElement = (TypeElement) element;
             Optional<TypeMirror> mirror = findRepository(typeElement.getInterfaces(), processingEnv);
             if (!mirror.isEmpty()) {
+                List<? extends Element> elements = typeElement.getEnclosedElements();
                 TypeMirror typeMirror = mirror.get();
                 List<String> parameters = RepositoryUtil.findParameters(typeMirror);
                 String entityType = parameters.get(0);
