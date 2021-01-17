@@ -16,10 +16,13 @@ package {{package}};
 
 import jakarta.nosql.mapping.Repository;
 import jakarta.nosql.mapping.document.DocumentTemplate;
+import jakarta.nosql.document.SelectQueryConverter;
+import jakarta.nosql.document.SelectQueryConverter;
 import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
+import org.eclipse.jnosql.communication.query.method.FindByMethodQueryProvider;
 
 import javax.annotation.processing.Generated;
 import java.util.Objects;
@@ -28,8 +31,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-
-import org.eclipse.jnosql.communication.query.method.FindByMethodQueryProvider;
 
 import static jakarta.nosql.mapping.IdNotFoundException.KEY_NOT_FOUND_EXCEPTION_SUPPLIER;
 import static java.util.Objects.nonNull;
@@ -48,12 +49,15 @@ public class {{className}} implements {{repository}} {
 
     private final RepositoryDocumentObserverParser parser;
 
+    private final SelectQueryConverter converter;
+
     public {{className}}(DocumentTemplate template) {
         this.template = Objects.requireNonNull(template, "template is required");
         ClassMappings mappings = new DefaultClassMappings();
         this.metadata = mappings.get({{entityType}}.class);
         this.selectProvider = new FindByMethodQueryProvider();
         this.parser = new RepositoryDocumentObserverParser(this.metadata);
+        this.converter = new SelectQueryParser();
     }
 
     DocumentTemplate getTemplate(){
