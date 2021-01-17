@@ -89,7 +89,10 @@ class RepositoryElement {
             TypeElement typeElement = (TypeElement) element;
             Optional<TypeMirror> mirror = findRepository(typeElement.getInterfaces(), processingEnv);
             if (!mirror.isEmpty()) {
-                List<MethodMetadata> methods = typeElement.getEnclosedElements().stream().map(MethodMetadata::of)
+
+                List<MethodMetadata> methods = typeElement.getEnclosedElements()
+                        .stream()
+                        .map(e -> MethodMetadata.of(e, processingEnv))
                         .collect(Collectors.toList());
                 TypeMirror typeMirror = mirror.get();
                 List<String> parameters = RepositoryUtil.findParameters(typeMirror);
