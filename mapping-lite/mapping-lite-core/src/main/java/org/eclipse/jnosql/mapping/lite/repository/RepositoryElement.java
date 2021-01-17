@@ -39,16 +39,20 @@ class RepositoryElement {
     private final String keyType;
     private final String repositoryInterface;
     private final DatabaseType type;
+    private final List<MethodMetadata> methods;
 
     public RepositoryElement(ProcessingEnvironment processingEnv, TypeElement element,
-                             String entityType, String keyType, String repositoryInterface,
-                             DatabaseType type) {
+                             String entityType, String keyType,
+                             String repositoryInterface,
+                             DatabaseType type,
+                             List<MethodMetadata> methods) {
         this.processingEnv = processingEnv;
         this.element = element;
         this.entityType = entityType;
         this.keyType = keyType;
         this.repositoryInterface = repositoryInterface;
         this.type = type;
+        this.methods = methods;
     }
 
     public String getClassName() {
@@ -85,6 +89,12 @@ class RepositoryElement {
         return repositoryInterface;
     }
 
+    public List<String> getMethods() {
+        return this.methods.stream()
+                .map(MethodMetadata::getMethodSource)
+                .collect(Collectors.toList());
+    }
+
     static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
         if (isTypeElement(element)) {
             TypeElement typeElement = (TypeElement) element;
@@ -105,7 +115,7 @@ class RepositoryElement {
                         .map(RepositoryLite::value).orElse(DatabaseType.DOCUMENT);
                 String repositoryInterface = typeElement.getQualifiedName().toString();
                 return new RepositoryElement(processingEnv, typeElement,
-                        entityType, keyType, repositoryInterface, type);
+                        entityType, keyType, repositoryInterface, type, methods);
             }
         }
         throw new ValidationException("The interface " + element.toString() + "must extends " + Repository.class.getName());

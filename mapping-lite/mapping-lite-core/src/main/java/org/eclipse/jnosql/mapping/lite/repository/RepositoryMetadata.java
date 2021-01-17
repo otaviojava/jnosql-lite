@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.mapping.lite.repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 final class RepositoryMetadata {
 
@@ -50,5 +51,9 @@ final class RepositoryMetadata {
 
     public String getRepository() {
         return this.element.getRepository();
+    }
+
+    public List<String> getMethods() {
+        return this.element.
     }
 }
