@@ -23,15 +23,22 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 class Parameter {
+    private final String name;
+    private final Param param;
+    private final TypeElement type;
 
-    //name
-    //type
-    //parameter
+    Parameter(String name, Param param, TypeElement type) {
+        this.name = name;
+        this.param = param;
+        this.type = type;
+    }
+
+
 
     public static Parameter of(VariableElement element, ProcessingEnvironment processingEnv) {
         String name = element.getSimpleName().toString();
         Param param = element.getAnnotation(Param.class);
         TypeElement type = (TypeElement) processingEnv.getTypeUtils().asElement(element.asType());
-        return new Parameter();
+        return new Parameter(name, param, type);
     }
 }
