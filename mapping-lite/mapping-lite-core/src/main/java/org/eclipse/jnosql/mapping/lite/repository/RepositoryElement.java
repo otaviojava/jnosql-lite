@@ -25,6 +25,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.isTypeElement;
 import static org.eclipse.jnosql.mapping.lite.repository.RepositoryUtil.findRepository;
@@ -88,7 +89,8 @@ class RepositoryElement {
             TypeElement typeElement = (TypeElement) element;
             Optional<TypeMirror> mirror = findRepository(typeElement.getInterfaces(), processingEnv);
             if (!mirror.isEmpty()) {
-                List<? extends Element> elements = typeElement.getEnclosedElements();
+                List<MethodMetadata> methods = typeElement.getEnclosedElements().stream().map(MethodMetadata::of)
+                        .collect(Collectors.toList());
                 TypeMirror typeMirror = mirror.get();
                 List<String> parameters = RepositoryUtil.findParameters(typeMirror);
                 String entityType = parameters.get(0);
