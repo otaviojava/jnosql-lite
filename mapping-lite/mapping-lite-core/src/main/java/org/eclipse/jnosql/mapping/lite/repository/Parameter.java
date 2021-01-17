@@ -16,7 +16,11 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import jakarta.nosql.mapping.Param;
 
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 
 class Parameter {
 
@@ -24,9 +28,10 @@ class Parameter {
     //type
     //parameter
 
-    public static Parameter of(VariableElement element) {
+    public static Parameter of(VariableElement element, ProcessingEnvironment processingEnv) {
         String name = element.getSimpleName().toString();
         Param param = element.getAnnotation(Param.class);
-        element.get
+        TypeElement type = (TypeElement) processingEnv.getTypeUtils().asElement(element.asType());
+        return new Parameter();
     }
 }
