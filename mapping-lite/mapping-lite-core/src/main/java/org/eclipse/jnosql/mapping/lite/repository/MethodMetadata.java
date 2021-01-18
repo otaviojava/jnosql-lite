@@ -64,7 +64,7 @@ class MethodMetadata {
 
     public List<String> getSourceCode() {
         List<String> lines = new ArrayList<>();
-        lines.add("SelectQuery selectQuery = selectProvider.apply(" + methodName + ", metadata.getName())");
+        lines.add("SelectQuery selectQuery = selectProvider.apply(\"" + methodName + "\", metadata.getName())");
         lines.add("DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
         lines.add("Params params = queryParams.getParams()");
         for (Parameter parameter : this.parameters) {
