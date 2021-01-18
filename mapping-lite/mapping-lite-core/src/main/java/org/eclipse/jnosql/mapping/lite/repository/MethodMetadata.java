@@ -16,6 +16,7 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Query;
+import org.eclipse.jnosql.mapping.lite.ProcessorUtil;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -81,14 +82,7 @@ class MethodMetadata {
             lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
         }
         lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
-        Matcher matcher = Pattern.compile("<(.*?)>").matcher(returnType);
-        String type;
-        if (matcher.find()) {
-            type = matcher.group(1);
-        } else {
-            type = returnType;
-        }
-        lines.add("Stream<" + type + "> result = this.template.select(query)");
+        lines.add("Stream<" + ProcessorUtil.extractFromType(returnType) + "> result = this.template.select(query)");
         return lines;
     }
 
