@@ -53,7 +53,7 @@ final class RepositoryMetadata {
         return this.element.getRepository();
     }
 
-    public List<String> getMethods() {
+    public List<MethodMetadata> getMethods() {
         return this.element.getMethods();
     }
 }

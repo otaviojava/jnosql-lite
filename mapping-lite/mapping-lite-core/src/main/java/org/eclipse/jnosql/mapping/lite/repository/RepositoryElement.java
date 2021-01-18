@@ -89,10 +89,8 @@ class RepositoryElement {
         return repositoryInterface;
     }
 
-    public List<String> getMethods() {
-        return this.methods.stream()
-                .map(MethodMetadata::getMethodSource)
-                .collect(Collectors.toList());
+    public List<MethodMetadata> getMethods() {
+        return this.methods;
     }
 
     static RepositoryElement of(Element element, ProcessingEnvironment processingEnv) {
