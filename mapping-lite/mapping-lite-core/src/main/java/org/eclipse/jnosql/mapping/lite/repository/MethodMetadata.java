@@ -21,6 +21,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,10 +62,15 @@ class MethodMetadata {
         return parameters;
     }
 
-    public String getSourceCode() {
-        StringBuilder source = new StringBuilder();
-        source.append(";");
-        return source.toString();
+    public List<String> getSourceCode() {
+        List<String> lines = new ArrayList<>();
+        lines.add("SelectQuery selectQuery = selectProvider.apply(" + methodName + ", metadata.getName())");
+        lines.add("DocumentQueryParams queryParams = converter.apply(selectQuery, parser);");
+        lines.add("Params params = queryParams.getParams();");
+        for (Parameter parameter : this.parameters) {
+            lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+        }
+        return lines;
     }
 
     public static MethodMetadata of(Element element, ProcessingEnvironment processingEnv) {
