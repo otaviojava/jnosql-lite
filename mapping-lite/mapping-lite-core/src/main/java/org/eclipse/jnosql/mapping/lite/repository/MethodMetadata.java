@@ -67,9 +67,9 @@ class MethodMetadata {
 
     public List<String> getSourceCode() {
         List<String> lines = new ArrayList<>();
-        lines.add("SelectQuery selectQuery = selectProvider.apply(\"" + methodName + "\", metadata.getName())");
-        lines.add("DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
-        lines.add("Params params = queryParams.getParams()");
+        lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + methodName + "\", metadata.getName())");
+        lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
+        lines.add("jakarta.nosql.Params params = queryParams.getParams()");
         for (Parameter parameter : this.parameters) {
             lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
         }
