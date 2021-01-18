@@ -24,6 +24,8 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
@@ -79,7 +81,14 @@ class MethodMetadata {
             lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
         }
         lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
-        lines.add("Stream<Object> result = this.template.select(query)");
+        Matcher matcher = Pattern.compile("<(.*?)>").matcher(returnType);
+        String type;
+        if (matcher.find()) {
+            type = matcher.group(1);
+        } else {
+            type = returnType;
+        }
+        lines.add("Stream<" + type + "> result = this.template.select(query)");
         return lines;
     }
 
