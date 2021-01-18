@@ -31,10 +31,15 @@ import static java.util.stream.Collectors.joining;
 class MethodMetadata {
 
     private final String methodName;
+
     private final TypeElement returnElement;
+
     private final String returnType;
+
     private final List<Parameter> parameters;
+
     private final Query query;
+
     private final DatabaseType type;
 
     public MethodMetadata(String methodName, TypeElement returnElement, String returnType,
@@ -73,6 +78,8 @@ class MethodMetadata {
         for (Parameter parameter : this.parameters) {
             lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
         }
+        lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
+        lines.add("Stream<Object> result = this.template.select(query)");
         return lines;
     }
 

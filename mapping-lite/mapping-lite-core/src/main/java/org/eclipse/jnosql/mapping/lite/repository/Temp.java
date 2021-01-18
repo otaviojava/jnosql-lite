@@ -44,7 +44,7 @@ public class Temp {
         Params params = queryParams.getParams();
         params.bind("", "");
         DocumentQuery documentQuery = queryParams.getQuery();
-        return this.template.select(documentQuery);
-
+        Stream<Object> result = this.template.select(documentQuery);
+        return null;
     }
 }
