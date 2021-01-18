@@ -24,6 +24,8 @@ import javax.lang.model.element.TypeElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.joining;
+
 class MethodMetadata {
 
     private final String methodName;
@@ -47,7 +49,15 @@ class MethodMetadata {
     }
 
     public String getMethodSource() {
-        return null;
+        StringBuilder source = new StringBuilder();
+        source.append("    @Override").append('\n').append("    ");
+        source.append("public ").append(returnType).append(methodName).append('(');
+        source.append(parameters.stream().map(p -> p.getType().toString() + " " + p.getName())
+                .collect(joining(","))).append(") {").append('\n');
+
+
+        source.append("    }");
+        return source.toString();
     }
 
     public static MethodMetadata of(Element element, ProcessingEnvironment processingEnv) {

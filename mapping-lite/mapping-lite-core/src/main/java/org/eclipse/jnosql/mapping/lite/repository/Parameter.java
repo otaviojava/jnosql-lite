@@ -32,6 +32,13 @@ class Parameter {
     }
 
 
+    public String getName() {
+        return name;
+    }
+
+    public TypeElement getType() {
+        return type;
+    }
 
     public static Parameter of(VariableElement element, ProcessingEnvironment processingEnv) {
         String name = element.getSimpleName().toString();
