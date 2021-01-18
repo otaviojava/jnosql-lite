@@ -18,9 +18,14 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static java.util.Locale.ENGLISH;
 
 public final class ProcessorUtil {
+
+    public static final Pattern COMPILE = Pattern.compile("<(.*?)>");
 
     private ProcessorUtil() {
     }
@@ -37,7 +42,16 @@ public final class ProcessorUtil {
         return name.substring(0, 1).toUpperCase(ENGLISH) + name.substring(1);
     }
 
-   public static boolean isTypeElement(Element element) {
+    public static boolean isTypeElement(Element element) {
         return element instanceof TypeElement;
+    }
+
+    public static String extractFromType(String returnType) {
+        Matcher matcher = COMPILE.matcher(returnType);
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return returnType;
+        }
     }
 }
