@@ -98,12 +98,6 @@ class RepositoryElement {
             TypeElement typeElement = (TypeElement) element;
             Optional<TypeMirror> mirror = findRepository(typeElement.getInterfaces(), processingEnv);
             if (!mirror.isEmpty()) {
-
-                List<MethodMetadata> methods = typeElement.getEnclosedElements()
-                        .stream()
-                        .map(e -> MethodMetadata.of(e, processingEnv))
-                        .filter(Objects::nonNull)
-                        .collect(Collectors.toList());
                 TypeMirror typeMirror = mirror.get();
                 List<String> parameters = RepositoryUtil.findParameters(typeMirror);
                 String entityType = parameters.get(0);
@@ -112,6 +106,11 @@ class RepositoryElement {
                 DatabaseType type = Optional.ofNullable(annotation)
                         .map(RepositoryLite::value).orElse(DatabaseType.DOCUMENT);
                 String repositoryInterface = typeElement.getQualifiedName().toString();
+                List<MethodMetadata> methods = typeElement.getEnclosedElements()
+                        .stream()
+                        .map(e -> MethodMetadata.of(e, type, processingEnv))
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList());
                 return new RepositoryElement(processingEnv, typeElement,
                         entityType, keyType, repositoryInterface, type, methods);
             }

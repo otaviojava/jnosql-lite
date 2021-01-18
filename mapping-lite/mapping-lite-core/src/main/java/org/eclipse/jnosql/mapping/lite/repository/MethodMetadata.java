@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Query;
 
 import javax.annotation.processing.ProcessingEnvironment;
@@ -34,15 +35,17 @@ class MethodMetadata {
     private final String returnType;
     private final List<Parameter> parameters;
     private final Query query;
+    private final DatabaseType type;
 
     public MethodMetadata(String methodName, TypeElement returnElement, String returnType,
-                          List<Parameter> parameters, Query query) {
+                          List<Parameter> parameters, Query query, DatabaseType type) {
 
         this.methodName = methodName;
         this.returnElement = returnElement;
         this.returnType = returnType;
         this.parameters = parameters;
         this.query = query;
+        this.type = type;
     }
 
     public String getMethodName() {
@@ -73,7 +76,7 @@ class MethodMetadata {
         return lines;
     }
 
-    public static MethodMetadata of(Element element, ProcessingEnvironment processingEnv) {
+    public static MethodMetadata of(Element element, DatabaseType type, ProcessingEnvironment processingEnv) {
         ElementKind kind = element.getKind();
         if (ElementKind.METHOD.equals(kind)) {
             ExecutableElement method = (ExecutableElement) element;
@@ -86,7 +89,7 @@ class MethodMetadata {
                     .collect(Collectors.toList());
 
             Query query = method.getAnnotation(Query.class);
-            return new MethodMetadata(methodName, returnElement, returnType, parameters, query);
+            return new MethodMetadata(methodName, returnElement, returnType, parameters, query, type);
         }
         return null;
     }
