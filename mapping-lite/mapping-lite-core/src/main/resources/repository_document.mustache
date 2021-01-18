@@ -122,7 +122,14 @@ public class {{className}} implements {{repository}} {
     }
 
     {{#methods}}
-    {{.}}
+    @Override
+    public {{returnType}} {{methodName}}({{parametersSignature}}) {
+    {{#parameters}}
+       requireNonNull({{name}}, "{{name}} is required");
+    {{/parameters}}
+    {{sourceCode}}
+     return null;
+    }
     {{/methods}}
 
     private FieldMetadata getIdField() {
