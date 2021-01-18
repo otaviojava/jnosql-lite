@@ -121,6 +121,10 @@ public class {{className}} implements {{repository}} {
       return findById(id).isPresent();
     }
 
+    {{#methods}}
+    {{.}}
+    {{/methods}}
+
     private FieldMetadata getIdField() {
         return getClassMapping().getId().orElseThrow(KEY_NOT_FOUND_EXCEPTION_SUPPLIER);
     }
@@ -136,7 +140,4 @@ public class {{className}} implements {{repository}} {
         return (Class<{{entityType}}>) getClassMapping().getClassInstance();
     }
 
-    {{#methods}}
-        {{.}}
-    {{/methods}}
 }
