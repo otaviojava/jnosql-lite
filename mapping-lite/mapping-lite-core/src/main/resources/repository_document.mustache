@@ -14,10 +14,12 @@
  */
 package {{package}};
 
-import jakarta.nosql.mapping.Repository;
+import jakarta.nosql.Params;
+import jakarta.nosql.document.DocumentQueryParams;
+import jakarta.nosql.document.SelectQueryConverter;
+import jakarta.nosql.document.SelectQueryConverter;
 import jakarta.nosql.mapping.document.DocumentTemplate;
-import jakarta.nosql.document.SelectQueryConverter;
-import jakarta.nosql.document.SelectQueryConverter;
+import jakarta.nosql.mapping.Repository;
 import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
@@ -128,7 +130,7 @@ public class {{className}} implements {{repository}} {
        requireNonNull({{name}}, "{{name}} is required");
     {{/parameters}}
     {{#sourceCode}}
-       {{{.}}}
+       {{{.}}};
     {{/sourceCode}}
      return null;
     }
