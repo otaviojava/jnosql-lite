@@ -18,7 +18,10 @@ import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Repository;
 import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 
+import java.util.stream.Stream;
+
 @RepositoryLite(DatabaseType.DOCUMENT)
 public interface ActorRepository extends Repository<Actor, Long> {
 
+    Stream<Actor> findByName(String name);
 }
