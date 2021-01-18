@@ -127,7 +127,9 @@ public class {{className}} implements {{repository}} {
     {{#parameters}}
        requireNonNull({{name}}, "{{name}} is required");
     {{/parameters}}
-    {{{sourceCode}}}
+    {{#sourceCode}}
+       {{{.}}}
+    {{/sourceCode}}
      return null;
     }
     {{/methods}}
