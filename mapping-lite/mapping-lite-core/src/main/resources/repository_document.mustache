@@ -123,11 +123,11 @@ public class {{className}} implements {{repository}} {
 
     {{#methods}}
     @Override
-    public {{returnType}} {{methodName}}({{parametersSignature}}) {
+    public {{{returnType}}} {{methodName}}({{{parametersSignature}}}) {
     {{#parameters}}
        requireNonNull({{name}}, "{{name}} is required");
     {{/parameters}}
-    {{sourceCode}}
+    {{{sourceCode}}}
      return null;
     }
     {{/methods}}
