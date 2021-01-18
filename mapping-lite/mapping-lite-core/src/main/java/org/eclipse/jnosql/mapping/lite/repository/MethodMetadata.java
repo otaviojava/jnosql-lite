@@ -48,15 +48,22 @@ class MethodMetadata {
         return methodName;
     }
 
-    public String getMethodSource() {
+    public String getReturnType() {
+        return returnType;
+    }
+
+    public String getParametersSignature() {
+        return parameters.stream().map(p -> p.getType().toString() + " " + p.getName())
+                .collect(joining(","));
+    }
+
+    public List<Parameter> getParameters() {
+        return parameters;
+    }
+
+    public String getSourceCode() {
         StringBuilder source = new StringBuilder();
-        source.append("    @Override").append('\n').append("    ");
-        source.append("public ").append(returnType).append(methodName).append('(');
-        source.append(parameters.stream().map(p -> p.getType().toString() + " " + p.getName())
-                .collect(joining(","))).append(") {").append('\n');
-
-
-        source.append("    }");
+        source.append(";");
         return source.toString();
     }
 
