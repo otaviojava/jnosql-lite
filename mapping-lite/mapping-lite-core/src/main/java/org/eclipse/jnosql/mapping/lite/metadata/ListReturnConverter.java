@@ -14,7 +14,15 @@
  */
 package org.eclipse.jnosql.mapping.lite.metadata;
 
-public enum ReturnType{
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+public class ListReturnConverter<T> implements Function<Stream<T>, List<T>> {
 
+    @Override
+    public List<T> apply(Stream<T> result) {
+        return result.collect(Collectors.toList());
+    }
 }
