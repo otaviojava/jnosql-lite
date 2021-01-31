@@ -14,6 +14,9 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import org.eclipse.jnosql.mapping.lite.ProcessorUtil;
+
+import java.util.ArrayList;
 import java.util.List;
 
 class DocumentMethodGenerator implements MethodGenerator {
@@ -25,6 +28,15 @@ class DocumentMethodGenerator implements MethodGenerator {
 
     @Override
     public List<String> getLines() {
-        return null;
+        List<String> lines = new ArrayList<>();
+        lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
+        lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
+        lines.add("jakarta.nosql.Params params = queryParams.getParams()");
+        for (Parameter parameter : this.metadata.getParameters()) {
+            lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+        }
+        lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
+        lines.add("Stream<" + ProcessorUtil.extractFromType(metadata.getReturnType()) + "> result = this.template.select(query)");
+        return lines;
     }
 }
