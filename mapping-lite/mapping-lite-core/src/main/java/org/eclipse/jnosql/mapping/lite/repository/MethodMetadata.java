@@ -16,14 +16,12 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Query;
-import org.eclipse.jnosql.mapping.lite.ProcessorUtil;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -72,15 +70,8 @@ class MethodMetadata {
     }
 
     public List<String> getSourceCode() {
-        List<String> lines = new ArrayList<>();
-        lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + methodName + "\", metadata.getName())");
-        lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
-        lines.add("jakarta.nosql.Params params = queryParams.getParams()");
-        for (Parameter parameter : this.parameters) {
-            lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
-        }
-        lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
-        lines.add("Stream<" + ProcessorUtil.extractFromType(returnType) + "> result = this.template.select(query)");
+        MethodGenerator methodGenerator = MethodGenerator.of(this);
+        List<String> lines = methodGenerator.getLines();
         return lines;
     }
 
