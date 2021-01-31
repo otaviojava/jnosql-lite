@@ -88,6 +88,10 @@ class MethodMetadata {
         return "result";
     }
 
+    public DatabaseType getType() {
+        return type;
+    }
+
     public static MethodMetadata of(Element element, DatabaseType type, ProcessingEnvironment processingEnv) {
         ElementKind kind = element.getKind();
         if (ElementKind.METHOD.equals(kind)) {

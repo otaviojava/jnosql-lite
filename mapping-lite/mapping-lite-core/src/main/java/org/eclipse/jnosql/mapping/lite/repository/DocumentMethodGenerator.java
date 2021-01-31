@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class DocumentMethodGenerator implements MethodGenerator {
+
     private final MethodMetadata metadata;
 
     DocumentMethodGenerator(MethodMetadata metadata) {
