@@ -16,7 +16,13 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import java.util.List;
 
-public class DocumentMethodGenerator implements MethodGenerator{
+class DocumentMethodGenerator implements MethodGenerator {
+    private final MethodMetadata metadata;
+
+    DocumentMethodGenerator(MethodMetadata metadata) {
+        this.metadata = metadata;
+    }
+
     @Override
     public List<String> getLines() {
         return null;
