@@ -71,8 +71,7 @@ class MethodMetadata {
 
     public List<String> getSourceCode() {
         MethodGenerator methodGenerator = MethodGenerator.of(this);
-        List<String> lines = methodGenerator.getLines();
-        return lines;
+        return methodGenerator.getLines();
     }
 
     public String getReturnValue() {
