@@ -88,6 +88,7 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
                 return QUEUE;
             case "java.util.SortedSet":
             case "java.util.TreeSet":
+                return SORTED_SET;
             default:
                 throw new UnsupportedOperationException("This return is not supported: " + returnType);
         }
