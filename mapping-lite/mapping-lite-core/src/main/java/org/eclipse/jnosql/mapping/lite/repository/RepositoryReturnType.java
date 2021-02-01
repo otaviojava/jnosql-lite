@@ -17,6 +17,7 @@ package org.eclipse.jnosql.mapping.lite.repository;
 import javax.lang.model.element.TypeElement;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
 import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.extractFromType;
@@ -31,6 +32,13 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
     };
 
     static RepositoryReturnType of(TypeElement returnElement) {
-        return STREAM;
+        String returnType = returnElement.getQualifiedName().toString();
+        switch (returnType) {
+            case "java.util.stream.Stream":
+                return STREAM;
+            default:
+                throw new UnsupportedOperationException("This return is not supported: " + returnType);
+        }
+
     }
 }
