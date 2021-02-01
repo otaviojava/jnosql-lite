@@ -14,17 +14,19 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
-import org.eclipse.jnosql.mapping.lite.ProcessorUtil;
-
 import javax.lang.model.element.TypeElement;
 import java.util.List;
-import java.util.function.BiConsumer;
+import java.util.function.Function;
 
-enum RepositoryReturnType implements BiConsumer<MethodMetadata, List<String>> {
+import static java.util.Collections.singletonList;
+import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.extractFromType;
+
+enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
     STREAM {
         @Override
-        public void accept(MethodMetadata metadata, List<String> lines) {
-            lines.add("Stream<" + ProcessorUtil.extractFromType(metadata.getReturnType()) + "> result = this.template.select(query)");
+        public List<String> apply(MethodMetadata metadata) {
+            String line = "Stream<" + extractFromType(metadata.getReturnType()) + "> result = this.template.select(query)";
+            return singletonList(line);
         }
     };
 

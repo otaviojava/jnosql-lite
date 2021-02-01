@@ -37,7 +37,8 @@ class DocumentMethodGenerator implements MethodGenerator {
             lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
         }
         lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
-        lines.add("Stream<" + ProcessorUtil.extractFromType(metadata.getReturnType()) + "> result = this.template.select(query)");
+        RepositoryReturnType returnType = RepositoryReturnType.of(metadata.getReturnElement());
+        lines.addAll(returnType.apply(this.metadata));
         return lines;
     }
 }
