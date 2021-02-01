@@ -60,8 +60,6 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
     }, SORTED_SET {
         @Override
         public List<String> apply(MethodMetadata metadata) {
-            java.util.Queue<String> queues = Stream.of("")
-                    .collect(java.util.stream.Collectors.toCollection(java.util.LinkedList::new));
             List<String> lines = new ArrayList<>();
             lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
             lines.add("java.util.Queue<" + getEntity(metadata) + "> result = entities.collect(java.util.stream" +
