@@ -51,12 +51,21 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
     }, QUEUE {
         @Override
         public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("java.util.Queue<" + getEntity(metadata) + "> result = entities.collect(java.util.stream" +
+                    ".Collectors.toCollection(java.util.LinkedList::new)");
+            return lines;
+        }
+    }, SORTED_SET {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
             java.util.Queue<String> queues = Stream.of("")
                     .collect(java.util.stream.Collectors.toCollection(java.util.LinkedList::new));
             List<String> lines = new ArrayList<>();
             lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
             lines.add("java.util.Queue<" + getEntity(metadata) + "> result = entities.collect(java.util.stream" +
-                    ".Collectors.toCollection(java.util.LinkedList::new)");
+                    ".Collectors.toCollection(java.util.TreeSet::new)");
             return lines;
         }
     };
