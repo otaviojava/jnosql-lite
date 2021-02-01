@@ -70,6 +70,12 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
         switch (returnType) {
             case "java.util.stream.Stream":
                 return STREAM;
+            case "java.util.List":
+                return LIST;
+            case "java.util.Set":
+                return SET;
+            case "java.util.Queue":
+                return QUEUE;
             default:
                 throw new UnsupportedOperationException("This return is not supported: " + returnType);
         }
