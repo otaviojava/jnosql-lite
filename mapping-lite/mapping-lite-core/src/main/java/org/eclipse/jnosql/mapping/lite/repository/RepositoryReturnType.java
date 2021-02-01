@@ -14,5 +14,16 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
-enum RepositoryReturnType {
+import org.eclipse.jnosql.mapping.lite.ProcessorUtil;
+
+import java.util.List;
+import java.util.function.BiConsumer;
+
+enum RepositoryReturnType implements BiConsumer<MethodMetadata, List<String>> {
+    STREAM {
+        @Override
+        public void accept(MethodMetadata metadata, List<String> lines) {
+            lines.add("Stream<" + ProcessorUtil.extractFromType(metadata.getReturnType()) + "> result = this.template.select(query)");
+        }
+    };
 }
