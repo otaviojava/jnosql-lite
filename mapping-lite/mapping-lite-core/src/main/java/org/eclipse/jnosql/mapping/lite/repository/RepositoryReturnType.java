@@ -15,6 +15,9 @@
 package org.eclipse.jnosql.mapping.lite.repository;
 
 import javax.lang.model.element.TypeElement;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -26,10 +29,41 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
     STREAM {
         @Override
         public List<String> apply(MethodMetadata metadata) {
-            String line = "Stream<" + extractFromType(metadata.getReturnType()) + "> result = this.template.select(query)";
+            String line = "Stream<" + getEntity(metadata) + "> result = this.template.select(query)";
             return singletonList(line);
         }
+    }, LIST {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("java.util.List<" + getEntity(metadata) + "> result = entities.collect(java.util.stream.Collectors.toList())");
+            return lines;
+        }
+    }, SET {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("java.util.Set<" + getEntity(metadata) + "> result = entities.collect(java.util.stream.Collectors.toSet())");
+            return lines;
+        }
+    }, QUEUE {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            java.util.Queue<String> queues = Stream.of("")
+                    .collect(java.util.stream.Collectors.toCollection(java.util.LinkedList::new));
+            List<String> lines = new ArrayList<>();
+            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("java.util.Queue<" + getEntity(metadata) + "> result = entities.collect(java.util.stream" +
+                    ".Collectors.toCollection(java.util.LinkedList::new)");
+            return lines;
+        }
     };
+
+    private static String getEntity(MethodMetadata metadata) {
+        return extractFromType(metadata.getReturnType());
+    }
 
     static RepositoryReturnType of(TypeElement returnElement) {
         String returnType = returnElement.getQualifiedName().toString();
