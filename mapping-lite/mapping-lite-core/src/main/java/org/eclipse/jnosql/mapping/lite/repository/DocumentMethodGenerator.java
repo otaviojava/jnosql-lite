@@ -14,6 +14,8 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import jakarta.nosql.mapping.Query;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +30,24 @@ class DocumentMethodGenerator implements MethodGenerator {
     @Override
     public List<String> getLines() {
         List<String> lines = new ArrayList<>();
-        if(metadata.get)
-        lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
-        lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
-        lines.add("jakarta.nosql.Params params = queryParams.getParams()");
-        for (Parameter parameter : this.metadata.getParameters()) {
-            lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+        if (metadata.hasQuery()) {
+            Query query = metadata.getQuery();
+            lines.add("jakarta.nosql.mapping.PreparedStatement prepare = template.prepare(\"" + query.value() +"\"");
+            for (Parameter parameter : this.metadata.getParameters()) {
+                parameter.get
+                lines.add("prepare.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+            }
+        } else {
+            lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
+            lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
+            lines.add("jakarta.nosql.Params params = queryParams.getParams()");
+            for (Parameter parameter : this.metadata.getParameters()) {
+                lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+            }
+            lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
+            RepositoryReturnType returnType = RepositoryReturnType.of(metadata);
+            lines.addAll(returnType.apply(this.metadata));
         }
-        lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
-        RepositoryReturnType returnType = RepositoryReturnType.of(metadata);
-        lines.addAll(returnType.apply(this.metadata));
         return lines;
     }
 }

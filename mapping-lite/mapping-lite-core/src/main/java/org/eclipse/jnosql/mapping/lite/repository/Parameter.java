@@ -40,6 +40,14 @@ class Parameter {
         return type;
     }
 
+    public Param getParam() {
+        return param;
+    }
+
+    public boolean hasParam() {
+        return param != null;
+    }
+
     public static Parameter of(VariableElement element, ProcessingEnvironment processingEnv) {
         String name = element.getSimpleName().toString();
         Param param = element.getAnnotation(Param.class);
