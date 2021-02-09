@@ -70,7 +70,16 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("java.util.Optional<" + getEntity(metadata) + "> result = this.template.singleResult\u200B(query)");
+            lines.add("java.util.Optional<" + getEntity(metadata) + "> result = this.template.singleResult(query)");
+            return lines;
+        }
+    },
+    INSTANCE {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            lines.add("java.util.Optional<" + getEntity(metadata) + "> entityResult = this.template.singleResult(query)");
+            lines.add(getEntity(metadata) + " result = entityResult.orElse(null)");
             return lines;
         }
     };
@@ -79,8 +88,11 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
         return extractFromType(metadata.getReturnType());
     }
 
-    static RepositoryReturnType of(TypeElement returnElement) {
+    static RepositoryReturnType of(TypeElement returnElement, MethodMetadata metadata) {
         String returnType = returnElement.getQualifiedName().toString();
+        if (returnType.equals(getEntity(metadata))) {
+
+        }
         switch (returnType) {
             case "java.util.stream.Stream":
                 return STREAM;
