@@ -20,6 +20,8 @@ import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Id;
 import jakarta.nosql.mapping.MappedSuperclass;
+import jakarta.nosql.mapping.Param;
+import jakarta.nosql.mapping.Query;
 import jakarta.nosql.mapping.Repository;
 import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 
@@ -38,4 +40,7 @@ public interface Person10RepositoryA extends Repository<Person10, Long> {
     Optional<Person10> findByDocument(Integer age);
 
     Person10 findByDocument2(Integer age);
+
+    @Query("select * from Person10 where name = @name")
+    List<Person10> query(@Param("name") String name);
 }
