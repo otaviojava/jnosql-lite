@@ -14,8 +14,6 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
-import org.eclipse.jnosql.mapping.lite.ProcessorUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
