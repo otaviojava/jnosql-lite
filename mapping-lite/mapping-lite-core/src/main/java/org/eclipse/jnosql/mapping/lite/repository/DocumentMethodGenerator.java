@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import jakarta.nosql.mapping.Param;
 import jakarta.nosql.mapping.Query;
 
 import java.util.ArrayList;
@@ -34,8 +35,10 @@ class DocumentMethodGenerator implements MethodGenerator {
             Query query = metadata.getQuery();
             lines.add("jakarta.nosql.mapping.PreparedStatement prepare = template.prepare(\"" + query.value() +"\"");
             for (Parameter parameter : this.metadata.getParameters()) {
-                parameter.get
-                lines.add("prepare.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+                if(parameter.hasParam()) {
+                    Param param = parameter.getParam();
+                    lines.add("prepare.bind(\"" + param.value() + "\"," + parameter.getName() + ")");
+                }
             }
         } else {
             lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
