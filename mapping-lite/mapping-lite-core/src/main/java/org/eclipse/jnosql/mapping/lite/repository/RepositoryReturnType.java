@@ -85,8 +85,9 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
         return extractFromType(metadata.getReturnType());
     }
 
-    static RepositoryReturnType of(TypeElement returnElement, MethodMetadata metadata) {
-        String returnType = returnElement.getQualifiedName().toString();
+    static RepositoryReturnType of(MethodMetadata metadata) {
+        TypeElement typeElement = metadata.getReturnElement();
+        String returnType = typeElement.getQualifiedName().toString();
 
         if (returnType.equals(getEntity(metadata))) {
             return ENTITY_TYPE;
