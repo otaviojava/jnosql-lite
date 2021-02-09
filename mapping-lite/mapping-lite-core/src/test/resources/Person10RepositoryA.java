@@ -24,6 +24,7 @@ import jakarta.nosql.mapping.Repository;
 import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -33,4 +34,8 @@ public interface Person10RepositoryA extends Repository<Person10, Long> {
     Stream<Person10> findByName(String name);
 
     List<Person10> findByAge(Integer age);
+
+    Optional<Person10> findByDocument(Integer age);
+
+    Person10 findByDocument2(Integer age);
 }
