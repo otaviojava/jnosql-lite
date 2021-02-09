@@ -28,6 +28,7 @@ class DocumentMethodGenerator implements MethodGenerator {
     @Override
     public List<String> getLines() {
         List<String> lines = new ArrayList<>();
+        if(metadata.get)
         lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
         lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
         lines.add("jakarta.nosql.Params params = queryParams.getParams()");

@@ -23,6 +23,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
@@ -84,6 +85,14 @@ class MethodMetadata {
 
     public TypeElement getReturnElement() {
         return returnElement;
+    }
+
+    public Query getQuery() {
+        return query;
+    }
+
+    public boolean hasQuery() {
+        return query != null;
     }
 
     public static MethodMetadata of(Element element, DatabaseType type, ProcessingEnvironment processingEnv) {
