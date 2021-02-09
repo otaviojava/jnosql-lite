@@ -16,11 +16,8 @@ package org.eclipse.jnosql.mapping.lite.repository;
 
 import javax.lang.model.element.TypeElement;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 import static java.util.Collections.singletonList;
 import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.extractFromType;
@@ -74,7 +71,7 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
             return lines;
         }
     },
-    INSTANCE {
+    ENTITY_TYPE {
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
@@ -92,7 +89,7 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
         String returnType = returnElement.getQualifiedName().toString();
 
         if (returnType.equals(getEntity(metadata))) {
-            return INSTANCE;
+            return ENTITY_TYPE;
         }
         switch (returnType) {
             case "java.util.stream.Stream":
