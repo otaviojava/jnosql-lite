@@ -90,8 +90,9 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
 
     static RepositoryReturnType of(TypeElement returnElement, MethodMetadata metadata) {
         String returnType = returnElement.getQualifiedName().toString();
-        if (returnType.equals(getEntity(metadata))) {
 
+        if (returnType.equals(getEntity(metadata))) {
+            return INSTANCE;
         }
         switch (returnType) {
             case "java.util.stream.Stream":
