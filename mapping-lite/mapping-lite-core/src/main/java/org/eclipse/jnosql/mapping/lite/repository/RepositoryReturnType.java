@@ -66,6 +66,13 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
                     ".Collectors.toCollection(java.util.TreeSet::new)");
             return lines;
         }
+    }, OPTIONAL {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            lines.add("java.util.Optional<" + getEntity(metadata) + "> result = this.template.singleResult\u200B(query)");
+            return lines;
+        }
     };
 
     private static String getEntity(MethodMetadata metadata) {
@@ -89,6 +96,8 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
             case "java.util.SortedSet":
             case "java.util.TreeSet":
                 return SORTED_SET;
+            case "java.util.Optional":
+                return OPTIONAL;
             default:
                 throw new UnsupportedOperationException("This return is not supported: " + returnType);
         }
