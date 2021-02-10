@@ -14,5 +14,19 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
-enum DocumentMethodBuilder {
+import java.util.List;
+import java.util.function.Function;
+
+enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
+    METHOD_QUERY{
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            return null;
+        }
+    }, ANNOTATION_QUERY{
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            return null;
+        }
+    };
 }
