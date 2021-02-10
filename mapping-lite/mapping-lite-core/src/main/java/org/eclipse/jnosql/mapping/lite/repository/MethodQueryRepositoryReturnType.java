@@ -22,7 +22,7 @@ import java.util.function.Function;
 import static java.util.Collections.singletonList;
 import static org.eclipse.jnosql.mapping.lite.ProcessorUtil.extractFromType;
 
-enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
+enum MethodQueryRepositoryReturnType implements Function<MethodMetadata, List<String>> {
     STREAM {
         @Override
         public List<String> apply(MethodMetadata metadata) {
@@ -85,7 +85,7 @@ enum RepositoryReturnType implements Function<MethodMetadata, List<String>> {
         return extractFromType(metadata.getReturnType());
     }
 
-    static RepositoryReturnType of(MethodMetadata metadata) {
+    static MethodQueryRepositoryReturnType of(MethodMetadata metadata) {
         TypeElement typeElement = metadata.getReturnElement();
         String returnType = typeElement.getQualifiedName().toString();
 

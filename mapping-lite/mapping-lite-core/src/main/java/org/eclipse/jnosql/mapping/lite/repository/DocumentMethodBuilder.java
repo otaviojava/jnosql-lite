@@ -34,7 +34,7 @@ enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
                 lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
             }
             lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
-            RepositoryReturnType returnType = RepositoryReturnType.of(metadata);
+            MethodQueryRepositoryReturnType returnType = MethodQueryRepositoryReturnType.of(metadata);
             lines.addAll(returnType.apply(metadata));
             return lines;
         }
