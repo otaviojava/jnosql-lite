@@ -43,9 +43,9 @@ enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
             Query query = metadata.getQuery();
-            lines.add("jakarta.nosql.mapping.PreparedStatement prepare = template.prepare(\"" + query.value() +"\"");
+            lines.add("jakarta.nosql.mapping.PreparedStatement prepare = template.prepare(\"" + query.value() + "\"");
             for (Parameter parameter : metadata.getParameters()) {
-                if(parameter.hasParam()) {
+                if (parameter.hasParam()) {
                     Param param = parameter.getParam();
                     lines.add("prepare.bind(\"" + param.value() + "\"," + parameter.getName() + ")");
                 }
@@ -53,4 +53,12 @@ enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
             return lines;
         }
     };
+
+    static DocumentMethodBuilder of(MethodMetadata metadata) {
+        if (metadata.hasQuery()) {
+            return ANNOTATION_QUERY;
+        } else {
+            return METHOD_QUERY;
+        }
+    }
 }
