@@ -14,19 +14,43 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
+import jakarta.nosql.mapping.Param;
+import jakarta.nosql.mapping.Query;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
-    METHOD_QUERY{
+
+    METHOD_QUERY {
         @Override
         public List<String> apply(MethodMetadata metadata) {
-            return null;
+            List<String> lines = new ArrayList<>();
+            lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
+            lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
+            lines.add("jakarta.nosql.Params params = queryParams.getParams()");
+            for (Parameter parameter : metadata.getParameters()) {
+                lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+            }
+            lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
+            RepositoryReturnType returnType = RepositoryReturnType.of(metadata);
+            lines.addAll(returnType.apply(metadata));
+            return lines;
         }
-    }, ANNOTATION_QUERY{
+    }, ANNOTATION_QUERY {
         @Override
         public List<String> apply(MethodMetadata metadata) {
-            return null;
+            List<String> lines = new ArrayList<>();
+            Query query = metadata.getQuery();
+            lines.add("jakarta.nosql.mapping.PreparedStatement prepare = template.prepare(\"" + query.value() +"\"");
+            for (Parameter parameter : metadata.getParameters()) {
+                if(parameter.hasParam()) {
+                    Param param = parameter.getParam();
+                    lines.add("prepare.bind(\"" + param.value() + "\"," + parameter.getName() + ")");
+                }
+            }
+            return lines;
         }
     };
 }
