@@ -26,14 +26,14 @@ enum AnnotationQueryRepositoryReturnType implements Function<MethodMetadata, Lis
     STREAM {
         @Override
         public List<String> apply(MethodMetadata metadata) {
-            String line = "Stream<" + getEntity(metadata) + "> result = this.template.select(query)";
+            String line = "Stream<" + getEntity(metadata) + "> result = prepare.getResult()";
             return singletonList(line);
         }
     }, LIST {
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("Stream<" + getEntity(metadata) + "> entities = prepare.getResult()");
             lines.add("java.util.List<" + getEntity(metadata) + "> result = entities.collect(java.util.stream.Collectors.toList())");
             return lines;
         }
@@ -41,7 +41,7 @@ enum AnnotationQueryRepositoryReturnType implements Function<MethodMetadata, Lis
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("Stream<" + getEntity(metadata) + "> entities = prepare.getResult()");
             lines.add("java.util.Set<" + getEntity(metadata) + "> result = entities.collect(java.util.stream.Collectors.toSet())");
             return lines;
         }
@@ -49,7 +49,7 @@ enum AnnotationQueryRepositoryReturnType implements Function<MethodMetadata, Lis
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("Stream<" + getEntity(metadata) + "> entities = prepare.getResult()");
             lines.add("java.util.Queue<" + getEntity(metadata) + "> result = entities.collect(java.util.stream" +
                     ".Collectors.toCollection(java.util.LinkedList::new)");
             return lines;
@@ -58,7 +58,7 @@ enum AnnotationQueryRepositoryReturnType implements Function<MethodMetadata, Lis
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("Stream<" + getEntity(metadata) + "> entities = this.template.select(query)");
+            lines.add("Stream<" + getEntity(metadata) + "> entities = prepare.getResult()");
             lines.add("java.util.Queue<" + getEntity(metadata) + "> result = entities.collect(java.util.stream" +
                     ".Collectors.toCollection(java.util.TreeSet::new)");
             return lines;
@@ -67,7 +67,7 @@ enum AnnotationQueryRepositoryReturnType implements Function<MethodMetadata, Lis
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("java.util.Optional<" + getEntity(metadata) + "> result = this.template.singleResult(query)");
+            lines.add("java.util.Optional<" + getEntity(metadata) + "> result = prepare.getSingleResult()");
             return lines;
         }
     },
@@ -75,7 +75,7 @@ enum AnnotationQueryRepositoryReturnType implements Function<MethodMetadata, Lis
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("java.util.Optional<" + getEntity(metadata) + "> entityResult = this.template.singleResult(query)");
+            lines.add("java.util.Optional<" + getEntity(metadata) + "> entityResult = prepare.getSingleResult()");
             lines.add(getEntity(metadata) + " result = entityResult.orElse(null)");
             return lines;
         }

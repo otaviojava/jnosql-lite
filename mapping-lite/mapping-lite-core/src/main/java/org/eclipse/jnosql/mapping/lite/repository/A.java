@@ -7,6 +7,6 @@ public class A {
     public void as() {
         PreparedStatement prepare = null;
         prepare.bind("name","name");
-        prepare.getResult()
+        prepare.getSingleResult()
     }
 }
