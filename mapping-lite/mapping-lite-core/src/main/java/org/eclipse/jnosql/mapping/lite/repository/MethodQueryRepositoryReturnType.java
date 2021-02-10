@@ -14,7 +14,6 @@
  */
 package org.eclipse.jnosql.mapping.lite.repository;
 
-import javax.lang.model.element.TypeElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -86,9 +85,7 @@ enum MethodQueryRepositoryReturnType implements Function<MethodMetadata, List<St
     }
 
     static MethodQueryRepositoryReturnType of(MethodMetadata metadata) {
-        TypeElement typeElement = metadata.getReturnElement();
-        String returnType = typeElement.getQualifiedName().toString();
-
+        String returnType = metadata.getReturnElement().getQualifiedName().toString();
         if (returnType.equals(getEntity(metadata))) {
             return ENTITY_TYPE;
         }
