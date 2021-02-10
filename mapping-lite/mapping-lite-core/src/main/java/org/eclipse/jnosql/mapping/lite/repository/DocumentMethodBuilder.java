@@ -50,7 +50,7 @@ enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
                     lines.add("prepare.bind(\"" + param.value() + "\"," + parameter.getName() + ")");
                 }
             }
-            MethodQueryRepositoryReturnType returnType = MethodQueryRepositoryReturnType.of(metadata);
+            AnnotationQueryRepositoryReturnType returnType = AnnotationQueryRepositoryReturnType.of(metadata);
             lines.addAll(returnType.apply(metadata));
             return lines;
         }
