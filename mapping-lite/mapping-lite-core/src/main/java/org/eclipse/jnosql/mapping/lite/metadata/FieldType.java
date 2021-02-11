@@ -18,5 +18,5 @@ package org.eclipse.jnosql.mapping.lite.metadata;
  * enum that contains kinds of annotations to fields on java.
  */
 public enum FieldType {
-    MAP, COLLECTION, DEFAULT, SUB_ENTITY, EMBEDDED;
+    MAP, COLLECTION, DEFAULT, SUB_ENTITY, EMBEDDED
 }
