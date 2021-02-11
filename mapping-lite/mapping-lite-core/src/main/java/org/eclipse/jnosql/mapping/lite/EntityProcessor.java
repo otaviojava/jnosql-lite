@@ -52,7 +52,7 @@ public class EntityProcessor extends AbstractProcessor {
     static final Predicate<Element> IS_CONSTRUCTOR = el -> el.getKind() == ElementKind.CONSTRUCTOR;
     static final Predicate<String> IS_BLANK = String::isBlank;
     static final Predicate<String> IS_NOT_BLANK = IS_BLANK.negate();
-    static final Predicate<Element> PUBLIC_PRIVATE = el -> el.getModifiers().stream().anyMatch(m -> MODIFIERS.contains(m));
+    static final Predicate<Element> PUBLIC_PRIVATE = el -> el.getModifiers().stream().anyMatch(MODIFIERS::contains);
     static final Predicate<Element> DEFAULT_MODIFIER = el -> el.getModifiers().isEmpty();
     static final Predicate<Element> HAS_ACCESS = PUBLIC_PRIVATE.or(DEFAULT_MODIFIER);
     static final Predicate<Element> HAS_COLUMN_ANNOTATION = el -> el.getAnnotation(Column.class) != null;
