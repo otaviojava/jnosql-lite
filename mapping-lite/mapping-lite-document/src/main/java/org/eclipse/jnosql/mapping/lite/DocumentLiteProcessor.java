@@ -19,9 +19,14 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
 public class DocumentLiteProcessor extends AbstractProcessor {
+    private static final Logger LOGGER = Logger.getLogger(DocumentLiteProcessor.class.getName());
+    private static final String PACKAGE = "org.eclipse.jnosql.mapping.lite.metadata.document.";
+    private static final String METADATA = "document";
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         return false;
