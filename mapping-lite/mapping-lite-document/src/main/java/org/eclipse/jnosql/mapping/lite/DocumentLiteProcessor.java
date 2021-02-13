@@ -14,12 +14,33 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
+import jakarta.nosql.mapping.MappingException;
+
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
+import javax.tools.JavaFileObject;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Writer;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
 public class DocumentLiteProcessor extends AbstractProcessor {
@@ -29,6 +50,42 @@ public class DocumentLiteProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
+        LOGGER.info("URL folder: " + url.toString());
+        LOGGER.info("URI folder: " + url.toURI().toString());
+        Stream<Path> path = Files.walk(getPath(url));
+        path.map(Path::getFileName)
+                .map(Path::toString)
+                .filter(s -> s.contains(".java"))
+                .map(s -> s.substring(0, s.lastIndexOf(".")))
+                .forEach(this::loadClass);
         return false;
+    }
+
+    private void loadClass(String file) {
+        try {
+            Filer filer = processingEnv.getFiler();
+            JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
+            try (Writer writer = fileObject.openWriter()) {
+                final InputStream stream = MetadataAppender.class
+                        .getClassLoader()
+                        .getResourceAsStream(METADATA + "/" + file + ".java");
+                String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
+                        .collect(Collectors.joining("\n"));
+                writer.append(source);
+            }
+        } catch (IOException exp) {
+            throw new MappingException("There is an issue while it is loading the class: " + file, exp);
+        }
+    }
+
+    private Path getPath(URL url) throws IOException, URISyntaxException {
+        URI uri = url.toURI();
+        if ("jar".equals(uri.getScheme())) {
+            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap(), null);
+            return fileSystem.getPath("/" + METADATA);
+        } else {
+            return Paths.get(uri);
+        }
     }
 }
