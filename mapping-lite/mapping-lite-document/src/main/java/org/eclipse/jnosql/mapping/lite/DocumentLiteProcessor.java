@@ -44,21 +44,26 @@ import java.util.stream.Stream;
 
 @SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
 public class DocumentLiteProcessor extends AbstractProcessor {
+
     private static final Logger LOGGER = Logger.getLogger(DocumentLiteProcessor.class.getName());
     private static final String PACKAGE = "org.eclipse.jnosql.mapping.lite.metadata.document.";
     private static final String METADATA = "document";
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
-        LOGGER.info("URL folder: " + url.toString());
-        LOGGER.info("URI folder: " + url.toURI().toString());
-        Stream<Path> path = Files.walk(getPath(url));
-        path.map(Path::getFileName)
-                .map(Path::toString)
-                .filter(s -> s.contains(".java"))
-                .map(s -> s.substring(0, s.lastIndexOf(".")))
-                .forEach(this::loadClass);
+        try {
+            URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
+            LOGGER.info("URL folder: " + url.toString());
+            LOGGER.info("URI folder: " + url.toURI().toString());
+            Stream<Path> path = Files.walk(getPath(url));
+            path.map(Path::getFileName)
+                    .map(Path::toString)
+                    .filter(s -> s.contains(".java"))
+                    .map(s -> s.substring(0, s.lastIndexOf(".")))
+                    .forEach(this::loadClass);
+        } catch (URISyntaxException | IOException exp) {
+            throw new MappingException("There is an issue while it is loading the class", exp);
+        }
         return false;
     }
 
