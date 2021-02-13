@@ -26,6 +26,9 @@ import java.util.function.Predicate;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.StreamSupport.stream;
 
+/**
+ * Converter the {@link String} to {@link Settings}
+ */
 public class SettingsConverter implements Converter<Settings> {
     @Override
     public Settings convert(String value) {
