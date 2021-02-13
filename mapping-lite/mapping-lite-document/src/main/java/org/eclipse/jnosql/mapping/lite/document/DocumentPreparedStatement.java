@@ -25,7 +25,6 @@ final class DocumentPreparedStatement implements PreparedStatement {
 
     private final jakarta.nosql.document.DocumentPreparedStatement preparedStatement;
 
-
     private final DocumentEntityConverter converter;
 
     DocumentPreparedStatement(jakarta.nosql.document.DocumentPreparedStatement preparedStatement,

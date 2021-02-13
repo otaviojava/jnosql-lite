@@ -35,6 +35,7 @@ import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
 import org.eclipse.jnosql.communication.document.query.DefaultDocumentQueryParser;
 
+import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;
@@ -58,6 +59,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
 
     private final DocumentObserverParser observerParser;
 
+    @Inject
     public LiteDocumentTemplate(DocumentCollectionManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteDocumentEntityConverter();
@@ -71,7 +73,6 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         DocumentEntity documentEntity = this.converter.toDocument(entity);
         return converter.toEntity(entity, manager.insert(documentEntity));
     }
-
 
     @Override
     public <T> T insert(T entity, Duration ttl) {
