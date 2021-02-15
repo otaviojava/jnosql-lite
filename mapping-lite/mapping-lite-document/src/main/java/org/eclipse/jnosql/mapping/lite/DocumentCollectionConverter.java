@@ -22,7 +22,6 @@ import org.eclipse.microprofile.config.spi.Converter;
 
 import javax.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
 public class DocumentCollectionConverter implements Converter<DocumentCollectionManager> {
 
     private static final String DATABASE_KEY = ".database";
