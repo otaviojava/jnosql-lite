@@ -14,10 +14,8 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import jakarta.nosql.Settings;
 import jakarta.nosql.document.DocumentCollectionManager;
 import jakarta.nosql.document.DocumentCollectionManagerFactory;
-import org.eclipse.jnosql.mapping.lite.metadata.SettingsConverter;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.spi.Converter;
@@ -27,14 +25,14 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class DocumentCollectionConverter implements Converter<DocumentCollectionManager> {
 
-    private static final String DOCUMENT_DATABASE = "document.database";
+    private static final String DATABASE_KEY = ".database";
 
     @Override
     public DocumentCollectionManager convert(String value) {
         Config config = ConfigProvider.getConfig();
         DocumentCollectionFactoryConverter converter = new DocumentCollectionFactoryConverter();
         DocumentCollectionManagerFactory factory = converter.convert(value);
-        String database = config.getValue(DOCUMENT_DATABASE, String.class);
+        String database = config.getValue(value + DATABASE_KEY, String.class);
         return factory.get(database);
     }
 }
