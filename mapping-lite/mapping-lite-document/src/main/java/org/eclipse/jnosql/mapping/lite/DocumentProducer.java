@@ -23,10 +23,12 @@ import java.util.function.Supplier;
 @ApplicationScoped
 public class DocumentProducer implements Supplier<DocumentCollectionManager> {
 
+    private static final String KEY_DOCUMENT = "document";
+
     @Override
     @Produces
     public DocumentCollectionManager get() {
         DocumentCollectionConverter converter = new DocumentCollectionConverter();
-        return converter.convert("document");
+        return converter.convert(KEY_DOCUMENT);
     }
 }
