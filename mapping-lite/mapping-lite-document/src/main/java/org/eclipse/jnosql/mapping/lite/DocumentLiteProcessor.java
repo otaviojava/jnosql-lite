@@ -72,7 +72,7 @@ public class DocumentLiteProcessor extends AbstractProcessor {
             Filer filer = processingEnv.getFiler();
             JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
             try (Writer writer = fileObject.openWriter()) {
-                final InputStream stream = MetadataAppender.class
+                final InputStream stream = DocumentLiteProcessor.class
                         .getClassLoader()
                         .getResourceAsStream(METADATA + "/" + file + ".java");
                 String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
