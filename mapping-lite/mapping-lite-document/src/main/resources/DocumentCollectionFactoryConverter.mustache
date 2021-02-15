@@ -25,7 +25,7 @@ public class DocumentCollectionFactoryConverter implements Converter<DocumentCol
     @Override
     public DocumentCollectionManagerFactory convert(String value) {
         SettingsConverter settingsConverter = new SettingsConverter();
-        DocumentConfiguration configuration = null;
+        DocumentConfiguration configuration = new {{config}};
         Settings settings = settingsConverter.convert(value);
         return configuration.get(settings);
     }
