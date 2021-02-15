@@ -35,6 +35,7 @@ import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Iterator;
@@ -47,6 +48,7 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Objects.requireNonNull;
 
+@ApplicationScoped
 public class LiteDocumentTemplate implements DocumentTemplate {
 
     private static final DocumentQueryParser PARSER = new DefaultDocumentQueryParser();
