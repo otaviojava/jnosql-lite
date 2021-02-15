@@ -16,6 +16,7 @@ package org.eclipse.jnosql.mapping.lite;
 
 import jakarta.nosql.Settings;
 import jakarta.nosql.document.DocumentCollectionManager;
+import jakarta.nosql.document.DocumentCollectionManagerFactory;
 import org.eclipse.jnosql.mapping.lite.metadata.SettingsConverter;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
@@ -29,8 +30,9 @@ public class DocumentCollectionConverter implements Converter<DocumentCollection
     @Override
     public DocumentCollectionManager convert(String value) {
         Config config = ConfigProvider.getConfig();
-        SettingsConverter settingsConverter = new SettingsConverter();
-        Settings settings = settingsConverter.convert(value);
-        return null;
+        DocumentCollectionFactoryConverter converter = new DocumentCollectionFactoryConverter();
+        DocumentCollectionManagerFactory factory = converter.convert(value);
+        String database = config.getValue("document.database", String.class);
+        return factory.get(database);
     }
 }
