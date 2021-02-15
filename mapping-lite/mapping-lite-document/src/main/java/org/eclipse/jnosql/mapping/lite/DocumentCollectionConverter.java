@@ -27,12 +27,14 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class DocumentCollectionConverter implements Converter<DocumentCollectionManager> {
 
+    private static final String DOCUMENT_DATABASE = "document.database";
+
     @Override
     public DocumentCollectionManager convert(String value) {
         Config config = ConfigProvider.getConfig();
         DocumentCollectionFactoryConverter converter = new DocumentCollectionFactoryConverter();
         DocumentCollectionManagerFactory factory = converter.convert(value);
-        String database = config.getValue("document.database", String.class);
+        String database = config.getValue(DOCUMENT_DATABASE, String.class);
         return factory.get(database);
     }
 }
