@@ -30,6 +30,7 @@ import static java.util.stream.StreamSupport.stream;
  * Converter the {@link String} to {@link Settings}
  */
 public class SettingsConverter implements Converter<Settings> {
+
     @Override
     public Settings convert(String value) {
         Config config = ConfigProvider.getConfig();
