@@ -17,6 +17,8 @@ package org.eclipse.jnosql.mapping.lite.document;
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
 import org.eclipse.jnosql.mapping.document.DocumentLiteProcessor;
+import org.eclipse.jnosql.mapping.lite.EntityProcessor;
+import org.eclipse.jnosql.mapping.lite.repository.RepositoryProcessor;
 import org.junit.jupiter.api.Test;
 
 import javax.tools.JavaFileObject;
@@ -36,7 +38,9 @@ public class CompilerTest {
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
-                .withProcessors(new DocumentLiteProcessor())
+                .withProcessors(new DocumentLiteProcessor(),
+                        new EntityProcessor(),
+                        new RepositoryProcessor())
                 .compile(javaFileObject);
         assertThat(compilation).succeeded();
     }
