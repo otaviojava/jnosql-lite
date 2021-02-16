@@ -12,9 +12,10 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.mapping.document;
 
 import jakarta.nosql.mapping.MappingException;
+import org.eclipse.jnosql.mapping.lite.EntityProcessor;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
