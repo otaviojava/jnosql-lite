@@ -20,7 +20,6 @@ import org.eclipse.jnosql.mapping.lite.EntityProcessor;
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
-import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 import java.io.BufferedReader;
@@ -43,7 +42,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
 public class DocumentLiteProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(DocumentLiteProcessor.class.getName());
