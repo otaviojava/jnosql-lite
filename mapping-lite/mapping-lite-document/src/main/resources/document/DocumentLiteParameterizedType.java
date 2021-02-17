@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.document;
+package org.eclipse.jnosql.lite.mapping.document;
 
 import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
 

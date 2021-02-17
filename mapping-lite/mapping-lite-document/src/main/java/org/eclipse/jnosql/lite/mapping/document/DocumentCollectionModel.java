@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.document;
+package org.eclipse.jnosql.lite.mapping.document;
 
 import jakarta.nosql.mapping.MappingException;
 import org.eclipse.microprofile.config.Config;
