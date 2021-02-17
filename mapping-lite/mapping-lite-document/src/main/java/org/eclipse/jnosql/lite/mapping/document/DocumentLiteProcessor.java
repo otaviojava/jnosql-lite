@@ -24,7 +24,6 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -71,11 +70,6 @@ public class DocumentLiteProcessor extends AbstractProcessor {
                 long start = System.currentTimeMillis();
                 LOGGER.info("Starting the document Lite Processor");
                 copyDocumentLiteClasses();
-                try {
-                    createCollectionFactory();
-                } catch (IOException exception) {
-                    error(exception);
-                }
                 needToExecute.set(false);
                 long end = System.currentTimeMillis() - start;
                 LOGGER.info("Document Lite Processor has finished " + end + " ms");
@@ -84,16 +78,6 @@ public class DocumentLiteProcessor extends AbstractProcessor {
         return false;
     }
 
-    private void createCollectionFactory() throws IOException {
-        LOGGER.info("Creating DocumentCollectionFactoryConverter class");
-        DocumentCollectionModel model = new DocumentCollectionModel();
-        Filer filer = processingEnv.getFiler();
-        JavaFileObject fileObject = filer.createSourceFile(model.getQualified());
-        try (Writer writer = fileObject.openWriter()) {
-            template.execute(writer, model);
-        }
-
-    }
 
     private void copyDocumentLiteClasses() {
         try {
@@ -143,8 +127,4 @@ public class DocumentLiteProcessor extends AbstractProcessor {
         return factory.compile(TEMPLATE);
     }
 
-    private void error(Exception exception) {
-        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, "failed to write extension file: "
-                + exception.getMessage());
-    }
 }
