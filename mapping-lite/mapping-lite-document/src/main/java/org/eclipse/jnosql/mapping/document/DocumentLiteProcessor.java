@@ -39,6 +39,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -50,8 +51,15 @@ public class DocumentLiteProcessor extends AbstractProcessor {
     private static final String PACKAGE = "org.eclipse.jnosql.mapping.lite.metadata.document.";
     private static final String METADATA = "document";
 
+    private final AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        executeDocumentExtensions();
+        return false;
+    }
+
+    private void executeDocumentExtensions() {
         try {
             URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
             LOGGER.info("URL folder: " + url.toString());
@@ -65,7 +73,6 @@ public class DocumentLiteProcessor extends AbstractProcessor {
         } catch (URISyntaxException | IOException exp) {
             throw new MappingException("There is an issue while it is loading the class", exp);
         }
-        return false;
     }
 
     private void loadClass(String file) {
