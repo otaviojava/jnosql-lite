@@ -16,7 +16,7 @@ package org.eclipse.jnosql.lite.mapping.entities;
 
 import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
+import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
 
 import java.util.stream.Stream;
 
