@@ -52,16 +52,8 @@ public class DocumentLiteProcessor extends AbstractProcessor {
     private static final Logger LOGGER = Logger.getLogger(DocumentLiteProcessor.class.getName());
     private static final String PACKAGE = "org.eclipse.jnosql.lite.mapping.document.";
     private static final String METADATA = "document";
-    private static final String TEMPLATE = "document/DocumentCollectionFactoryConverter.java";
 
     private final AtomicBoolean needToExecute = new AtomicBoolean(true);
-
-    private final Mustache template;
-
-    public DocumentLiteProcessor() {
-        this.template = createTemplate();
-    }
-
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -121,10 +113,4 @@ public class DocumentLiteProcessor extends AbstractProcessor {
             return Paths.get(uri);
         }
     }
-
-    private Mustache createTemplate() {
-        MustacheFactory factory = new DefaultMustacheFactory();
-        return factory.compile(TEMPLATE);
-    }
-
 }
