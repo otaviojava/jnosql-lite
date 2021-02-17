@@ -15,4 +15,8 @@
 package org.eclipse.jnosql.mapping.document;
 
 class DocumentCollectionModel {
+
+    public String getQualified() {
+        return "org.eclipse.jnosql.mapping.document.DocumentCollectionFactoryConverter";
+    }
 }

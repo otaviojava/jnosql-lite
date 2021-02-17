@@ -79,6 +79,10 @@ public class DocumentLiteProcessor extends AbstractProcessor {
         return false;
     }
 
+    private void createCollectionFactory() {
+        LOGGER.info("Creating DocumentCollectionFactoryConverter class");
+
+    }
     private void copyDocumentLiteClasses() {
         try {
             URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
