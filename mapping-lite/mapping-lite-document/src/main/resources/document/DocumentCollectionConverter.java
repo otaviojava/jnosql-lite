@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package document;
+package org.eclipse.jnosql.mapping.document;
 
 import jakarta.nosql.document.DocumentCollectionManager;
 import jakarta.nosql.document.DocumentCollectionManagerFactory;
