@@ -18,7 +18,6 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.mapping.MappingException;
-import org.eclipse.jnosql.mapping.lite.EntityProcessor;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -98,7 +97,7 @@ public class DocumentLiteProcessor extends AbstractProcessor {
 
     private void copyDocumentLiteClasses() {
         try {
-            URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
+            URL url = DocumentLiteProcessor.class.getClassLoader().getResource(METADATA);
             LOGGER.info("URL folder: " + url.toString());
             LOGGER.info("URI folder: " + url.toURI().toString());
             Stream<Path> path = Files.walk(getPath(url));
