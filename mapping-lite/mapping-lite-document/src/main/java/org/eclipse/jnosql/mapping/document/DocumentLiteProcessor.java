@@ -57,8 +57,12 @@ public class DocumentLiteProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         synchronized (this) {
             if (needToExecute.get()) {
+                long start = System.currentTimeMillis();
+                LOGGER.info("Starting the document Lite Processor");
                 executeDocumentExtensions();
                 needToExecute.set(false);
+                long end = System.currentTimeMillis() - start;
+                LOGGER.info("Document Lite Processor has finished " + end + " ms");
             }
         }
         return false;
@@ -70,12 +74,11 @@ public class DocumentLiteProcessor extends AbstractProcessor {
             LOGGER.info("URL folder: " + url.toString());
             LOGGER.info("URI folder: " + url.toURI().toString());
             Stream<Path> path = Files.walk(getPath(url));
-            Set<String> paths = path.map(Path::getFileName)
+            path.map(Path::getFileName)
                     .map(Path::toString)
                     .filter(s -> s.contains(".java"))
                     .map(s -> s.substring(0, s.lastIndexOf(".")))
-                    .collect(Collectors.toSet());
-            paths.forEach(this::loadClass);
+                    .distinct().forEach(this::loadClass);
         } catch (URISyntaxException | IOException exp) {
             throw new MappingException("There is an issue while it is loading the class", exp);
         }
