@@ -51,14 +51,14 @@ public class DocumentLiteProcessor extends AbstractProcessor {
     private static final String PACKAGE = "org.eclipse.jnosql.mapping.lite.metadata.document.";
     private static final String METADATA = "document";
 
-    private final AtomicBoolean atomicBoolean = new AtomicBoolean(true);
+    private final AtomicBoolean needToExecute = new AtomicBoolean(true);
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         synchronized (this) {
-            if (atomicBoolean.get()) {
+            if (needToExecute.get()) {
                 executeDocumentExtensions();
-                atomicBoolean.set(false);
+                needToExecute.set(false);
             }
         }
         executeDocumentExtensions();
