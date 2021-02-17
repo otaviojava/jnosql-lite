@@ -75,6 +75,7 @@ public class DocumentLiteProcessor extends AbstractProcessor {
                     .map(Path::toString)
                     .filter(s -> s.contains(".java"))
                     .map(s -> s.substring(0, s.lastIndexOf(".")))
+                    .distinct()
                     .forEach(this::loadClass);
         } catch (URISyntaxException | IOException exp) {
             throw new MappingException("There is an issue while it is loading the class", exp);
