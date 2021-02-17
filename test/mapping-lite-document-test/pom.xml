@@ -55,7 +55,7 @@
                         <path>
                             <groupId>org.eclipse.jnosql.lite.mapping</groupId>
                             <artifactId>mapping-lite-document</artifactId>
-                            <versiDocumentConfigurationon>${jakarta.nosql.version}</versiDocumentConfigurationon>
+                            <version>${jakarta.nosql.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
