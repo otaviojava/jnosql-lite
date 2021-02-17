@@ -103,7 +103,7 @@
                             <outputDirectory>${basedir}/target/classes/metadata/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/java/org/eclipse/jnosql/mapping/lite/metadata/</directory>
+                                    <directory>src/main/java/org/eclipse/jnosql/lite/mapping/metadata/</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
