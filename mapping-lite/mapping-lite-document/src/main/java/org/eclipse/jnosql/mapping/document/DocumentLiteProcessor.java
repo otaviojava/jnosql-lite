@@ -14,6 +14,9 @@
  */
 package org.eclipse.jnosql.mapping.document;
 
+import com.github.mustachejava.DefaultMustacheFactory;
+import com.github.mustachejava.Mustache;
+import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.mapping.MappingException;
 import org.eclipse.jnosql.mapping.lite.EntityProcessor;
 
@@ -50,8 +53,16 @@ public class DocumentLiteProcessor extends AbstractProcessor {
     private static final Logger LOGGER = Logger.getLogger(DocumentLiteProcessor.class.getName());
     private static final String PACKAGE = "org.eclipse.jnosql.mapping.lite.metadata.document.";
     private static final String METADATA = "document";
+    private static final String TEMPLATE = "DocumentCollectionFactoryConverter.mustache";
 
     private final AtomicBoolean needToExecute = new AtomicBoolean(true);
+
+    private final Mustache template;
+
+    public DocumentLiteProcessor() {
+        this.template = createTemplate();
+    }
+
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -109,5 +120,10 @@ public class DocumentLiteProcessor extends AbstractProcessor {
         } else {
             return Paths.get(uri);
         }
+    }
+
+    private Mustache createTemplate() {
+        MustacheFactory factory = new DefaultMustacheFactory();
+        return factory.compile(TEMPLATE);
     }
 }
