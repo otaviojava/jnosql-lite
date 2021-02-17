@@ -12,14 +12,25 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.metadata;
 
+import java.util.NavigableSet;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+/**
+ * An implementation of {@link CollectionSupplier} to {@link TreeSet}
+ */
+public class TreeSetSupplier implements CollectionSupplier<TreeSet<?>> {
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
+    @Override
+    public boolean test(Class<?> type) {
+        return NavigableSet.class.equals(type)
+                || SortedSet.class.equals(type);
+    }
 
+    @Override
+    public TreeSet<?> get() {
+        return new TreeSet<>();
+    }
 }

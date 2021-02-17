@@ -12,14 +12,23 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping;
 
+import java.util.List;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+public class ClassMappingsModel extends BaseMappingModel {
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
+    private final List<String> entities;
 
+    public ClassMappingsModel(List<String> entities) {
+        this.entities = entities;
+    }
+
+    public List<String> getEntities() {
+        return entities;
+    }
+
+    public String getQualified() {
+        return "org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings";
+    }
 }

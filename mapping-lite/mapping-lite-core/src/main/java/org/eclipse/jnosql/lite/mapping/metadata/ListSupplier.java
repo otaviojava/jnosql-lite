@@ -12,14 +12,25 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.metadata;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+/**
+ * An implementation of {@link CollectionSupplier} to {@link ArrayList}
+ */
+public class ListSupplier implements CollectionSupplier<ArrayList<?>> {
+    @Override
+    public boolean test(Class<?> type) {
+        return List.class.equals(type) ||
+                Iterable.class.equals(type)
+                || Collection.class.equals(type);
+    }
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
-
+    @Override
+    public ArrayList<?> get() {
+        return new ArrayList<>();
+    }
 }

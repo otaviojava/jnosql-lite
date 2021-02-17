@@ -12,14 +12,11 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.metadata;
 
-
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
-
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
-
+/**
+ * enum that contains kinds of annotations to fields on java.
+ */
+public enum FieldType {
+    MAP, COLLECTION, DEFAULT, SUB_ENTITY, EMBEDDED
 }

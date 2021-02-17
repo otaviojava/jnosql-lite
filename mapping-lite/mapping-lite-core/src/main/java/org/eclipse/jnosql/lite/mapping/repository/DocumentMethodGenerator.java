@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Otávio Santana and others
+ *  Copyright (c) 2021 Otávio Santana and others
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the Eclipse Public License v1.0
  *   and Apache License v2.0 which accompanies this distribution.
@@ -12,14 +12,21 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.repository;
 
+import java.util.List;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+class DocumentMethodGenerator implements MethodGenerator {
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
+    private final MethodMetadata metadata;
 
+    DocumentMethodGenerator(MethodMetadata metadata) {
+        this.metadata = metadata;
+    }
+
+    @Override
+    public List<String> getLines() {
+        DocumentMethodBuilder methodBuilder = DocumentMethodBuilder.of(this.metadata);
+        return methodBuilder.apply(this.metadata);
+    }
 }

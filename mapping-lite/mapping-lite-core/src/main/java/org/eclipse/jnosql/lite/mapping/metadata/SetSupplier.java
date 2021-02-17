@@ -12,14 +12,24 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.metadata;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+/**
+ * An implementation of {@link CollectionSupplier} to {@link HashSet}
+ */
+public class SetSupplier implements CollectionSupplier<HashSet<?>> {
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
+    @Override
+    public boolean test(Class<?> type) {
+        return Set.class.equals(type);
+    }
 
+    @Override
+    public HashSet<?> get() {
+        return new HashSet<>();
+    }
 }

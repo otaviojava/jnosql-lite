@@ -12,14 +12,24 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.metadata;
 
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+/**
+ * An implementation of {@link CollectionSupplier} to {@link LinkedList}
+ */
+public class DequeSupplier implements CollectionSupplier<LinkedList<?>> {
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
+    @Override
+    public boolean test(Class<?> type) {
+        return Deque.class.equals(type) || Queue.class.equals(type);
+    }
 
+    @Override
+    public LinkedList<?> get() {
+        return new LinkedList<>();
+    }
 }

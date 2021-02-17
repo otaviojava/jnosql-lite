@@ -12,14 +12,15 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping;
 
+public class ValidationException extends RuntimeException {
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+    public ValidationException(String message) {
+        super(message);
+    }
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10Repository extends Repository<Person10, Long> {
-
+    public ValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
