@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.mapping.lite.document;
 
 import jakarta.nosql.Settings;
+import jakarta.nosql.document.DocumentCollectionManager;
 import jakarta.nosql.document.DocumentCollectionManagerFactory;
 import jakarta.nosql.document.DocumentConfiguration;
 
@@ -22,11 +23,30 @@ public class MockConfiguration implements DocumentConfiguration {
 
     @Override
     public DocumentCollectionManagerFactory get() {
-        return null;
+        return new MockFactory(Settings.of());
     }
 
     @Override
     public DocumentCollectionManagerFactory get(Settings settings) {
-        return null;
+        return new MockFactory(settings);
+    }
+
+    public static class MockFactory implements DocumentCollectionManagerFactory {
+
+        private final Settings settings;
+
+        public MockFactory(Settings settings) {
+            this.settings = settings;
+        }
+
+        @Override
+        public <T extends DocumentCollectionManager> T get(String database) {
+            return null;
+        }
+
+        @Override
+        public void close() {
+
+        }
     }
 }
