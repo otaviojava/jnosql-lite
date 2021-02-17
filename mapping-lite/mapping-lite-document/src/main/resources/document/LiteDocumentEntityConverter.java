@@ -18,12 +18,12 @@ import jakarta.nosql.document.Document;
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
 import org.eclipse.jnosql.lite.mapping.document.DocumentFieldConverters.DocumentFieldConverterFactory;
-import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
-import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
-import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldType;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldTypeUtil;
+import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
 
 import java.util.Collections;
 import java.util.List;

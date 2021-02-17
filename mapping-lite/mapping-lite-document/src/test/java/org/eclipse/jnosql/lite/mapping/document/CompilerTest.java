@@ -16,9 +16,8 @@ package org.eclipse.jnosql.lite.mapping.document;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
-import org.eclipse.jnosql.lite.mapping.document.DocumentLiteProcessor;
-import org.eclipse.jnosql.mapping.lite.EntityProcessor;
-import org.eclipse.jnosql.mapping.lite.repository.RepositoryProcessor;
+import org.eclipse.jnosql.lite.mapping.EntityProcessor;
+import org.eclipse.jnosql.lite.mapping.repository.RepositoryProcessor;
 import org.junit.jupiter.api.Test;
 
 import javax.tools.JavaFileObject;

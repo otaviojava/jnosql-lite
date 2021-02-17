@@ -14,7 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping.document;
 
-import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

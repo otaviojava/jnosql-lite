@@ -20,11 +20,11 @@ import jakarta.nosql.Value;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.MappingException;
-import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
-import org.eclipse.jnosql.mapping.lite.metadata.CollectionSupplier;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldType;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldTypeUtil;
+import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.CollectionSupplier;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;

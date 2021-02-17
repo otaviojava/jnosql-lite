@@ -30,10 +30,10 @@ import jakarta.nosql.mapping.document.DocumentEntityConverter;
 import jakarta.nosql.mapping.document.DocumentQueryPagination;
 import jakarta.nosql.mapping.document.DocumentTemplate;
 import org.eclipse.jnosql.communication.document.query.DefaultDocumentQueryParser;
-import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
-import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
-import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
