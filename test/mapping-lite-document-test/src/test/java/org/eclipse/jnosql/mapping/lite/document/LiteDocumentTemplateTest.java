@@ -24,6 +24,7 @@ import jakarta.nosql.document.DocumentQuery;
 import jakarta.nosql.mapping.IdNotFoundException;
 import jakarta.nosql.mapping.PreparedStatement;
 import jakarta.nosql.mapping.document.DocumentTemplate;
+import org.eclipse.jnosql.lite.mapping.document.LiteDocumentTemplate;
 import org.eclipse.jnosql.lite.mapping.entities.Job;
 import org.eclipse.jnosql.lite.mapping.entities.Movie;
 import org.eclipse.jnosql.lite.mapping.entities.Person;
