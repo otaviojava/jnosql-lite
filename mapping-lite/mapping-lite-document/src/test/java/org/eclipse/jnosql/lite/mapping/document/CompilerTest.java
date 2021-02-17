@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.document;
+package org.eclipse.jnosql.lite.mapping.document;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
