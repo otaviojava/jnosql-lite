@@ -70,7 +70,7 @@ public class DocumentLiteProcessor extends AbstractProcessor {
             if (needToExecute.get()) {
                 long start = System.currentTimeMillis();
                 LOGGER.info("Starting the document Lite Processor");
-                executeDocumentExtensions();
+                copyDocumentLiteClasses();
                 needToExecute.set(false);
                 long end = System.currentTimeMillis() - start;
                 LOGGER.info("Document Lite Processor has finished " + end + " ms");
@@ -79,7 +79,7 @@ public class DocumentLiteProcessor extends AbstractProcessor {
         return false;
     }
 
-    private void executeDocumentExtensions() {
+    private void copyDocumentLiteClasses() {
         try {
             URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
             LOGGER.info("URL folder: " + url.toString());
