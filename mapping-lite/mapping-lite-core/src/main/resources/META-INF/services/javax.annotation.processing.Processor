@@ -1,2 +1,2 @@
 org.eclipse.jnosql.lite.mapping.EntityProcessor
-org.eclipse.jnosql.lite.mapping.RepositoryProcessor
+org.eclipse.jnosql.lite.mapping.repository.RepositoryProcessor
