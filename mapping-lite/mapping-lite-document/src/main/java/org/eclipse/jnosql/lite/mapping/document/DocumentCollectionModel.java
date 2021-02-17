@@ -33,6 +33,6 @@ class DocumentCollectionModel {
     }
 
     public String getQualified() {
-        return "org.eclipse.jnosql.mapping.document.DocumentCollectionFactoryConverter";
+        return "org.eclipse.jnosql.lite.mapping.document.DocumentCollectionFactoryConverter";
     }
 }
