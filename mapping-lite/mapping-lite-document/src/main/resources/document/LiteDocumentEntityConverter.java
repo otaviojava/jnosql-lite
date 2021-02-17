@@ -17,7 +17,7 @@ package org.eclipse.jnosql.lite.mapping.document;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import org.eclipse.jnosql.mapping.lite.document.DocumentFieldConverters.DocumentFieldConverterFactory;
+import org.eclipse.jnosql.lite.mapping.document.DocumentFieldConverters.DocumentFieldConverterFactory;
 import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
