@@ -52,7 +52,7 @@ import java.util.stream.Stream;
 public class DocumentLiteProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(DocumentLiteProcessor.class.getName());
-    private static final String PACKAGE = "org.eclipse.jnosql.mapping.document.";
+    private static final String PACKAGE = "org.eclipse.jnosql.lite.mapping.document.";
     private static final String METADATA = "document";
     private static final String TEMPLATE = "DocumentCollectionFactoryConverter.mustache";
 
