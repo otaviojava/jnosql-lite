@@ -12,50 +12,43 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.entities;
-
+package org.eclipse.jnosql.lite.mapping.entities;
 
 import jakarta.nosql.mapping.Column;
 import jakarta.nosql.mapping.Entity;
 import jakarta.nosql.mapping.Id;
 
-import java.util.Collections;
-import java.util.Set;
-
-@Entity("vendors")
-public class Vendor {
+@Entity("download")
+public class Download {
 
     @Id
-    private String name;
+    private Long id;
 
     @Column
-    private Set<String> prefixes;
+    private byte[] contents;
 
-    Vendor() {
+    public Long getId() {
+        return id;
     }
 
-    public Vendor(String name) {
-        this.name = name;
-        prefixes = Collections.emptySet();
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public byte[] getContents() {
+        if(contents != null) {
+            byte[] copiedArray = new byte[contents.length];
+            System.arraycopy(contents, 0, copiedArray, 0, contents.length);
+            return copiedArray;
+        }
+        return new byte[0];
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setContents(byte[] contents) {
+        if(contents != null) {
+            this.contents = new byte[contents.length];
+            System.arraycopy(contents, 0, this.contents, 0, contents.length);
 
-    public Set<String> getPrefixes() {
-        return prefixes;
-    }
-
-    public void setPrefixes(Set<String> prefixes) {
-        this.prefixes = prefixes;
-    }
-
-    public void add(String prefix) {
-        this.prefixes.add(prefix);
+        }
     }
 }

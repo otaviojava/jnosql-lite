@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Otávio Santana and others
+ *  Copyright (c) 2021 Otávio Santana and others
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the Eclipse Public License v1.0
  *   and Apache License v2.0 which accompanies this distribution.
@@ -12,8 +12,16 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.entities;
+package org.eclipse.jnosql.lite.mapping.entities;
 
-public enum ContactType {
-    MOBILE, PHONE, EMAIL;
+import jakarta.nosql.mapping.DatabaseType;
+import jakarta.nosql.mapping.Repository;
+import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
+
+import java.util.stream.Stream;
+
+@RepositoryLite(DatabaseType.DOCUMENT)
+public interface ActorRepository extends Repository<Actor, Long> {
+
+    Stream<Actor> findByName(String name);
 }

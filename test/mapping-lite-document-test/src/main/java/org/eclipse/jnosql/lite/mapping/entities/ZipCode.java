@@ -12,19 +12,33 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.entities;
+package org.eclipse.jnosql.lite.mapping.entities;
 
-import jakarta.nosql.mapping.AttributeConverter;
+import jakarta.nosql.mapping.Column;
+import jakarta.nosql.mapping.Entity;
 
-public class MoneyConverter implements AttributeConverter<Money, String> {
+@Entity
+public class ZipCode {
 
-    @Override
-    public String convertToDatabaseColumn(Money attribute) {
-        return attribute.toString();
+    @Column
+    private String zip;
+
+    @Column
+    private String plusFour;
+
+    public String getZip() {
+        return zip;
     }
 
-    @Override
-    public Money convertToEntityAttribute(String dbData) {
-        return Money.parse(dbData);
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public String getPlusFour() {
+        return plusFour;
+    }
+
+    public void setPlusFour(String plusFour) {
+        this.plusFour = plusFour;
     }
 }

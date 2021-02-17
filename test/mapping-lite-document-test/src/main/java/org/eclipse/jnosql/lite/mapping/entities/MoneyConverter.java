@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2021 Otávio Santana and others
+ *  Copyright (c) 2020 Otávio Santana and others
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the Eclipse Public License v1.0
  *   and Apache License v2.0 which accompanies this distribution.
@@ -12,16 +12,19 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.entities;
+package org.eclipse.jnosql.lite.mapping.entities;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.mapping.lite.metadata.RepositoryLite;
+import jakarta.nosql.mapping.AttributeConverter;
 
-import java.util.stream.Stream;
+public class MoneyConverter implements AttributeConverter<Money, String> {
 
-@RepositoryLite(DatabaseType.DOCUMENT)
-public interface ActorRepository extends Repository<Actor, Long> {
+    @Override
+    public String convertToDatabaseColumn(Money attribute) {
+        return attribute.toString();
+    }
 
-    Stream<Actor> findByName(String name);
+    @Override
+    public Money convertToEntityAttribute(String dbData) {
+        return Money.parse(dbData);
+    }
 }
