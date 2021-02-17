@@ -61,7 +61,6 @@ public class DocumentLiteProcessor extends AbstractProcessor {
                 needToExecute.set(false);
             }
         }
-        executeDocumentExtensions();
         return false;
     }
 
@@ -71,12 +70,12 @@ public class DocumentLiteProcessor extends AbstractProcessor {
             LOGGER.info("URL folder: " + url.toString());
             LOGGER.info("URI folder: " + url.toURI().toString());
             Stream<Path> path = Files.walk(getPath(url));
-            path.map(Path::getFileName)
+            Set<String> paths = path.map(Path::getFileName)
                     .map(Path::toString)
                     .filter(s -> s.contains(".java"))
                     .map(s -> s.substring(0, s.lastIndexOf(".")))
-                    .distinct()
-                    .forEach(this::loadClass);
+                    .collect(Collectors.toSet());
+            paths.forEach(this::loadClass);
         } catch (URISyntaxException | IOException exp) {
             throw new MappingException("There is an issue while it is loading the class", exp);
         }
