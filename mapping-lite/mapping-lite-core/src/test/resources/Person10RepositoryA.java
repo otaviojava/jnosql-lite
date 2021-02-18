@@ -19,7 +19,7 @@ import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Param;
 import jakarta.nosql.mapping.Query;
 import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+import org.eclipse.jnosql.lite.mapping.RepositoryLite;
 
 import java.util.List;
 import java.util.Optional;

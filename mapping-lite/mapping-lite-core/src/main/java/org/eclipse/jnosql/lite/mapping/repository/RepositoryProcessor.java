@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@SupportedAnnotationTypes("org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite")
+@SupportedAnnotationTypes("org.eclipse.jnosql.lite.mapping.RepositoryLite")
 public class RepositoryProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(RepositoryProcessor.class.getName());

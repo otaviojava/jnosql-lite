@@ -17,7 +17,7 @@ package org.eclipse.jnosql.lite.mapping.repository;
 import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Repository;
 import org.eclipse.jnosql.lite.mapping.ValidationException;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+import org.eclipse.jnosql.lite.mapping.RepositoryLite;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;

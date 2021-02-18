@@ -17,7 +17,7 @@ package org.eclipse.jnosql.mapping.lite;
 
 import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
+import org.eclipse.jnosql.lite.mapping.RepositoryLite;
 
 @RepositoryLite(DatabaseType.DOCUMENT)
 public interface Person10Repository extends Repository<Person10, Long> {
