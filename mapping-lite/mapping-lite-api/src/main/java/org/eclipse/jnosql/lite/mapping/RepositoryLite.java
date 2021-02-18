@@ -12,27 +12,20 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.lite.mapping.metadata;
+package org.eclipse.jnosql.lite.mapping;
 
-public final class StringUtils {
+import jakarta.nosql.mapping.DatabaseType;
 
-    private StringUtils() {
-    }
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public static boolean isBlank(final CharSequence cs) {
-        if (cs == null || cs.length() == 0) {
-            return true;
-        }
-
-        for (int i = 0; i < cs.length(); i++) {
-            if (!Character.isWhitespace(cs.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean isNotBlank(final CharSequence cs) {
-        return !isBlank(cs);
-    }
+/**
+ * This annotation enables a repository in JNoSQL lite.
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface RepositoryLite {
+    DatabaseType value();
 }

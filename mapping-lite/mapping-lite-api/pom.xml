@@ -30,5 +30,10 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>jakarta.nosql.mapping</groupId>
+            <artifactId>mapping-core</artifactId>
+            <version>${jakarta.nosql.version}</version>
+        </dependency>
     </dependencies>
 </project>
