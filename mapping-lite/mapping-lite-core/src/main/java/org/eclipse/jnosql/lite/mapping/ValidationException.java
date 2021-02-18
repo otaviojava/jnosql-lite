@@ -14,7 +14,9 @@
  */
 package org.eclipse.jnosql.lite.mapping;
 
-public class ValidationException extends RuntimeException {
+import jakarta.nosql.mapping.MappingException;
+
+public class ValidationException extends MappingException {
 
     public ValidationException(String message) {
         super(message);
