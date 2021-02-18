@@ -27,6 +27,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.eclipse.jnosql.lite.mapping</groupId>
+            <artifactId>mapping-lite-api</artifactId>
+            <version>${jakarta.nosql.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
             <artifactId>communication-document</artifactId>
             <version>${project.version}</version>
@@ -36,12 +41,7 @@
             <artifactId>mapping-document</artifactId>
             <version>${jakarta.nosql.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.eclipse.jnosql.lite.mapping</groupId>
-            <artifactId>mapping-lite-core</artifactId>
-            <version>${jakarta.nosql.version}</version>
-            <scope>provided</scope>
-        </dependency>
+
         <dependency>
             <groupId>jakarta.nosql.tck.mapping</groupId>
             <artifactId>mapping-tck-core</artifactId>
