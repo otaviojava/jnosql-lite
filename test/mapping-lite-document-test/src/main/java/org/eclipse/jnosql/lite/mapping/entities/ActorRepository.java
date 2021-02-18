@@ -15,13 +15,19 @@
 package org.eclipse.jnosql.lite.mapping.entities;
 
 import jakarta.nosql.mapping.DatabaseType;
+import jakarta.nosql.mapping.Param;
+import jakarta.nosql.mapping.Query;
 import jakarta.nosql.mapping.Repository;
 import org.eclipse.jnosql.lite.mapping.metadata.RepositoryLite;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 @RepositoryLite(DatabaseType.DOCUMENT)
 public interface ActorRepository extends Repository<Actor, Long> {
 
     Stream<Actor> findByName(String name);
+
+    @Query("select * from Actor where name = @name")
+    List<Actor> query(@Param("name") String name);
 }
