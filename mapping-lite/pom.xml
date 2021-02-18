@@ -32,6 +32,7 @@
 
     <modules>
         <module>mapping-lite-core</module>
+        <module>mapping-lite-api</module>
         <module>mapping-lite-document</module>
     </modules>
 
