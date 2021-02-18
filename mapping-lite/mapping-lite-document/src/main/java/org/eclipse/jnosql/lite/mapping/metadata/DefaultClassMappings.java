@@ -19,26 +19,26 @@ import java.util.Optional;
 public class DefaultClassMappings implements ClassMappings{
     @Override
     public EntityMetadata get(Class<?> classEntity) {
-        return null;
+       throw new UnsupportedOperationException("This method is not implemented yet");
     }
 
     @Override
     public EntityMetadata findByName(String name) {
-        return null;
+        throw new UnsupportedOperationException("This method is not implemented yet");
     }
 
     @Override
     public Optional<EntityMetadata> findBySimpleName(String name) {
-        return Optional.empty();
+        throw new UnsupportedOperationException("This method is not implemented yet");
     }
 
     @Override
     public Optional<EntityMetadata> findByClassName(String name) {
-        return Optional.empty();
+        throw new UnsupportedOperationException("This method is not implemented yet");
     }
 
     @Override
     public Optional<EntityMetadata> findByClass(Class<?> classEntity) {
-        return Optional.empty();
+        throw new UnsupportedOperationException("This method is not implemented yet");
     }
 }
