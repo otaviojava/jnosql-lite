@@ -123,7 +123,7 @@ class DocumentFieldConverters {
                         field.write(instance, value.get(() -> DocumentLiteParameterizedType.of(field)));
                         return;
                     case MAP:
-                        field.write(instance, getValueGeneric(value).get(() -> DocumentLiteParameterizedType.of(field)));
+                        field.write(instance, getMapValue(value).get(() -> DocumentLiteParameterizedType.of(field)));
                         return;
                     default:
                         field.write(instance, value.get(field.getType()));
@@ -133,11 +133,12 @@ class DocumentFieldConverters {
             }
         }
 
-        private Value getValueGeneric(Value value) {
-            if (value instanceof Iterable) {
+        private Value getMapValue(Value value) {
+            Object object = value.get();
+            if (object instanceof Iterable) {
                 return value;
             } else {
-                return Value.of(Collections.singletonList(value.get()));
+                return Value.of(Collections.singletonList(object));
             }
         }
     }
