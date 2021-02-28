@@ -28,6 +28,7 @@ import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -120,13 +121,21 @@ class DocumentFieldConverters {
                 switch (FieldTypeUtil.of(field, mappings)) {
                     case COLLECTION:
                     case MAP:
-                        field.write(instance, value.get(() -> DocumentLiteParameterizedType.of(field)));
+                        field.write(instance, getValueGeneric(value).get(() -> DocumentLiteParameterizedType.of(field)));
                         return;
                     default:
                         field.write(instance, value.get(field.getType()));
                         return;
                 }
 
+            }
+        }
+
+        private Value getValueGeneric(Value value) {
+            if (value instanceof Iterable) {
+                return value;
+            } else {
+                return Value.of(Collections.singletonList(value.get()));
             }
         }
     }
@@ -149,7 +158,7 @@ class DocumentFieldConverters {
                     List<Class<?>> arguments = field.getArguments();
                     Class<?> type = arguments.stream().findFirst()
                             .orElseThrow(() -> new MappingException("There is an issue in the field: "
-                            + field.getName() + " in the class " + instance.getClass()));
+                                    + field.getName() + " in the class " + instance.getClass()));
                     Object element = converter.toEntity(type, documentList);
                     collection.add(element);
                 }
