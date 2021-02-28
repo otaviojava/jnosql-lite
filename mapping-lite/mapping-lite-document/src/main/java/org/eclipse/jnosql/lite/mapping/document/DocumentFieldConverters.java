@@ -120,6 +120,8 @@ class DocumentFieldConverters {
             } else {
                 switch (FieldTypeUtil.of(field, mappings)) {
                     case COLLECTION:
+                        field.write(instance, value.get(() -> DocumentLiteParameterizedType.of(field)));
+                        return;
                     case MAP:
                         field.write(instance, getValueGeneric(value).get(() -> DocumentLiteParameterizedType.of(field)));
                         return;
