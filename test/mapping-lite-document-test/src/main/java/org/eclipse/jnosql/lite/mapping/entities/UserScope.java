@@ -21,6 +21,7 @@ import jakarta.nosql.mapping.Id;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Entity
 public class UserScope {
@@ -38,11 +39,49 @@ public class UserScope {
         return userName;
     }
 
+    void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getScope() {
         return scope;
+    }
+
+    void setScope(String scope) {
+        this.scope = scope;
     }
 
     public Map<String, Object> getProperties() {
         return properties;
     }
-} 
+
+    void setProperties(Map<String, Object> properties) {
+        this.properties = properties;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        UserScope userScope = (UserScope) o;
+        return Objects.equals(userName, userScope.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName);
+    }
+
+    @Override
+    public String toString() {
+        return "UserScope{" +
+                "userName='" + userName + '\'' +
+                ", scope='" + scope + '\'' +
+                ", properties=" + properties +
+                '}';
+    }
+}
