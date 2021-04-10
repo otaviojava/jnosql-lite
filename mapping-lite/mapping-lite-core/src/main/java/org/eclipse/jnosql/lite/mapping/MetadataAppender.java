@@ -34,6 +34,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,6 +52,7 @@ final class MetadataAppender {
 
     void append() throws IOException, URISyntaxException {
         URL url = EntityProcessor.class.getClassLoader().getResource(METADATA);
+        Objects.requireNonNull(url, "Could not load resources from metadata folder");
         LOGGER.info("URL folder: " + url.toString());
         LOGGER.info("URI folder: " + url.toURI().toString());
         Stream<Path> path = Files.walk(getPath(url));
