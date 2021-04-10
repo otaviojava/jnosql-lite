@@ -36,8 +36,8 @@ final class RepositoryMetadata {
             case COLUMN:
                 return this.element.getSimpleName() + "LiteColumn";
             default:
-                throw new UnsupportedOperationException("There is not support to the element type in the medatadta: "
-                        + this.element.getType()
+                throw new UnsupportedOperationException("There is not support to the element type" +
+                        " in the medatadta: " + this.element.getType()
                 );
         }
 
