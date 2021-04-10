@@ -57,6 +57,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>jakarta.nosql.mapping</groupId>
+            <artifactId>mapping-column</artifactId>
+            <version>${jakarta.nosql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
             <artifactId>communication-document</artifactId>
             <version>${jakarta.nosql.version}</version>
