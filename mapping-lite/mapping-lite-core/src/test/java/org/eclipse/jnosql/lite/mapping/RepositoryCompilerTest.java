@@ -47,7 +47,7 @@ public class RepositoryCompilerTest {
     }
 
     @Test
-    public void shouldCompileColumnFindByName() {
+    public void shouldColumnRepository() {
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
