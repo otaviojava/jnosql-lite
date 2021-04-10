@@ -28,12 +28,12 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
             lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
-            lines.add("jakarta.nosql.document.DocumentQueryParams queryParams = converter.apply(selectQuery, parser)");
+            lines.add("jakarta.nosql.column.ColumnQueryParams queryParams = converter.apply(selectQuery, parser)");
             lines.add("jakarta.nosql.Params params = queryParams.getParams()");
             for (Parameter parameter : metadata.getParameters()) {
                 lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
             }
-            lines.add("jakarta.nosql.document.DocumentQuery query = queryParams.getQuery()");
+            lines.add("jakarta.nosql.column.ColumnQuery query = queryParams.getQuery()");
             MethodQueryRepositoryReturnType returnType = MethodQueryRepositoryReturnType.of(metadata);
             lines.addAll(returnType.apply(metadata));
             return lines;
