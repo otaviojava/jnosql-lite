@@ -30,7 +30,17 @@ final class RepositoryMetadata {
     }
 
     public String getClassName() {
-        return this.element.getSimpleName() + "LiteDocument";
+        switch (this.element.getType()) {
+            case DOCUMENT:
+                return this.element.getSimpleName() + "LiteDocument";
+            case COLUMN:
+                return this.element.getSimpleName() + "LiteColumn";
+            default:
+                throw new UnsupportedOperationException("There is not support to the element type in the medatadta: "
+                        + this.element.getType()
+                );
+        }
+
     }
 
     public String getPackage() {
