@@ -22,7 +22,8 @@ import jakarta.nosql.mapping.DatabaseType;
 import java.util.function.Supplier;
 
 enum RepositoryTemplateType implements Supplier<Mustache> {
-    DOCUMENT("repository_document.mustache");
+    DOCUMENT("repository_document.mustache"),
+    COLUMN("repository_column.mustache");
 
     private final String fileName;
 
@@ -38,6 +39,8 @@ enum RepositoryTemplateType implements Supplier<Mustache> {
         switch (type) {
             case DOCUMENT:
                 return DOCUMENT;
+            case COLUMN:
+                return COLUMN;
             default:
                 throw new UnsupportedOperationException("There is not template to this database type: " + type);
         }
