@@ -27,6 +27,8 @@ public interface MethodGenerator {
         switch (type) {
             case DOCUMENT:
                 return new DocumentMethodGenerator(metadata);
+            case COLUMN:
+                return new ColumnMethodGenerator(metadata);
             default:
                 throw new UnsupportedOperationException("There is not support to the type " + type);
         }
