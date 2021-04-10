@@ -26,7 +26,7 @@ class ColumnMethodGenerator implements MethodGenerator {
 
     @Override
     public List<String> getLines() {
-        DocumentMethodBuilder methodBuilder = DocumentMethodBuilder.of(this.metadata);
+        ColumnMethodBuilder methodBuilder = ColumnMethodBuilder.of(this.metadata);
         return methodBuilder.apply(this.metadata);
     }
 }
