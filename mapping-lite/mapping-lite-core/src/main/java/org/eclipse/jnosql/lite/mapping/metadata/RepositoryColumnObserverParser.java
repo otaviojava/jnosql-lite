@@ -14,11 +14,11 @@
  */
 package org.eclipse.jnosql.lite.mapping.metadata;
 
-import jakarta.nosql.document.DocumentObserverParser;
+import jakarta.nosql.column.ColumnObserverParser;
 
 import java.util.Optional;
 
-public class RepositoryColumnObserverParser implements DocumentObserverParser {
+public class RepositoryColumnObserverParser implements ColumnObserverParser {
 
     private final EntityMetadata entityMetadata;
 
