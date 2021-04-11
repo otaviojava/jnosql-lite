@@ -15,9 +15,9 @@
 package org.eclipse.jnosql.lite.mapping.column;
 
 
-import jakarta.nosql.document.Document;
+import jakarta.nosql.column.Column;
 import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
+import jakarta.nosql.mapping.column.ColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
@@ -92,22 +92,22 @@ class DocumentFieldMetadata implements FieldMetadata {
         return this.read() != null;
     }
 
-    public <X, Y> List<Document> toDocument(DocumentEntityConverter converter, ClassMappings mappings) {
+    public <X, Y> List<Column> toDocument(ColumnEntityConverter converter, ClassMappings mappings) {
         FieldType fieldType = FieldTypeUtil.of(this, mappings);
 
         if (FieldType.EMBEDDED.equals(fieldType)) {
-            return converter.toDocument(read()).getDocuments();
+            return converter.toColumn(read()).getColumns();
         } else if (FieldType.SUB_ENTITY.equals(fieldType)) {
-            return singletonList(Document.of(getName(), converter.toDocument(this.read()).getDocuments()));
+            return singletonList(Column.of(getName(), converter.toColumn(this.read()).getColumns()));
         } else if (isEmbeddableCollection(fieldType, mappings)) {
-            return singletonList(Document.of(getName(), getDocuments(converter)));
+            return singletonList(Column.of(getName(), getDocuments(converter)));
         }
         Optional<AttributeConverter<X, Y>> optionalConverter = this.getConverter();
         if (optionalConverter.isPresent()) {
             AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
-            return singletonList(Document.of(getName(), attributeConverter.convertToDatabaseColumn((X) this.read())));
+            return singletonList(Column.of(getName(), attributeConverter.convertToDatabaseColumn((X) this.read())));
         }
-        return singletonList(Document.of(getName(), this.read()));
+        return singletonList(Column.of(getName(), this.read()));
     }
 
     private boolean isEmbeddableCollection(FieldType fieldType, ClassMappings mappings) {
@@ -123,10 +123,10 @@ class DocumentFieldMetadata implements FieldMetadata {
         return false;
     }
 
-    private List<List<Document>> getDocuments(DocumentEntityConverter converter) {
-        List<List<Document>> documents = new ArrayList<>();
+    private List<List<Column>> getDocuments(ColumnEntityConverter converter) {
+        List<List<Column>> documents = new ArrayList<>();
         for (Object element : (Iterable) this.read()) {
-            documents.add(converter.toDocument(element).getDocuments());
+            documents.add(converter.toColumn(element).getColumns());
         }
         return documents;
     }
