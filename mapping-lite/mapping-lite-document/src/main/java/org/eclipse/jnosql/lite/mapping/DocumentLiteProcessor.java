@@ -37,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
@@ -71,6 +72,7 @@ public class DocumentLiteProcessor extends AbstractProcessor {
     private void copyDocumentLiteClasses() {
         try {
             URL url = DocumentLiteProcessor.class.getClassLoader().getResource(METADATA);
+            Objects.requireNonNull(url, "Could not load resources from metadata folder");
             LOGGER.info("URL folder: " + url.toString());
             LOGGER.info("URI folder: " + url.toURI().toString());
             Stream<Path> path = Files.walk(getPath(url));
