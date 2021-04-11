@@ -14,21 +14,22 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.document.DocumentCollectionManager;
+import jakarta.nosql.column.ColumnFamilyManager;
+import jakarta.nosql.column.ColumnFamilyManagerFactory;
 import jakarta.nosql.document.DocumentCollectionManagerFactory;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.spi.Converter;
 
-public class DocumentCollectionConverter implements Converter<DocumentCollectionManager> {
+public class DocumentCollectionConverter implements Converter<ColumnFamilyManager> {
 
     private static final String DATABASE_KEY = ".database";
 
     @Override
-    public DocumentCollectionManager convert(String value) {
+    public ColumnFamilyManager convert(String value) {
         Config config = ConfigProvider.getConfig();
         DocumentCollectionFactoryConverter converter = new DocumentCollectionFactoryConverter();
-        DocumentCollectionManagerFactory factory = converter.convert(value);
+        ColumnFamilyManagerFactory factory = converter.convert(value);
         String database = config.getValue(value + DATABASE_KEY, String.class);
         return factory.get(database);
     }
