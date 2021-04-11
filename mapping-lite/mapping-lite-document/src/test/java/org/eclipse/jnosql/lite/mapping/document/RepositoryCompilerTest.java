@@ -43,7 +43,7 @@ public class RepositoryCompilerTest {
                 .withOptions()
                 .withProcessors(new EntityProcessor(), new RepositoryProcessor())
                 .compile(JavaFileObjects.forResource("Person10.java"),
-                        JavaFileObjects.forResource("Person10RepositoryA.java"));
+                        JavaFileObjects.forResource("Person10Repository.java"));
         assertThat(compilation).succeeded();
     }
 

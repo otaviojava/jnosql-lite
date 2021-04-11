@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 
 
 @RepositoryLite(DatabaseType.DOCUMENT)
-public interface Person10RepositoryA extends Repository<Person10, Long> {
+public interface Person10Repository extends Repository<Person10, Long> {
 
     Stream<Person10> findByName(String name);
 
