@@ -148,10 +148,10 @@ class DocumentFieldConverters {
         @Override
         public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
-            column.ifPresent(convertDocument(instance, field, converter));
+            column.ifPresent(convertColumn(instance, field, converter));
         }
 
-        private <T> Consumer<Column> convertDocument(T instance, FieldMetadata field, LiteColumnEntityConverter converter) {
+        private <T> Consumer<Column> convertColumn(T instance, FieldMetadata field, LiteColumnEntityConverter converter) {
             return column -> {
 
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
