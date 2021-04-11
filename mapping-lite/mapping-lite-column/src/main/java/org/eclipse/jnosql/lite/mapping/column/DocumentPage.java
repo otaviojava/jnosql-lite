@@ -17,8 +17,8 @@ package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.mapping.Page;
 import jakarta.nosql.mapping.Pagination;
-import jakarta.nosql.mapping.document.DocumentQueryPagination;
-import jakarta.nosql.mapping.document.DocumentTemplate;
+import jakarta.nosql.mapping.column.ColumnQueryPagination;
+import jakarta.nosql.mapping.column.ColumnTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,15 +34,15 @@ import java.util.stream.Stream;
  */
 final class DocumentPage<T> implements Page<T> {
 
-    private final DocumentTemplate template;
+    private final ColumnTemplate template;
 
     private final Stream<T> entities;
 
-    private final DocumentQueryPagination query;
+    private final ColumnQueryPagination query;
 
     private List<T> entitiesCache;
 
-    DocumentPage(DocumentTemplate template, Stream<T> entities, DocumentQueryPagination query) {
+    DocumentPage(ColumnTemplate template, Stream<T> entities, ColumnQueryPagination query) {
         this.template = template;
         this.entities = entities;
         this.query = query;
@@ -103,7 +103,7 @@ final class DocumentPage<T> implements Page<T> {
 
     @Override
     public String toString() {
-        return "DocumentPage{" +
+        return "ColumnPage{" +
                 "entities=" + entities +
                 ", query=" + query +
                 '}';
