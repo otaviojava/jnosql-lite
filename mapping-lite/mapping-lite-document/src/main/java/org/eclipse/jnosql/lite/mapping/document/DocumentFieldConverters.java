@@ -157,12 +157,12 @@ class DocumentFieldConverters {
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
                 Collection collection = supplier.get();
                 List<List<Document>> embeddable = (List<List<Document>>) document.get();
-                for (List<Document> documentList : embeddable) {
+                for (List<Document> documents : embeddable) {
                     List<Class<?>> arguments = field.getArguments();
                     Class<?> type = arguments.stream().findFirst()
                             .orElseThrow(() -> new MappingException("There is an issue in the field: "
                                     + field.getName() + " in the class " + instance.getClass()));
-                    Object element = converter.toEntity(type, documentList);
+                    Object element = converter.toEntity(type, documents);
                     collection.add(element);
                 }
                 field.write(instance, collection);
