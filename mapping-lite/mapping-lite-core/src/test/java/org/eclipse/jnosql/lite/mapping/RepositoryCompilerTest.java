@@ -24,6 +24,27 @@ import static com.google.testing.compile.Compiler.javac;
 
 public class RepositoryCompilerTest {
 
+    @Test
+    public void shouldCompile() {
+        Compilation compilation = javac()
+                .withClasspathFrom(this.getClass().getClassLoader())
+                .withOptions()
+                .withProcessors(new EntityProcessor(), new RepositoryProcessor())
+                .compile(JavaFileObjects.forResource("Person10.java"),
+                        JavaFileObjects.forResource("Person10Repository.java"));
+        assertThat(compilation).succeeded();
+    }
+
+    @Test
+    public void shouldCompileFindByName() {
+        Compilation compilation = javac()
+                .withClasspathFrom(this.getClass().getClassLoader())
+                .withOptions()
+                .withProcessors(new EntityProcessor(), new RepositoryProcessor())
+                .compile(JavaFileObjects.forResource("Person10.java"),
+                        JavaFileObjects.forResource("Person10RepositoryA.java"));
+        assertThat(compilation).succeeded();
+    }
 
     @Test
     public void shouldColumnRepository() {
