@@ -84,10 +84,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/classes/document/</outputDirectory>
+                            <outputDirectory>${basedir}/target/classes/column/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/java/org/eclipse/jnosql/lite/mapping/document/</directory>
+                                    <directory>src/main/java/org/eclipse/jnosql/lite/mapping/column/</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
