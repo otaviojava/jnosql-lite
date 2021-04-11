@@ -16,20 +16,20 @@ package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.NonUniqueResultException;
 import jakarta.nosql.Value;
-import jakarta.nosql.document.DocumentCollectionManager;
-import jakarta.nosql.document.DocumentDeleteQuery;
-import jakarta.nosql.document.DocumentEntity;
-import jakarta.nosql.document.DocumentObserverParser;
-import jakarta.nosql.document.DocumentQuery;
-import jakarta.nosql.document.DocumentQueryParser;
+import jakarta.nosql.column.ColumnDeleteQuery;
+import jakarta.nosql.column.ColumnEntity;
+import jakarta.nosql.column.ColumnFamilyManager;
+import jakarta.nosql.column.ColumnObserverParser;
+import jakarta.nosql.column.ColumnQuery;
+import jakarta.nosql.column.ColumnQueryParser;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.IdNotFoundException;
 import jakarta.nosql.mapping.Page;
 import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import jakarta.nosql.mapping.document.DocumentQueryPagination;
-import jakarta.nosql.mapping.document.DocumentTemplate;
-import org.eclipse.jnosql.communication.document.query.DefaultDocumentQueryParser;
+import jakarta.nosql.mapping.column.ColumnEntityConverter;
+import jakarta.nosql.mapping.column.ColumnQueryPagination;
+import jakarta.nosql.mapping.column.ColumnTemplate;
+import org.eclipse.jnosql.communication.column.query.DefaultColumnQueryParser;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
@@ -49,20 +49,20 @@ import java.util.stream.StreamSupport;
 import static java.util.Objects.requireNonNull;
 
 @ApplicationScoped
-public class LiteDocumentTemplate implements DocumentTemplate {
+public class LiteDocumentTemplate implements ColumnTemplate {
 
-    private static final DocumentQueryParser PARSER = new DefaultDocumentQueryParser();
+    private static final ColumnQueryParser PARSER = new DefaultColumnQueryParser();
 
-    private final DocumentEntityConverter converter;
+    private final ColumnEntityConverter converter;
 
-    private final DocumentCollectionManager manager;
+    private final ColumnFamilyManager manager;
 
     private final ClassMappings mappings;
 
-    private final DocumentObserverParser observerParser;
+    private final ColumnObserverParser observerParser;
 
     @Inject
-    public LiteDocumentTemplate(DocumentCollectionManager manager) {
+    public LiteDocumentTemplate(ColumnFamilyManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteColumnEntityConverter();
         this.mappings = new DefaultClassMappings();
@@ -72,16 +72,16 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     @Override
     public <T> T insert(T entity) {
         requireNonNull(entity, "entity is required");
-        DocumentEntity documentEntity = this.converter.toDocument(entity);
-        return converter.toEntity(entity, manager.insert(documentEntity));
+        ColumnEntity columnEntity = this.converter.toColumn(entity);
+        return converter.toEntity(entity, manager.insert(columnEntity));
     }
 
     @Override
     public <T> T insert(T entity, Duration ttl) {
         requireNonNull(entity, "entity is required");
         requireNonNull(ttl, "ttl is required");
-        DocumentEntity documentEntity = this.converter.toDocument(entity);
-        return converter.toEntity(entity, manager.insert(documentEntity, ttl));
+        ColumnEntity columnEntity = this.converter.toColumn(entity);
+        return converter.toEntity(entity, manager.insert(columnEntity, ttl));
     }
 
     @Override
@@ -103,8 +103,8 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     @Override
     public <T> T update(T entity) {
         requireNonNull(entity, "entity is required");
-        DocumentEntity documentEntity = this.converter.toDocument(entity);
-        return converter.toEntity(entity, manager.update(documentEntity));
+        ColumnEntity columnEntity = this.converter.toColumn(entity);
+        return converter.toEntity(entity, manager.update(columnEntity));
     }
 
     @Override
@@ -115,26 +115,26 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     }
 
     @Override
-    public void delete(DocumentDeleteQuery query) {
+    public void delete(ColumnDeleteQuery query) {
         requireNonNull(query, "query is required");
         this.manager.delete(query);
     }
 
     @Override
-    public <T> Stream<T> select(DocumentQuery query) {
+    public <T> Stream<T> select(ColumnQuery query) {
         Objects.requireNonNull(query, "query is required");
         return executeQuery(query);
     }
 
     @Override
-    public <T> Page<T> select(DocumentQueryPagination query) {
+    public <T> Page<T> select(ColumnQueryPagination query) {
         Objects.requireNonNull(query, "query is required");
         Stream<T> entities = executeQuery(query);
         return new ColumnPage<>(this, entities, query);
     }
 
     @Override
-    public <T> Optional<T> singleResult(DocumentQuery query) {
+    public <T> Optional<T> singleResult(ColumnQuery query) {
         Objects.requireNonNull(query, "query is required");
         final Stream<T> entities = select(query);
         final Iterator<T> iterator = entities.iterator();
@@ -158,7 +158,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
         Object value = converter.map(c -> c.convertToDatabaseColumn(id))
                 .orElse(Value.of(id).get(idField.getType()));
-        DocumentQuery query = DocumentQuery.select().from(entityMetadata.getName())
+        ColumnQuery query = ColumnQuery.select().from(entityMetadata.getName())
                 .where(idField.getName()).eq(value).build();
         return singleResult(query);
     }
@@ -173,7 +173,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
         Object value = converter.map(c -> c.convertToDatabaseColumn(id))
                 .orElse(Value.of(id).get(idField.getType()));
-        DocumentDeleteQuery query = DocumentDeleteQuery.delete().from(entityMetadata.getName())
+        ColumnDeleteQuery query = ColumnDeleteQuery.delete().from(entityMetadata.getName())
                 .where(idField.getName()).eq(value).build();
         delete(query);
     }
@@ -217,10 +217,10 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         return this.manager.count(entityMetadata.getName());
     }
 
-    private <T> Stream<T> executeQuery(DocumentQuery query) {
+    private <T> Stream<T> executeQuery(ColumnQuery query) {
         requireNonNull(query, "query is required");
-        Stream<DocumentEntity> entities = this.manager.select(query);
-        Function<DocumentEntity, T> function = e -> this.converter.toEntity(e);
+        Stream<ColumnEntity> entities = this.manager.select(query);
+        Function<ColumnEntity, T> function = e -> this.converter.toEntity(e);
         return entities.map(function);
     }
 
