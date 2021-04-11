@@ -21,14 +21,14 @@ import jakarta.nosql.mapping.column.ColumnEntityConverter;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-final class DocumentPreparedStatement implements PreparedStatement {
+final class ColumnPreparedStatement implements PreparedStatement {
 
     private final jakarta.nosql.column.ColumnPreparedStatement preparedStatement;
 
     private final ColumnEntityConverter converter;
 
-    DocumentPreparedStatement(jakarta.nosql.column.ColumnPreparedStatement preparedStatement,
-                              ColumnEntityConverter converter) {
+    ColumnPreparedStatement(jakarta.nosql.column.ColumnPreparedStatement preparedStatement,
+                            ColumnEntityConverter converter) {
         this.preparedStatement = preparedStatement;
         this.converter = converter;
     }

@@ -201,7 +201,7 @@ public class LiteColumnTemplate implements ColumnTemplate {
 
     @Override
     public PreparedStatement prepare(String query) {
-        return new DocumentPreparedStatement(PARSER.prepare(query, this.manager, this.observerParser),
+        return new ColumnPreparedStatement(PARSER.prepare(query, this.manager, this.observerParser),
                 this.converter);
     }
 
