@@ -35,13 +35,13 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
-public class LiteDocumentEntityConverter implements ColumnEntityConverter {
+public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
     private final ClassMappings mappings;
 
     private final DocumentFieldConverterFactory converterFactory;
 
-    public LiteDocumentEntityConverter() {
+    public LiteColumnEntityConverter() {
         this.mappings = new DefaultClassMappings();
         this.converterFactory = new DocumentFieldConverterFactory();
     }

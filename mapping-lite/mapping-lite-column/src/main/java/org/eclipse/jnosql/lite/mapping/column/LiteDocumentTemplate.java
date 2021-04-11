@@ -64,7 +64,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     @Inject
     public LiteDocumentTemplate(DocumentCollectionManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
-        this.converter = new LiteDocumentEntityConverter();
+        this.converter = new LiteColumnEntityConverter();
         this.mappings = new DefaultClassMappings();
         this.observerParser = new LiteDocumentMapperObserver(this.mappings);
     }

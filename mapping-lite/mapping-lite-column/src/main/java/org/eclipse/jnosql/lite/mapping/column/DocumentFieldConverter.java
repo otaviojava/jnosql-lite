@@ -24,5 +24,5 @@ import java.util.Optional;
 interface DocumentFieldConverter {
 
     <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column, FieldMetadata field,
-                           LiteDocumentEntityConverter converter, ClassMappings mappings);
+                           LiteColumnEntityConverter converter, ClassMappings mappings);
 }

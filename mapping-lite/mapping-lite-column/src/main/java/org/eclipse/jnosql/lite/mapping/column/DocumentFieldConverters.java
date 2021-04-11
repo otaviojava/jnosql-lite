@@ -67,7 +67,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
 
             if (document.isPresent()) {
                 Column sudDocument = document.get();
@@ -98,7 +98,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
 
             Object subEntity = converter.toEntity(field.getType(), documents);
             field.write(instance, subEntity);
@@ -110,7 +110,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
             Value value = document.get().getValue();
 
             Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
@@ -148,11 +148,11 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
             document.ifPresent(convertDocument(instance, field, converter));
         }
 
-        private <T> Consumer<Column> convertDocument(T instance, FieldMetadata field, LiteDocumentEntityConverter converter) {
+        private <T> Consumer<Column> convertDocument(T instance, FieldMetadata field, LiteColumnEntityConverter converter) {
             return document -> {
 
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
