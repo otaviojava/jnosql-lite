@@ -27,7 +27,7 @@ public class ColumnFamilyManagerConverter implements Converter<ColumnFamilyManag
     @Override
     public ColumnFamilyManager convert(String value) {
         Config config = ConfigProvider.getConfig();
-        DocumentCollectionFactoryConverter converter = new DocumentCollectionFactoryConverter();
+        ColumnFamilyManagerFactoryConverter converter = new ColumnFamilyManagerFactoryConverter();
         ColumnFamilyManagerFactory factory = converter.convert(value);
         String database = config.getValue(value + DATABASE_KEY, String.class);
         return factory.get(database);

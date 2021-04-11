@@ -21,7 +21,7 @@ import javax.enterprise.inject.Produces;
 import java.util.function.Supplier;
 
 @ApplicationScoped
-public class DocumentProducer implements Supplier<ColumnFamilyManager> {
+public class ColumnProducer implements Supplier<ColumnFamilyManager> {
 
     private static final String KEY_DOCUMENT = "document";
 

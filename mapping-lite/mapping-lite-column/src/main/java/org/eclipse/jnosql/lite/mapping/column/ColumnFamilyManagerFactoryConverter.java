@@ -20,7 +20,7 @@ import jakarta.nosql.column.ColumnFamilyManagerFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.SettingsConverter;
 import org.eclipse.microprofile.config.spi.Converter;
 
-public class DocumentCollectionFactoryConverter implements Converter<ColumnFamilyManagerFactory> {
+public class ColumnFamilyManagerFactoryConverter implements Converter<ColumnFamilyManagerFactory> {
 
     @Override
     public ColumnFamilyManagerFactory convert(String value) {
