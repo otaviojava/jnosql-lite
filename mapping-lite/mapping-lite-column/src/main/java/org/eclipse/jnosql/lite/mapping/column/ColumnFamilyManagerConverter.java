@@ -20,7 +20,7 @@ import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.spi.Converter;
 
-public class DocumentCollectionConverter implements Converter<ColumnFamilyManager> {
+public class ColumnFamilyManagerConverter implements Converter<ColumnFamilyManager> {
 
     private static final String DATABASE_KEY = ".database";
 

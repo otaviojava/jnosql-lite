@@ -28,7 +28,7 @@ public class DocumentProducer implements Supplier<ColumnFamilyManager> {
     @Override
     @Produces
     public ColumnFamilyManager get() {
-        DocumentCollectionConverter converter = new DocumentCollectionConverter();
+        ColumnFamilyManagerConverter converter = new ColumnFamilyManagerConverter();
         return converter.convert(KEY_DOCUMENT);
     }
 }
