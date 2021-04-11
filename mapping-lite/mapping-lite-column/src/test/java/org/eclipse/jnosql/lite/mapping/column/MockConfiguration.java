@@ -15,23 +15,23 @@
 package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.Settings;
-import jakarta.nosql.document.DocumentCollectionManager;
-import jakarta.nosql.document.DocumentCollectionManagerFactory;
-import jakarta.nosql.document.DocumentConfiguration;
+import jakarta.nosql.column.ColumnConfiguration;
+import jakarta.nosql.column.ColumnFamilyManager;
+import jakarta.nosql.column.ColumnFamilyManagerFactory;
 
-public class MockConfiguration implements DocumentConfiguration {
+public class MockConfiguration implements ColumnConfiguration {
 
     @Override
-    public DocumentCollectionManagerFactory get() {
+    public ColumnFamilyManagerFactory get() {
         return new MockFactory(Settings.of());
     }
 
     @Override
-    public DocumentCollectionManagerFactory get(Settings settings) {
+    public ColumnFamilyManagerFactory get(Settings settings) {
         return new MockFactory(settings);
     }
 
-    public static class MockFactory implements DocumentCollectionManagerFactory {
+    public static class MockFactory implements ColumnFamilyManagerFactory {
 
         private final Settings settings;
 
@@ -40,7 +40,7 @@ public class MockConfiguration implements DocumentConfiguration {
         }
 
         @Override
-        public <T extends DocumentCollectionManager> T get(String database) {
+        public <T extends ColumnFamilyManager> T get(String database) {
             return null;
         }
 
