@@ -15,17 +15,17 @@
 package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.Settings;
-import jakarta.nosql.document.DocumentCollectionManagerFactory;
-import jakarta.nosql.document.DocumentConfiguration;
+import jakarta.nosql.column.ColumnConfiguration;
+import jakarta.nosql.column.ColumnFamilyManagerFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.SettingsConverter;
 import org.eclipse.microprofile.config.spi.Converter;
 
-public class DocumentCollectionFactoryConverter implements Converter<DocumentCollectionManagerFactory> {
+public class DocumentCollectionFactoryConverter implements Converter<ColumnFamilyManagerFactory> {
 
     @Override
-    public DocumentCollectionManagerFactory convert(String value) {
+    public ColumnFamilyManagerFactory convert(String value) {
         SettingsConverter settingsConverter = new SettingsConverter();
-        DocumentConfiguration configuration = DocumentConfiguration.getConfiguration();
+        ColumnConfiguration configuration = ColumnConfiguration.getConfiguration();
         Settings settings = settingsConverter.convert(value);
         return configuration.get(settings);
     }
