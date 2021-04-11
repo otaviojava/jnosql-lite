@@ -72,7 +72,7 @@ public class ColumnLiteProcessor extends AbstractProcessor {
     private void copyColumnLiteClasses() {
         try {
             URL url = ColumnLiteProcessor.class.getClassLoader().getResource(METADATA);
-            Objects.requireNonNull(url, "");
+            Objects.requireNonNull(url, "Could not load resources from metadata folder");
             LOGGER.info("URL folder: " + url.toString());
             LOGGER.info("URI folder: " + url.toURI().toString());
             Stream<Path> path = Files.walk(getPath(url));
