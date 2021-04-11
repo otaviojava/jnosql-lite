@@ -32,7 +32,7 @@ import java.util.stream.Stream;
  *
  * @param <T> the entity type
  */
-final class DocumentPage<T> implements Page<T> {
+final class ColumnPage<T> implements Page<T> {
 
     private final ColumnTemplate template;
 
@@ -42,7 +42,7 @@ final class DocumentPage<T> implements Page<T> {
 
     private List<T> entitiesCache;
 
-    DocumentPage(ColumnTemplate template, Stream<T> entities, ColumnQueryPagination query) {
+    ColumnPage(ColumnTemplate template, Stream<T> entities, ColumnQueryPagination query) {
         this.template = template;
         this.entities = entities;
         this.query = query;
@@ -91,7 +91,7 @@ final class DocumentPage<T> implements Page<T> {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        DocumentPage<?> that = (DocumentPage<?>) o;
+        ColumnPage<?> that = (ColumnPage<?>) o;
         return Objects.equals(entities, that.entities) &&
                 Objects.equals(query, that.query);
     }

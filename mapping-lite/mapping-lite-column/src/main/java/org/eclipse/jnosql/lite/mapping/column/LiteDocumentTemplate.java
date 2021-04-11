@@ -130,7 +130,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     public <T> Page<T> select(DocumentQueryPagination query) {
         Objects.requireNonNull(query, "query is required");
         Stream<T> entities = executeQuery(query);
-        return new DocumentPage<>(this, entities, query);
+        return new ColumnPage<>(this, entities, query);
     }
 
     @Override
