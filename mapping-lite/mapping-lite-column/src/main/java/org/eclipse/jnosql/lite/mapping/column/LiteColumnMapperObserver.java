@@ -20,11 +20,11 @@ import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 
 import java.util.Optional;
 
-final class LiteDocumentMapperObserver implements ColumnObserverParser {
+final class LiteColumnMapperObserver implements ColumnObserverParser {
 
     private final ClassMappings mappings;
 
-    LiteDocumentMapperObserver(ClassMappings mappings) {
+    LiteColumnMapperObserver(ClassMappings mappings) {
         this.mappings = mappings;
     }
 

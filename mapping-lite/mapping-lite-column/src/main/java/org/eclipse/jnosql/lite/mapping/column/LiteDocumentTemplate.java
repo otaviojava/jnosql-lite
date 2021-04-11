@@ -66,7 +66,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteColumnEntityConverter();
         this.mappings = new DefaultClassMappings();
-        this.observerParser = new LiteDocumentMapperObserver(this.mappings);
+        this.observerParser = new LiteColumnMapperObserver(this.mappings);
     }
 
     @Override
