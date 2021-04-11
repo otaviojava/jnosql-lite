@@ -19,11 +19,11 @@ import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-final class DocumentLiteParameterizedType implements ParameterizedType {
+final class ColumnLiteParameterizedType implements ParameterizedType {
 
     private final FieldMetadata field;
 
-    private DocumentLiteParameterizedType(FieldMetadata field) {
+    private ColumnLiteParameterizedType(FieldMetadata field) {
         this.field = field;
     }
 
@@ -43,6 +43,6 @@ final class DocumentLiteParameterizedType implements ParameterizedType {
     }
 
     static ParameterizedType of(FieldMetadata fieldMetadata) {
-        return new DocumentLiteParameterizedType(fieldMetadata);
+        return new ColumnLiteParameterizedType(fieldMetadata);
     }
 }
