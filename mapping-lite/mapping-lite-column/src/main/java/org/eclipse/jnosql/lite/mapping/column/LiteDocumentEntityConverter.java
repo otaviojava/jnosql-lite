@@ -12,12 +12,12 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.lite.mapping.document;
+package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.document.Document;
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import org.eclipse.jnosql.lite.mapping.document.DocumentFieldConverters.DocumentFieldConverterFactory;
+import org.eclipse.jnosql.lite.mapping.column.DocumentFieldConverters.DocumentFieldConverterFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;

@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.lite.mapping.document;
+package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.document.DocumentObserverParser;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
