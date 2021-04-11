@@ -37,6 +37,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
@@ -44,11 +45,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
-public class DocumentLiteProcessor extends AbstractProcessor {
+public class ColumnLiteProcessor extends AbstractProcessor {
 
-    private static final Logger LOGGER = Logger.getLogger(DocumentLiteProcessor.class.getName());
-    private static final String PACKAGE = "org.eclipse.jnosql.lite.mapping.document.";
-    private static final String METADATA = "document";
+    private static final Logger LOGGER = Logger.getLogger(ColumnLiteProcessor.class.getName());
+    private static final String PACKAGE = "org.eclipse.jnosql.lite.mapping.column.";
+    private static final String METADATA = "column";
 
     private final AtomicBoolean needToExecute = new AtomicBoolean(true);
 
@@ -57,20 +58,21 @@ public class DocumentLiteProcessor extends AbstractProcessor {
         synchronized (this) {
             if (needToExecute.get()) {
                 long start = System.currentTimeMillis();
-                LOGGER.info("Starting the document Lite Processor");
-                copyDocumentLiteClasses();
+                LOGGER.info("Starting the column Lite Processor");
+                copyColumnLiteClasses();
                 needToExecute.set(false);
                 long end = System.currentTimeMillis() - start;
-                LOGGER.info("Document Lite Processor has finished " + end + " ms");
+                LOGGER.info("Column Lite Processor has finished " + end + " ms");
             }
         }
         return false;
     }
 
 
-    private void copyDocumentLiteClasses() {
+    private void copyColumnLiteClasses() {
         try {
-            URL url = DocumentLiteProcessor.class.getClassLoader().getResource(METADATA);
+            URL url = ColumnLiteProcessor.class.getClassLoader().getResource(METADATA);
+            Objects.requireNonNull(url, "");
             LOGGER.info("URL folder: " + url.toString());
             LOGGER.info("URI folder: " + url.toURI().toString());
             Stream<Path> path = Files.walk(getPath(url));
@@ -89,7 +91,7 @@ public class DocumentLiteProcessor extends AbstractProcessor {
             Filer filer = processingEnv.getFiler();
             JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
             try (Writer writer = fileObject.openWriter()) {
-                final InputStream stream = DocumentLiteProcessor.class
+                final InputStream stream = ColumnLiteProcessor.class
                         .getClassLoader()
                         .getResourceAsStream(METADATA + "/" + file + ".java");
                 String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
