@@ -14,20 +14,20 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.document.DocumentCollectionManager;
+import jakarta.nosql.column.ColumnFamilyManager;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import java.util.function.Supplier;
 
 @ApplicationScoped
-public class DocumentProducer implements Supplier<DocumentCollectionManager> {
+public class DocumentProducer implements Supplier<ColumnFamilyManager> {
 
     private static final String KEY_DOCUMENT = "document";
 
     @Override
     @Produces
-    public DocumentCollectionManager get() {
+    public ColumnFamilyManager get() {
         DocumentCollectionConverter converter = new DocumentCollectionConverter();
         return converter.convert(KEY_DOCUMENT);
     }
