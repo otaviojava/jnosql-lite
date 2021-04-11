@@ -112,7 +112,7 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
             FieldMetadata field = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(field, mappings);
-            DocumentFieldConverter fieldConverter = converterFactory.get(field, type, mappings);
+            ColumnFieldConverter fieldConverter = converterFactory.get(field, type, mappings);
             fieldConverter.convert(instance, documents, document, field, this, mappings);
         };
     }

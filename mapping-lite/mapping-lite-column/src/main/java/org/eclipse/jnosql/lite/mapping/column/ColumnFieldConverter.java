@@ -21,7 +21,7 @@ import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import java.util.List;
 import java.util.Optional;
 
-interface DocumentFieldConverter {
+interface ColumnFieldConverter {
 
     <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column, FieldMetadata field,
                            LiteColumnEntityConverter converter, ClassMappings mappings);

@@ -18,7 +18,6 @@ package org.eclipse.jnosql.lite.mapping.column;
 import jakarta.nosql.TypeReference;
 import jakarta.nosql.Value;
 import jakarta.nosql.column.Column;
-import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.MappingException;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
@@ -45,7 +44,7 @@ class DocumentFieldConverters {
         private final CollectionEmbeddableConverter embeddableConverter = new CollectionEmbeddableConverter();
         private final SubEntityConverter subEntityConverter = new SubEntityConverter();
 
-        DocumentFieldConverter get(FieldMetadata field, FieldType type, ClassMappings mappings) {
+        ColumnFieldConverter get(FieldMetadata field, FieldType type, ClassMappings mappings) {
             if (FieldType.EMBEDDED.equals(type)) {
                 return embeddedFieldConverter;
             } else if (FieldType.SUB_ENTITY.equals(type)) {
@@ -63,7 +62,7 @@ class DocumentFieldConverters {
         }
     }
 
-    private static class SubEntityConverter implements DocumentFieldConverter {
+    private static class SubEntityConverter implements ColumnFieldConverter {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
@@ -93,7 +92,7 @@ class DocumentFieldConverters {
         }
     }
 
-    private static class EmbeddedFieldConverter implements DocumentFieldConverter {
+    private static class EmbeddedFieldConverter implements ColumnFieldConverter {
 
 
         @Override
@@ -106,7 +105,7 @@ class DocumentFieldConverters {
         }
     }
 
-    private static class DefaultConverter implements DocumentFieldConverter {
+    private static class DefaultConverter implements ColumnFieldConverter {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
@@ -144,7 +143,7 @@ class DocumentFieldConverters {
         }
     }
 
-    private static class CollectionEmbeddableConverter implements DocumentFieldConverter {
+    private static class CollectionEmbeddableConverter implements ColumnFieldConverter {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
