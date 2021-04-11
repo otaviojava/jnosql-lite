@@ -14,21 +14,21 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.document.DocumentEntity;
+import jakarta.nosql.column.ColumnEntity;
 import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
+import jakarta.nosql.mapping.column.ColumnEntityConverter;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
 final class DocumentPreparedStatement implements PreparedStatement {
 
-    private final jakarta.nosql.document.DocumentPreparedStatement preparedStatement;
+    private final jakarta.nosql.column.ColumnPreparedStatement preparedStatement;
 
-    private final DocumentEntityConverter converter;
+    private final ColumnEntityConverter converter;
 
-    DocumentPreparedStatement(jakarta.nosql.document.DocumentPreparedStatement preparedStatement,
-                              DocumentEntityConverter converter) {
+    DocumentPreparedStatement(jakarta.nosql.column.ColumnPreparedStatement preparedStatement,
+                              ColumnEntityConverter converter) {
         this.preparedStatement = preparedStatement;
         this.converter = converter;
     }
@@ -46,7 +46,7 @@ final class DocumentPreparedStatement implements PreparedStatement {
 
     @Override
     public <T> Optional<T> getSingleResult() {
-        Optional<DocumentEntity> singleResult = preparedStatement.getSingleResult();
+        Optional<ColumnEntity> singleResult = preparedStatement.getSingleResult();
         return singleResult.map(converter::toEntity);
     }
 }
