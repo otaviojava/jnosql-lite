@@ -39,7 +39,6 @@ public class CompilerTest {
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
                 .withProcessors(new ColumnLiteProcessor(),
-                        new EntityProcessor(),
                         new RepositoryProcessor())
                 .compile(javaFileObject);
         assertThat(compilation).succeeded();
