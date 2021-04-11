@@ -49,7 +49,7 @@ import java.util.stream.StreamSupport;
 import static java.util.Objects.requireNonNull;
 
 @ApplicationScoped
-public class LiteDocumentTemplate implements ColumnTemplate {
+public class LiteColumnTemplate implements ColumnTemplate {
 
     private static final ColumnQueryParser PARSER = new DefaultColumnQueryParser();
 
@@ -62,7 +62,7 @@ public class LiteDocumentTemplate implements ColumnTemplate {
     private final ColumnObserverParser observerParser;
 
     @Inject
-    public LiteDocumentTemplate(ColumnFamilyManager manager) {
+    public LiteColumnTemplate(ColumnFamilyManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteColumnEntityConverter();
         this.mappings = new DefaultClassMappings();
