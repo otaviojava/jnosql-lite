@@ -14,13 +14,13 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.document.DocumentObserverParser;
+import jakarta.nosql.column.ColumnObserverParser;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 
 import java.util.Optional;
 
-final class LiteDocumentMapperObserver implements DocumentObserverParser {
+final class LiteDocumentMapperObserver implements ColumnObserverParser {
 
     private final ClassMappings mappings;
 
