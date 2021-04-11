@@ -65,29 +65,29 @@ class DocumentFieldConverters {
     private static class SubEntityConverter implements ColumnFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
 
-            if (document.isPresent()) {
-                Column sudDocument = document.get();
-                Object value = sudDocument.get();
+            if (column.isPresent()) {
+                Column sudColumn = column.get();
+                Object value = sudColumn.get();
                 if (value instanceof Map) {
                     Map map = (Map) value;
-                    List<Column> embeddedDocument = new ArrayList<>();
+                    List<Column> embeddedColumn = new ArrayList<>();
 
                     for (Map.Entry entry : (Set<Map.Entry>) map.entrySet()) {
-                        embeddedDocument.add(Column.of(entry.getKey().toString(), entry.getValue()));
+                        embeddedColumn.add(Column.of(entry.getKey().toString(), entry.getValue()));
                     }
-                    field.write(instance, converter.toEntity(field.getType(), embeddedDocument));
+                    field.write(instance, converter.toEntity(field.getType(), embeddedColumn));
 
                 } else {
                     field.write(instance, converter.toEntity(field.getType(),
-                            sudDocument.get(new TypeReference<List<Column>>() {
+                            sudColumn.get(new TypeReference<List<Column>>() {
                             })));
                 }
 
             } else {
-                field.write(instance, converter.toEntity(field.getType(), documents));
+                field.write(instance, converter.toEntity(field.getType(), columns));
             }
         }
     }
@@ -96,10 +96,10 @@ class DocumentFieldConverters {
 
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
 
-            Object subEntity = converter.toEntity(field.getType(), documents);
+            Object subEntity = converter.toEntity(field.getType(), columns);
             field.write(instance, subEntity);
 
         }
@@ -108,9 +108,9 @@ class DocumentFieldConverters {
     private static class DefaultConverter implements ColumnFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
-            Value value = document.get().getValue();
+            Value value = column.get().getValue();
 
             Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
             if (optionalConverter.isPresent()) {
@@ -146,23 +146,23 @@ class DocumentFieldConverters {
     private static class CollectionEmbeddableConverter implements ColumnFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
-            document.ifPresent(convertDocument(instance, field, converter));
+            column.ifPresent(convertDocument(instance, field, converter));
         }
 
         private <T> Consumer<Column> convertDocument(T instance, FieldMetadata field, LiteColumnEntityConverter converter) {
-            return document -> {
+            return column -> {
 
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
                 Collection collection = supplier.get();
-                List<List<Column>> embeddable = (List<List<Column>>) document.get();
-                for (List<Column> documentList : embeddable) {
+                List<List<Column>> embeddable = (List<List<Column>>) column.get();
+                for (List<Column> columns : embeddable) {
                     List<Class<?>> arguments = field.getArguments();
                     Class<?> type = arguments.stream().findFirst()
                             .orElseThrow(() -> new MappingException("There is an issue in the field: "
                                     + field.getName() + " in the class " + instance.getClass()));
-                    Object element = converter.toEntity(type, documentList);
+                    Object element = converter.toEntity(type, columns);
                     collection.add(element);
                 }
                 field.write(instance, collection);
