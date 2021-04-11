@@ -29,13 +29,13 @@ import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 
-class DocumentFieldMetadata implements FieldMetadata {
+class ColumnFieldMetadata implements FieldMetadata {
 
     private final FieldMetadata field;
 
     private final Object entity;
 
-    private DocumentFieldMetadata(FieldMetadata field, Object entity) {
+    private ColumnFieldMetadata(FieldMetadata field, Object entity) {
         this.field = field;
         this.entity = entity;
     }
@@ -139,8 +139,8 @@ class DocumentFieldMetadata implements FieldMetadata {
                 '}';
     }
 
-    static DocumentFieldMetadata of(FieldMetadata field, Object entity) {
-        return new DocumentFieldMetadata(field, entity);
+    static ColumnFieldMetadata of(FieldMetadata field, Object entity) {
+        return new ColumnFieldMetadata(field, entity);
     }
 
 

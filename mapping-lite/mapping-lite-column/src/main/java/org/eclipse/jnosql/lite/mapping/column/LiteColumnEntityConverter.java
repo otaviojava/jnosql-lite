@@ -52,8 +52,8 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
         ColumnEntity entity = ColumnEntity.of(mapping.getName());
         mapping.getFields().stream()
-                .map(f -> DocumentFieldMetadata.of(f, entityInstance))
-                .filter(DocumentFieldMetadata::isNotEmpty)
+                .map(f -> ColumnFieldMetadata.of(f, entityInstance))
+                .filter(ColumnFieldMetadata::isNotEmpty)
                 .map(f -> f.toDocument(this, this.mappings))
                 .flatMap(List::stream)
                 .forEach(entity::add);
