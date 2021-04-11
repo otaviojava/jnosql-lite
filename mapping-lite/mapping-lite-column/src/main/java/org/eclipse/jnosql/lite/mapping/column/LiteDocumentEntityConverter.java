@@ -14,9 +14,9 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.document.Document;
-import jakarta.nosql.document.DocumentEntity;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
+import jakarta.nosql.column.Column;
+import jakarta.nosql.column.ColumnEntity;
+import jakarta.nosql.mapping.column.ColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.column.DocumentFieldConverters.DocumentFieldConverterFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
-public class LiteDocumentEntityConverter implements DocumentEntityConverter {
+public class LiteDocumentEntityConverter implements ColumnEntityConverter {
 
     private final ClassMappings mappings;
 
@@ -47,10 +47,10 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
     }
 
     @Override
-    public DocumentEntity toDocument(Object entityInstance) {
+    public ColumnEntity toColumn(Object entityInstance) {
         requireNonNull(entityInstance, "Object is required");
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
-        DocumentEntity entity = DocumentEntity.of(mapping.getName());
+        ColumnEntity entity = ColumnEntity.of(mapping.getName());
         mapping.getFields().stream()
                 .map(f -> DocumentFieldMetadata.of(f, entityInstance))
                 .filter(DocumentFieldMetadata::isNotEmpty)
@@ -61,37 +61,37 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
     }
 
     @Override
-    public <T> T toEntity(Class<T> entityClass, DocumentEntity entity) {
+    public <T> T toEntity(Class<T> entityClass, ColumnEntity entity) {
         requireNonNull(entityClass, "entityClass is required");
         requireNonNull(entity, "entity is required");
-        return toEntity(entityClass, entity.getDocuments());
+        return toEntity(entityClass, entity.getColumns());
     }
 
     @Override
-    public <T> T toEntity(T entityInstance, DocumentEntity entity) {
+    public <T> T toEntity(T entityInstance, ColumnEntity entity) {
         requireNonNull(entityInstance, "entityInstance is required");
         requireNonNull(entity, "entity is required");
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
-        return convertEntity(entity.getDocuments(), mapping, entityInstance);
+        return convertEntity(entity.getColumns(), mapping, entityInstance);
     }
 
     @Override
-    public <T> T toEntity(DocumentEntity entity) {
+    public <T> T toEntity(ColumnEntity entity) {
         requireNonNull(entity, "entity is required");
         EntityMetadata mapping = mappings.findByName(entity.getName());
         T instance = mapping.newInstance();
-        return convertEntity(entity.getDocuments(), mapping, instance);
+        return convertEntity(entity.getColumns(), mapping, instance);
     }
 
-    <T> T toEntity(Class<T> entityClass, List<Document> documents) {
+    <T> T toEntity(Class<T> entityClass, List<Column> documents) {
         EntityMetadata mapping = mappings.get(entityClass);
         T instance = mapping.newInstance();
         return convertEntity(documents, mapping, instance);
     }
 
-    private <T> T convertEntity(List<Document> documents, EntityMetadata mapping, T instance) {
+    private <T> T convertEntity(List<Column> documents, EntityMetadata mapping, T instance) {
         final Map<String, FieldMetadata> fieldsGroupByName = mapping.getFieldsGroupByName();
-        final List<String> names = documents.stream().map(Document::getName).sorted().collect(Collectors.toList());
+        final List<String> names = documents.stream().map(Column::getName).sorted().collect(Collectors.toList());
         final Predicate<String> existField = k -> Collections.binarySearch(names, k) >= 0;
         final Predicate<String> isElementType = k -> {
             FieldMetadata fieldMetadata = fieldsGroupByName.get(k);
@@ -106,9 +106,9 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
         return instance;
     }
 
-    private <T> Consumer<String> feedObject(T instance, List<Document> documents, Map<String, FieldMetadata> fieldsGroupByName) {
+    private <T> Consumer<String> feedObject(T instance, List<Column> documents, Map<String, FieldMetadata> fieldsGroupByName) {
         return k -> {
-            Optional<Document> document = documents.stream().filter(c -> c.getName().equals(k)).findFirst();
+            Optional<Column> document = documents.stream().filter(c -> c.getName().equals(k)).findFirst();
 
             FieldMetadata field = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(field, mappings);
