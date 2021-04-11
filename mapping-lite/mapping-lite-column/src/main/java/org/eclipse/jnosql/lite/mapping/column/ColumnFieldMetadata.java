@@ -92,7 +92,7 @@ class ColumnFieldMetadata implements FieldMetadata {
         return this.read() != null;
     }
 
-    public <X, Y> List<Column> toDocument(ColumnEntityConverter converter, ClassMappings mappings) {
+    public <X, Y> List<Column> toColumn(ColumnEntityConverter converter, ClassMappings mappings) {
         FieldType fieldType = FieldTypeUtil.of(this, mappings);
 
         if (FieldType.EMBEDDED.equals(fieldType)) {
@@ -100,7 +100,7 @@ class ColumnFieldMetadata implements FieldMetadata {
         } else if (FieldType.SUB_ENTITY.equals(fieldType)) {
             return singletonList(Column.of(getName(), converter.toColumn(this.read()).getColumns()));
         } else if (isEmbeddableCollection(fieldType, mappings)) {
-            return singletonList(Column.of(getName(), getDocuments(converter)));
+            return singletonList(Column.of(getName(), getColumns(converter)));
         }
         Optional<AttributeConverter<X, Y>> optionalConverter = this.getConverter();
         if (optionalConverter.isPresent()) {
@@ -123,17 +123,17 @@ class ColumnFieldMetadata implements FieldMetadata {
         return false;
     }
 
-    private List<List<Column>> getDocuments(ColumnEntityConverter converter) {
-        List<List<Column>> documents = new ArrayList<>();
+    private List<List<Column>> getColumns(ColumnEntityConverter converter) {
+        List<List<Column>> columns = new ArrayList<>();
         for (Object element : (Iterable) this.read()) {
-            documents.add(converter.toColumn(element).getColumns());
+            columns.add(converter.toColumn(element).getColumns());
         }
-        return documents;
+        return columns;
     }
 
     @Override
     public String toString() {
-        return "DocumentFieldMetadata{" +
+        return "ColumnFieldMetadata{" +
                 "field=" + field +
                 ", entity=" + entity +
                 '}';
