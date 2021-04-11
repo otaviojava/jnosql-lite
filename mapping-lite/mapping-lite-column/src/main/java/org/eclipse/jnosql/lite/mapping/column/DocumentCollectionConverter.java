@@ -16,7 +16,6 @@ package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.column.ColumnFamilyManager;
 import jakarta.nosql.column.ColumnFamilyManagerFactory;
-import jakarta.nosql.document.DocumentCollectionManagerFactory;
 import org.eclipse.microprofile.config.Config;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.eclipse.microprofile.config.spi.Converter;
