@@ -32,7 +32,7 @@ public class CompilerTest {
 
     @Test
     public void shouldCompile() throws IOException {
-        System.setProperty("document.provider", "org.eclipse.jnosql.lite.mapping.document.MockConfiguration");
+        System.setProperty("document.provider", "org.eclipse.jnosql.lite.mapping.column.MockConfiguration");
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person.java");
 
         Compilation compilation = javac()
