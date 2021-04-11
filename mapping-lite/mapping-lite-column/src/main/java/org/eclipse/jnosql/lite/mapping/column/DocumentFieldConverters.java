@@ -17,6 +17,7 @@ package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.TypeReference;
 import jakarta.nosql.Value;
+import jakarta.nosql.column.Column;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.MappingException;
@@ -65,24 +66,24 @@ class DocumentFieldConverters {
     private static class SubEntityConverter implements DocumentFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
+        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
 
             if (document.isPresent()) {
-                Document sudDocument = document.get();
+                Column sudDocument = document.get();
                 Object value = sudDocument.get();
                 if (value instanceof Map) {
                     Map map = (Map) value;
-                    List<Document> embeddedDocument = new ArrayList<>();
+                    List<Column> embeddedDocument = new ArrayList<>();
 
                     for (Map.Entry entry : (Set<Map.Entry>) map.entrySet()) {
-                        embeddedDocument.add(Document.of(entry.getKey().toString(), entry.getValue()));
+                        embeddedDocument.add(Column.of(entry.getKey().toString(), entry.getValue()));
                     }
                     field.write(instance, converter.toEntity(field.getType(), embeddedDocument));
 
                 } else {
                     field.write(instance, converter.toEntity(field.getType(),
-                            sudDocument.get(new TypeReference<List<Document>>() {
+                            sudDocument.get(new TypeReference<List<Column>>() {
                             })));
                 }
 
@@ -96,7 +97,7 @@ class DocumentFieldConverters {
 
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
+        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
 
             Object subEntity = converter.toEntity(field.getType(), documents);
@@ -108,7 +109,7 @@ class DocumentFieldConverters {
     private static class DefaultConverter implements DocumentFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
+        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
             Value value = document.get().getValue();
 
@@ -146,18 +147,18 @@ class DocumentFieldConverters {
     private static class CollectionEmbeddableConverter implements DocumentFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Document> documents, Optional<Document> document,
+        public <X, Y, T> void convert(T instance, List<Column> documents, Optional<Column> document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
             document.ifPresent(convertDocument(instance, field, converter));
         }
 
-        private <T> Consumer<Document> convertDocument(T instance, FieldMetadata field, LiteDocumentEntityConverter converter) {
+        private <T> Consumer<Column> convertDocument(T instance, FieldMetadata field, LiteDocumentEntityConverter converter) {
             return document -> {
 
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
                 Collection collection = supplier.get();
-                List<List<Document>> embeddable = (List<List<Document>>) document.get();
-                for (List<Document> documentList : embeddable) {
+                List<List<Column>> embeddable = (List<List<Column>>) document.get();
+                for (List<Column> documentList : embeddable) {
                     List<Class<?>> arguments = field.getArguments();
                     Class<?> type = arguments.stream().findFirst()
                             .orElseThrow(() -> new MappingException("There is an issue in the field: "
