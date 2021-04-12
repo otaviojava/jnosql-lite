@@ -15,10 +15,10 @@
 package org.eclipse.jnosql.mapping.lite;
 
 import jakarta.nosql.mapping.AttributeConverter;
-import org.eclipse.jnosql.mapping.lite.metadata.ClassMappings;
-import org.eclipse.jnosql.mapping.lite.metadata.DefaultClassMappings;
-import org.eclipse.jnosql.mapping.lite.metadata.EntityMetadata;
-import org.eclipse.jnosql.mapping.lite.metadata.FieldMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
