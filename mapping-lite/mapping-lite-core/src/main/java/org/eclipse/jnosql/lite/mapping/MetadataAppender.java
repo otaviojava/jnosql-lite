@@ -29,6 +29,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,10 +67,20 @@ final class MetadataAppender {
     private Path getPath(URL url) throws IOException, URISyntaxException {
         URI uri = url.toURI();
         if ("jar".equals(uri.getScheme())) {
-            FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap(), null);
+            FileSystem fileSystem = getFileSystem(uri);
             return fileSystem.getPath("/" + METADATA);
         } else {
             return Paths.get(uri);
+        }
+    }
+
+    private FileSystem getFileSystem(URI uri) throws IOException {
+        try {
+            LOGGER.info("Loading File system from " + uri);
+            return FileSystems.getFileSystem(uri);
+        } catch (FileSystemNotFoundException exception) {
+            LOGGER.info("File system does not exist, creating a new one: " + uri);
+            return FileSystems.newFileSystem(uri, Collections.emptyMap(), null);
         }
     }
 
