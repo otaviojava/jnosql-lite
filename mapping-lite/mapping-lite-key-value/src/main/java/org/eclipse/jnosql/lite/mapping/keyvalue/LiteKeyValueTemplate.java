@@ -63,11 +63,6 @@ public class LiteKeyValueTemplate implements KeyValueTemplate {
     }
 
     @Override
-    public <T> Iterable<T> insert(Iterable<T> entities) {
-        return put(entities);
-    }
-
-    @Override
     public <T> Iterable<T> insert(Iterable<T> entities, Duration ttl) {
         return put(entities, ttl);
     }
