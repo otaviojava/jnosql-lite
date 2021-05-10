@@ -58,11 +58,11 @@ public class KeyValueLiteProcessor extends AbstractProcessor {
         synchronized (this) {
             if (needToExecute.get()) {
                 long start = System.currentTimeMillis();
-                LOGGER.info("Starting the column Lite Processor");
+                LOGGER.info("Starting the key-value Lite Processor");
                 copyColumnLiteClasses();
                 needToExecute.set(false);
                 long end = System.currentTimeMillis() - start;
-                LOGGER.info("Column Lite Processor has finished " + end + " ms");
+                LOGGER.info("KeyValue Lite Processor has finished " + end + " ms");
             }
         }
         return false;
@@ -73,8 +73,8 @@ public class KeyValueLiteProcessor extends AbstractProcessor {
         try {
             URL url = KeyValueLiteProcessor.class.getClassLoader().getResource(METADATA);
             Objects.requireNonNull(url, "Could not load resources from metadata folder");
-            LOGGER.info("URL folder: " + url.toString());
-            LOGGER.info("URI folder: " + url.toURI().toString());
+            LOGGER.info("URL folder: " + url);
+            LOGGER.info("URI folder: " + url.toURI());
             Stream<Path> path = Files.walk(getPath(url));
             path.map(Path::getFileName)
                     .map(Path::toString)
