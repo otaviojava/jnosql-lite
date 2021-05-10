@@ -21,8 +21,6 @@ import jakarta.nosql.keyvalue.KeyValueEntity;
 import jakarta.nosql.mapping.PreparedStatement;
 import jakarta.nosql.mapping.keyvalue.KeyValueEntityConverter;
 import jakarta.nosql.mapping.keyvalue.KeyValueTemplate;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -41,14 +39,11 @@ public class LiteKeyValueTemplate implements KeyValueTemplate {
 
     private BucketManager manager;
 
-    private final ClassMappings mappings;
-
     private final KeyValueEntityConverter converter;
 
     @Inject
     public LiteKeyValueTemplate(BucketManager manager) {
         this.manager = manager;
-        this.mappings = new DefaultClassMappings();
         this.converter = new LiteKeyValueEntityConverter();
     }
 
@@ -103,7 +98,7 @@ public class LiteKeyValueTemplate implements KeyValueTemplate {
         requireNonNull(entityClass, "entity class is required");
 
         Optional<Value> value = getManager().get(key);
-        return value.map(v -> getConverter().toEntity(entityClass, KeyValueEntity.of(key, v)))
+        return value.map(v -> converter.toEntity(entityClass, KeyValueEntity.of(key, v)))
                 .filter(Objects::nonNull);
     }
 
@@ -115,7 +110,7 @@ public class LiteKeyValueTemplate implements KeyValueTemplate {
                 .map(k -> getManager().get(k)
                         .map(v -> KeyValueEntity.of(k, v)))
                 .filter(Optional::isPresent)
-                .map(e -> getConverter().toEntity(entityClass, e.get()))
+                .map(e -> converter.toEntity(entityClass, e.get()))
                 .collect(Collectors.toList());
     }
 
