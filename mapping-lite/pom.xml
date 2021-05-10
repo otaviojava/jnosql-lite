@@ -33,6 +33,7 @@
     <modules>
         <module>mapping-lite-core</module>
         <module>mapping-lite-api</module>
+        <module>mapping-lite-key-value</module>
         <module>mapping-lite-document</module>
         <module>mapping-lite-column</module>
     </modules>
