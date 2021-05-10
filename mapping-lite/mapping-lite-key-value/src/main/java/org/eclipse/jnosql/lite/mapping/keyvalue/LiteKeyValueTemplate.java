@@ -88,6 +88,11 @@ public class LiteKeyValueTemplate implements KeyValueTemplate {
     }
 
     @Override
+    public <T> Iterable<T> insert(Iterable<T> entities) {
+        return put(entities);
+    }
+
+    @Override
     public <K, T> Optional<T> get(K key, Class<T> entityClass) {
         requireNonNull(key, "key is required");
         requireNonNull(entityClass, "entity class is required");
