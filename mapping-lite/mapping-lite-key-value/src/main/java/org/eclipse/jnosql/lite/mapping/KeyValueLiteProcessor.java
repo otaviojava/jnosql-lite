@@ -48,8 +48,8 @@ import java.util.stream.Stream;
 public class KeyValueLiteProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(KeyValueLiteProcessor.class.getName());
-    private static final String PACKAGE = "org.eclipse.jnosql.lite.mapping.column.";
-    private static final String METADATA = "column";
+    private static final String PACKAGE = "org.eclipse.jnosql.lite.mapping.keyvalue.";
+    private static final String METADATA = "keyvalue";
 
     private final AtomicBoolean needToExecute = new AtomicBoolean(true);
 
