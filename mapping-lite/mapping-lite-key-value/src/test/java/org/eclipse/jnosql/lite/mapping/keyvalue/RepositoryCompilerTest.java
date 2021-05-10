@@ -18,6 +18,7 @@ import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
 import org.eclipse.jnosql.lite.mapping.EntityProcessor;
 import org.eclipse.jnosql.lite.mapping.repository.RepositoryProcessor;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static com.google.testing.compile.CompilationSubject.assertThat;
@@ -27,6 +28,7 @@ public class RepositoryCompilerTest {
 
 
     @Test
+    @Disabled
     public void shouldColumnRepository() {
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
