@@ -15,18 +15,9 @@
 package org.eclipse.jnosql.lite.mapping.keyvalue;
 
 import jakarta.nosql.Settings;
-import jakarta.nosql.column.ColumnConfiguration;
-import jakarta.nosql.column.ColumnFamilyManager;
-import jakarta.nosql.column.ColumnFamilyManagerFactory;
-import jakarta.nosql.keyvalue.BucketManager;
 import jakarta.nosql.keyvalue.BucketManagerFactory;
 import jakarta.nosql.keyvalue.KeyValueConfiguration;
 import org.mockito.Mockito;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
 
 public class MockConfiguration implements KeyValueConfiguration {
 
