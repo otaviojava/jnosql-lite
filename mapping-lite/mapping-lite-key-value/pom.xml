@@ -32,13 +32,13 @@
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
-            <artifactId>communication-keyvalue</artifactId>
+            <artifactId>communication-key-value</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.nosql.mapping</groupId>
-            <artifactId>mapping-keyvalue</artifactId>
+            <artifactId>mapping-key-value</artifactId>
             <version>${jakarta.nosql.version}</version>
             <scope>provided</scope>
         </dependency>
