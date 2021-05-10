@@ -23,7 +23,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>mapping-lite-column</artifactId>
+    <artifactId>mapping-lite-key-value</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -32,13 +32,13 @@
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
-            <artifactId>communication-column</artifactId>
+            <artifactId>communication-keyvalue</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.nosql.mapping</groupId>
-            <artifactId>mapping-column</artifactId>
+            <artifactId>mapping-keyvalue</artifactId>
             <version>${jakarta.nosql.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -84,10 +84,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${basedir}/target/classes/column/</outputDirectory>
+                            <outputDirectory>${basedir}/target/classes/keyvalue/</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>src/main/java/org/eclipse/jnosql/lite/mapping/column/</directory>
+                                    <directory>src/main/java/org/eclipse/jnosql/lite/mapping/keyvalue/</directory>
                                     <filtering>true</filtering>
                                 </resource>
                             </resources>
