@@ -18,35 +18,25 @@ import jakarta.nosql.Settings;
 import jakarta.nosql.column.ColumnConfiguration;
 import jakarta.nosql.column.ColumnFamilyManager;
 import jakarta.nosql.column.ColumnFamilyManagerFactory;
+import jakarta.nosql.keyvalue.BucketManager;
+import jakarta.nosql.keyvalue.BucketManagerFactory;
+import jakarta.nosql.keyvalue.KeyValueConfiguration;
+import org.mockito.Mockito;
 
-public class MockConfiguration implements ColumnConfiguration {
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
+public class MockConfiguration implements KeyValueConfiguration {
 
     @Override
-    public ColumnFamilyManagerFactory get() {
-        return new MockFactory(Settings.of());
+    public BucketManagerFactory get() {
+        return Mockito.mock(BucketManagerFactory.class);
     }
 
     @Override
-    public ColumnFamilyManagerFactory get(Settings settings) {
-        return new MockFactory(settings);
-    }
-
-    public static class MockFactory implements ColumnFamilyManagerFactory {
-
-        private final Settings settings;
-
-        public MockFactory(Settings settings) {
-            this.settings = settings;
-        }
-
-        @Override
-        public <T extends ColumnFamilyManager> T get(String database) {
-            return null;
-        }
-
-        @Override
-        public void close() {
-
-        }
+    public BucketManagerFactory get(Settings settings) {
+        return Mockito.mock(BucketManagerFactory.class);
     }
 }
