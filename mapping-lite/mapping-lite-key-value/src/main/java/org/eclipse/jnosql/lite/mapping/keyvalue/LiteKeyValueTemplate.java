@@ -22,6 +22,7 @@ import jakarta.nosql.column.ColumnFamilyManager;
 import jakarta.nosql.column.ColumnObserverParser;
 import jakarta.nosql.column.ColumnQuery;
 import jakarta.nosql.column.ColumnQueryParser;
+import jakarta.nosql.keyvalue.BucketManager;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.IdNotFoundException;
 import jakarta.nosql.mapping.Page;
@@ -29,6 +30,7 @@ import jakarta.nosql.mapping.PreparedStatement;
 import jakarta.nosql.mapping.column.ColumnEntityConverter;
 import jakarta.nosql.mapping.column.ColumnQueryPagination;
 import jakarta.nosql.mapping.column.ColumnTemplate;
+import jakarta.nosql.mapping.keyvalue.KeyValueTemplate;
 import org.eclipse.jnosql.communication.column.query.DefaultColumnQueryParser;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
@@ -49,94 +51,122 @@ import java.util.stream.StreamSupport;
 import static java.util.Objects.requireNonNull;
 
 @ApplicationScoped
-public class LiteColumnTemplate implements ColumnTemplate {
+public class LiteColumnTemplate implements KeyValueTemplate {
 
-    private static final ColumnQueryParser PARSER = new DefaultColumnQueryParser();
+    private final BucketManager manager;
 
-    private final ColumnEntityConverter converter;
-
-    private final ColumnFamilyManager manager;
-
-    private final ClassMappings mappings;
-
-    private final ColumnObserverParser observerParser;
+    private ClassMappings mappings;
 
     @Inject
-    public LiteColumnTemplate(ColumnFamilyManager manager) {
-        this.manager = Objects.requireNonNull(manager, "manager is required");
-        this.converter = new LiteColumnEntityConverter();
+    public LiteColumnTemplate(BucketManager manager) {
+        this.manager = manager;
         this.mappings = new DefaultClassMappings();
-        this.observerParser = new LiteColumnMapperObserver(this.mappings);
     }
 
     @Override
-    public <T> T insert(T entity) {
+    public <T> T put(T entity) {
         requireNonNull(entity, "entity is required");
-        ColumnEntity columnEntity = this.converter.toColumn(entity);
-        return converter.toEntity(entity, manager.insert(columnEntity));
+
+        UnaryOperator<KeyValueEntity> putAction = k -> {
+            getManager().put(k);
+            return k;
+
+        };
+        getManager().
+        return getFlow().flow(entity, putAction);
     }
 
     @Override
-    public <T> T insert(T entity, Duration ttl) {
+    public <T> T put(T entity, Duration ttl) {
         requireNonNull(entity, "entity is required");
-        requireNonNull(ttl, "ttl is required");
-        ColumnEntity columnEntity = this.converter.toColumn(entity);
-        return converter.toEntity(entity, manager.insert(columnEntity, ttl));
+        requireNonNull(ttl, "ttl class is required");
+
+        UnaryOperator<KeyValueEntity> putAction = k -> {
+            getManager().put(k, ttl);
+            return k;
+
+        };
+        return getFlow().flow(entity, putAction);
     }
 
     @Override
     public <T> Iterable<T> insert(Iterable<T> entities) {
-        requireNonNull(entities, "entity is required");
-        return StreamSupport.stream(entities.spliterator(), false)
-                .map(this::insert).collect(Collectors.toList());
+        return put(entities);
     }
 
     @Override
     public <T> Iterable<T> insert(Iterable<T> entities, Duration ttl) {
-        requireNonNull(entities, "entities is required");
-        requireNonNull(ttl, "ttl is required");
-        return StreamSupport.stream(entities.spliterator(), false)
-                .map(e -> insert(e, ttl))
-                .collect(Collectors.toList());
+        return put(entities, ttl);
     }
 
     @Override
     public <T> T update(T entity) {
-        requireNonNull(entity, "entity is required");
-        ColumnEntity columnEntity = this.converter.toColumn(entity);
-        return converter.toEntity(entity, manager.update(columnEntity));
+        return put(entity);
     }
 
     @Override
     public <T> Iterable<T> update(Iterable<T> entities) {
-        requireNonNull(entities, "entity is required");
-        return StreamSupport.stream(entities.spliterator(), false)
-                .map(this::update).collect(Collectors.toList());
+        return put(entities);
     }
 
     @Override
-    public void delete(ColumnDeleteQuery query) {
+    public <T> T insert(T entity) {
+        return put(entity);
+    }
+
+    @Override
+    public <T> T insert(T entity, Duration ttl) {
+        return put(entity, ttl);
+    }
+
+    @Override
+    public <K, T> Optional<T> get(K key, Class<T> entityClass) {
+        requireNonNull(key, "key is required");
+        requireNonNull(entityClass, "entity class is required");
+
+        Optional<Value> value = getManager().get(key);
+        return value.map(v -> getConverter().toEntity(entityClass, KeyValueEntity.of(key, v)))
+                .filter(Objects::nonNull);
+    }
+
+    @Override
+    public <K, T> Iterable<T> get(Iterable<K> keys, Class<T> entityClass) {
+        requireNonNull(keys, "keys is required");
+        requireNonNull(entityClass, "entity class is required");
+        return StreamSupport.stream(keys.spliterator(), false)
+                .map(k -> getManager().get(k)
+                        .map(v -> KeyValueEntity.of(k, v)))
+                .filter(Optional::isPresent)
+                .map(e -> getConverter().toEntity(entityClass, e.get()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public <K> void delete(K key) {
+        requireNonNull(key, "key is required");
+        getManager().delete(key);
+    }
+
+    @Override
+    public <K> void delete(Iterable<K> keys) {
+        requireNonNull(keys, "keys is required");
+        getManager().delete(keys);
+    }
+
+    @Override
+    public <T> Stream<T> query(String query, Class<T> entityClass) {
         requireNonNull(query, "query is required");
-        this.manager.delete(query);
+        requireNonNull(entityClass, "entityClass is required");
+        Stream<Value> values = getManager().query(query);
+        return values.map(v -> v.get(entityClass));
     }
 
     @Override
-    public <T> Stream<T> select(ColumnQuery query) {
-        Objects.requireNonNull(query, "query is required");
-        return executeQuery(query);
-    }
+    public <T> Optional<T> getSingleResult(String query, Class<T> entityClass) {
+        requireNonNull(query, "query is required");
+        requireNonNull(entityClass, "entityClass is required");
 
-    @Override
-    public <T> Page<T> select(ColumnQueryPagination query) {
-        Objects.requireNonNull(query, "query is required");
-        Stream<T> entities = executeQuery(query);
-        return new ColumnPage<>(this, entities, query);
-    }
-
-    @Override
-    public <T> Optional<T> singleResult(ColumnQuery query) {
-        Objects.requireNonNull(query, "query is required");
-        final Stream<T> entities = select(query);
+        Stream<T> entities = query(query, entityClass);
         final Iterator<T> iterator = entities.iterator();
         if (!iterator.hasNext()) {
             return Optional.empty();
@@ -145,83 +175,32 @@ public class LiteColumnTemplate implements ColumnTemplate {
         if (!iterator.hasNext()) {
             return Optional.of(entity);
         }
-        throw new NonUniqueResultException("No unique result found to the query: " + query);
+        throw new NonUniqueResultException("No Unique result found to the query: " + query);
+    }
+
+    @Override
+    public void query(String query) {
+        requireNonNull(query, "query is required");
+        getManager().query(query);
+    }
+
+    @Override
+    public <T> PreparedStatement prepare(String query, Class<T> entityClass) {
+        requireNonNull(query, "query is required");
+        return new KeyValuePreparedStatement(getManager().prepare(query), entityClass);
     }
 
     @Override
     public <T, K> Optional<T> find(Class<T> entityClass, K id) {
-        requireNonNull(entityClass, "entityClass is required");
-        requireNonNull(id, "id is required");
-        EntityMetadata entityMetadata = mappings.get(entityClass);
-        FieldMetadata idField = entityMetadata.getId()
-                .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
-        Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
-        Object value = converter.map(c -> c.convertToDatabaseColumn(id))
-                .orElse(Value.of(id).get(idField.getType()));
-        ColumnQuery query = ColumnQuery.select().from(entityMetadata.getName())
-                .where(idField.getName()).eq(value).build();
-        return singleResult(query);
+        return this.get(id, entityClass);
     }
 
     @Override
     public <T, K> void delete(Class<T> entityClass, K id) {
-        requireNonNull(entityClass, "entityClass is required");
-        requireNonNull(id, "id is required");
-        EntityMetadata entityMetadata = mappings.get(entityClass);
-        FieldMetadata idField = entityMetadata.getId()
-                .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
-        Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
-        Object value = converter.map(c -> c.convertToDatabaseColumn(id))
-                .orElse(Value.of(id).get(idField.getType()));
-        ColumnDeleteQuery query = ColumnDeleteQuery.delete().from(entityMetadata.getName())
-                .where(idField.getName()).eq(value).build();
-        delete(query);
+        this.delete(id);
     }
 
-    @Override
-    public <T> Stream<T> query(String query) {
-        requireNonNull(query, "query is required");
-        return PARSER.query(query, this.manager, this.observerParser).map(c -> (T) this.converter.toEntity(c));
+    private BucketManager getManager() {
+        return manager;
     }
-
-    @Override
-    public <T> Optional<T> singleResult(String query) {
-        requireNonNull(query, "query is required");
-        Stream<T> entities = query(query);
-        final Iterator<T> iterator = entities.iterator();
-        if (!iterator.hasNext()) {
-            return Optional.empty();
-        }
-        final T entity = iterator.next();
-        if (!iterator.hasNext()) {
-            return Optional.of(entity);
-        }
-        throw new NonUniqueResultException("No unique result found to the query: " + query);
-    }
-
-    @Override
-    public PreparedStatement prepare(String query) {
-        return new ColumnPreparedStatement(PARSER.prepare(query, this.manager, this.observerParser),
-                this.converter);
-    }
-
-    @Override
-    public long count(String documentCollection) {
-        return this.manager.count(documentCollection);
-    }
-
-    @Override
-    public <T> long count(Class<T> entityClass) {
-        requireNonNull(entityClass, "entityClass is required");
-        EntityMetadata entityMetadata = mappings.get(entityClass);
-        return this.manager.count(entityMetadata.getName());
-    }
-
-    private <T> Stream<T> executeQuery(ColumnQuery query) {
-        requireNonNull(query, "query is required");
-        Stream<ColumnEntity> entities = this.manager.select(query);
-        Function<ColumnEntity, T> function = e -> this.converter.toEntity(e);
-        return entities.map(function);
-    }
-
 }

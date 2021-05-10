@@ -30,13 +30,13 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class LiteColumnEntityConverter implements KeyValueEntityConverter {
+public class LiteKeyValueEntityConverter implements KeyValueEntityConverter {
 
     private final ClassMappings mappings;
 
     private final DocumentFieldConverterFactory converterFactory;
 
-    public LiteColumnEntityConverter() {
+    public LiteKeyValueEntityConverter() {
         this.mappings = new DefaultClassMappings();
         this.converterFactory = new DocumentFieldConverterFactory();
     }
