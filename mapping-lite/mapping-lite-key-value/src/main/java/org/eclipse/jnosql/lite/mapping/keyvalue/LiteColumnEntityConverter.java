@@ -14,28 +14,23 @@
  */
 package org.eclipse.jnosql.lite.mapping.keyvalue;
 
-import jakarta.nosql.column.Column;
-import jakarta.nosql.column.ColumnEntity;
-import jakarta.nosql.mapping.column.ColumnEntityConverter;
+import jakarta.nosql.Value;
+import jakarta.nosql.keyvalue.KeyValueEntity;
+import jakarta.nosql.mapping.AttributeConverter;
+import jakarta.nosql.mapping.IdNotFoundException;
+import jakarta.nosql.mapping.MappingException;
+import jakarta.nosql.mapping.keyvalue.KeyValueEntityConverter;
 import org.eclipse.jnosql.lite.mapping.keyvalue.ColumnFieldConverters.DocumentFieldConverterFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class LiteColumnEntityConverter implements ColumnEntityConverter {
+public class LiteColumnEntityConverter implements KeyValueEntityConverter {
 
     private final ClassMappings mappings;
 
@@ -46,76 +41,50 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
         this.converterFactory = new DocumentFieldConverterFactory();
     }
 
-    @Override
-    public ColumnEntity toColumn(Object entityInstance) {
-        requireNonNull(entityInstance, "Object is required");
-        EntityMetadata mapping = mappings.get(entityInstance.getClass());
-        ColumnEntity entity = ColumnEntity.of(mapping.getName());
-        mapping.getFields().stream()
-                .map(f -> ColumnFieldMetadata.of(f, entityInstance))
-                .filter(ColumnFieldMetadata::isNotEmpty)
-                .map(f -> f.toColumn(this, this.mappings))
-                .flatMap(List::stream)
-                .forEach(entity::add);
-        return entity;
-    }
 
     @Override
-    public <T> T toEntity(Class<T> entityClass, ColumnEntity entity) {
-        requireNonNull(entityClass, "entityClass is required");
+    public KeyValueEntity toKeyValue(Object entity) {
         requireNonNull(entity, "entity is required");
-        return toEntity(entityClass, entity.getColumns());
+        EntityMetadata metadata = this.mappings.get(entity.getClass());
+        FieldMetadata id = metadata.getId().orElseThrow(() -> new MappingException("The @Id annotations is required in the class: "
+                + entity.getClass()));
+        Object key = id.read(entity);
+        requireNonNull(key, String.format("The key field %s is required", id.getName()));
+        return KeyValueEntity.of(getKey(key, entity.getClass(), false), entity);
     }
 
     @Override
-    public <T> T toEntity(T entityInstance, ColumnEntity entity) {
-        requireNonNull(entityInstance, "entityInstance is required");
+    public <T> T toEntity(Class<T> type, KeyValueEntity entity) {
+        requireNonNull(type, "entity is required");
         requireNonNull(entity, "entity is required");
-        EntityMetadata mapping = mappings.get(entityInstance.getClass());
-        return convertEntity(entity.getColumns(), mapping, entityInstance);
+        T bean = entity.getValue(type);
+        if (Objects.isNull(bean)) {
+            return null;
+        }
+
+        Object key = getKey(entity.getKey(), type, true);
+        FieldMetadata id = getId(type);
+        id.write(bean, key);
+        return bean;
     }
 
-    @Override
-    public <T> T toEntity(ColumnEntity entity) {
-        requireNonNull(entity, "entity is required");
-        EntityMetadata mapping = mappings.findByName(entity.getName());
-        T instance = mapping.newInstance();
-        return convertEntity(entity.getColumns(), mapping, instance);
+    private <T> Object getKey(Object key, Class<T> entityClass, boolean toEntity) {
+        FieldMetadata id = getId(entityClass);
+        if (id.getConverter().isPresent()) {
+            AttributeConverter<Object, Object> attributeConverter = (AttributeConverter<Object, Object>)
+                    id.getConverter().get();
+            if (toEntity) {
+                return attributeConverter.convertToEntityAttribute(key);
+            } else {
+                return attributeConverter.convertToDatabaseColumn(key);
+            }
+        } else {
+            return Value.of(key).get(id.getType());
+        }
     }
 
-    <T> T toEntity(Class<T> entityClass, List<Column> documents) {
-        EntityMetadata mapping = mappings.get(entityClass);
-        T instance = mapping.newInstance();
-        return convertEntity(documents, mapping, instance);
+    private FieldMetadata getId(Class<?> type) {
+        EntityMetadata metadata = this.mappings.get(type);
+        return metadata.getId().orElseThrow(() -> IdNotFoundException.newInstance(type));
     }
-
-    private <T> T convertEntity(List<Column> documents, EntityMetadata mapping, T instance) {
-        final Map<String, FieldMetadata> fieldsGroupByName = mapping.getFieldsGroupByName();
-        final List<String> names = documents.stream().map(Column::getName).sorted().collect(Collectors.toList());
-        final Predicate<String> existField = k -> Collections.binarySearch(names, k) >= 0;
-        final Predicate<String> isElementType = k -> {
-            FieldMetadata fieldMetadata = fieldsGroupByName.get(k);
-            FieldType type = FieldTypeUtil.of(fieldMetadata, mappings);
-            return FieldType.EMBEDDED.equals(type) || FieldType.SUB_ENTITY.equals(type);
-        };
-
-        fieldsGroupByName.keySet().stream()
-                .filter(existField.or(isElementType))
-                .forEach(feedObject(instance, documents, fieldsGroupByName));
-
-        return instance;
-    }
-
-    private <T> Consumer<String> feedObject(T instance, List<Column> documents, Map<String, FieldMetadata> fieldsGroupByName) {
-        return k -> {
-            Optional<Column> document = documents.stream().filter(c -> c.getName().equals(k)).findFirst();
-
-            FieldMetadata field = fieldsGroupByName.get(k);
-            FieldType type = FieldTypeUtil.of(field, mappings);
-            ColumnFieldConverter fieldConverter = converterFactory.get(field, type, mappings);
-            fieldConverter.convert(instance, documents, document, field, this, mappings);
-        };
-    }
-
-
 }
