@@ -16,26 +16,13 @@ package org.eclipse.jnosql.lite.mapping.keyvalue;
 
 import jakarta.nosql.NonUniqueResultException;
 import jakarta.nosql.Value;
-import jakarta.nosql.column.ColumnDeleteQuery;
-import jakarta.nosql.column.ColumnEntity;
-import jakarta.nosql.column.ColumnFamilyManager;
-import jakarta.nosql.column.ColumnObserverParser;
-import jakarta.nosql.column.ColumnQuery;
-import jakarta.nosql.column.ColumnQueryParser;
 import jakarta.nosql.keyvalue.BucketManager;
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.IdNotFoundException;
-import jakarta.nosql.mapping.Page;
+import jakarta.nosql.keyvalue.KeyValueEntity;
 import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.column.ColumnEntityConverter;
-import jakarta.nosql.mapping.column.ColumnQueryPagination;
-import jakarta.nosql.mapping.column.ColumnTemplate;
+import jakarta.nosql.mapping.keyvalue.KeyValueEntityConverter;
 import jakarta.nosql.mapping.keyvalue.KeyValueTemplate;
-import org.eclipse.jnosql.communication.column.query.DefaultColumnQueryParser;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -43,7 +30,6 @@ import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -51,42 +37,34 @@ import java.util.stream.StreamSupport;
 import static java.util.Objects.requireNonNull;
 
 @ApplicationScoped
-public class LiteColumnTemplate implements KeyValueTemplate {
+public class LiteKeyValueTemplate implements KeyValueTemplate {
 
-    private final BucketManager manager;
+    private BucketManager manager;
 
-    private ClassMappings mappings;
+    private final ClassMappings mappings;
+
+    private final KeyValueEntityConverter converter;
 
     @Inject
-    public LiteColumnTemplate(BucketManager manager) {
+    public LiteKeyValueTemplate(BucketManager manager) {
         this.manager = manager;
         this.mappings = new DefaultClassMappings();
+        this.converter = new LiteKeyValueEntityConverter();
     }
 
     @Override
     public <T> T put(T entity) {
         requireNonNull(entity, "entity is required");
-
-        UnaryOperator<KeyValueEntity> putAction = k -> {
-            getManager().put(k);
-            return k;
-
-        };
-        getManager().
-        return getFlow().flow(entity, putAction);
+        this.manager.put(this.converter.toKeyValue(entity));
+        return entity;
     }
 
     @Override
     public <T> T put(T entity, Duration ttl) {
         requireNonNull(entity, "entity is required");
         requireNonNull(ttl, "ttl class is required");
-
-        UnaryOperator<KeyValueEntity> putAction = k -> {
-            getManager().put(k, ttl);
-            return k;
-
-        };
-        return getFlow().flow(entity, putAction);
+        this.manager.put(this.converter.toKeyValue(entity), ttl);
+        return entity;
     }
 
     @Override
