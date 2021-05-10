@@ -16,7 +16,7 @@ package org.eclipse.jnosql.lite.mapping.keyvalue;
 
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
-import org.eclipse.jnosql.lite.mapping.ColumnLiteProcessor;
+import org.eclipse.jnosql.lite.mapping.KeyValueLiteProcessor;
 import org.eclipse.jnosql.lite.mapping.EntityProcessor;
 import org.eclipse.jnosql.lite.mapping.repository.RepositoryProcessor;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ public class CompilerTest {
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
                 .withOptions()
-                .withProcessors(new ColumnLiteProcessor(),
+                .withProcessors(new KeyValueLiteProcessor(),
                         new RepositoryProcessor())
                 .compile(javaFileObject);
         assertThat(compilation).succeeded();

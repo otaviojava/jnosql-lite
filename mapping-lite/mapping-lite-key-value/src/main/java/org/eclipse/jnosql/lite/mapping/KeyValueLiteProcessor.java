@@ -45,9 +45,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
-public class ColumnLiteProcessor extends AbstractProcessor {
+public class KeyValueLiteProcessor extends AbstractProcessor {
 
-    private static final Logger LOGGER = Logger.getLogger(ColumnLiteProcessor.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(KeyValueLiteProcessor.class.getName());
     private static final String PACKAGE = "org.eclipse.jnosql.lite.mapping.column.";
     private static final String METADATA = "column";
 
@@ -71,7 +71,7 @@ public class ColumnLiteProcessor extends AbstractProcessor {
 
     private void copyColumnLiteClasses() {
         try {
-            URL url = ColumnLiteProcessor.class.getClassLoader().getResource(METADATA);
+            URL url = KeyValueLiteProcessor.class.getClassLoader().getResource(METADATA);
             Objects.requireNonNull(url, "Could not load resources from metadata folder");
             LOGGER.info("URL folder: " + url.toString());
             LOGGER.info("URI folder: " + url.toURI().toString());
@@ -91,7 +91,7 @@ public class ColumnLiteProcessor extends AbstractProcessor {
             Filer filer = processingEnv.getFiler();
             JavaFileObject fileObject = filer.createSourceFile(PACKAGE + file);
             try (Writer writer = fileObject.openWriter()) {
-                final InputStream stream = ColumnLiteProcessor.class
+                final InputStream stream = KeyValueLiteProcessor.class
                         .getClassLoader()
                         .getResourceAsStream(METADATA + "/" + file + ".java");
                 String source = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).lines()
