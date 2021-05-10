@@ -38,12 +38,12 @@ public class LiteKeyValueEntityConverter implements KeyValueEntityConverter {
         this.mappings = new DefaultClassMappings();
     }
 
-
     @Override
     public KeyValueEntity toKeyValue(Object entity) {
         requireNonNull(entity, "entity is required");
         EntityMetadata metadata = this.mappings.get(entity.getClass());
-        FieldMetadata id = metadata.getId().orElseThrow(() -> new MappingException("The @Id annotations is required in the class: "
+        FieldMetadata id = metadata.getId()
+                .orElseThrow(() -> new MappingException("The @Id annotations is required in the class: "
                 + entity.getClass()));
         Object key = id.read(entity);
         requireNonNull(key, String.format("The key field %s is required", id.getName()));
