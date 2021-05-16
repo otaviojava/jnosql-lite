@@ -63,19 +63,19 @@ public class {{className}} implements {{repository}} {
     @Override
     public Optional<{{entityType}}> findById({{keyType}} id) {
         Objects.requireNonNull(id, "id is required");
-        return this.template.get(id, Long.class);
+        return this.template.get(id, {{entityType}}.class);
     }
 
     @Override
     public Iterable<{{entityType}}> findById(Iterable<{{keyType}}> ids) {
        Objects.requireNonNull(ids, "ids is required");
-       return this.template.get(ids, Long.class);
+       return this.template.get(ids, {{entityType}}.class);
     }
 
     @Override
     public boolean existsById({{keyType}} id) {
         Objects.requireNonNull(id, "id is required");
-        return this.template.get(id, Long.class).isPresent();
+        return this.template.get(id, {{entityType}}.class).isPresent();
     }
 
     @Override
