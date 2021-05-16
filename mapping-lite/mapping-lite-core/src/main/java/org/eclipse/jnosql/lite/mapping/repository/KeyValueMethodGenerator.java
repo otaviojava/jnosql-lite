@@ -26,7 +26,7 @@ class KeyValueMethodGenerator implements MethodGenerator {
 
     @Override
     public List<String> getLines() {
-        ColumnMethodBuilder methodBuilder = ColumnMethodBuilder.of(this.metadata);
+        KeyValueMethodBuilder methodBuilder = KeyValueMethodBuilder.of(this.metadata);
         return methodBuilder.apply(this.metadata);
     }
 }
