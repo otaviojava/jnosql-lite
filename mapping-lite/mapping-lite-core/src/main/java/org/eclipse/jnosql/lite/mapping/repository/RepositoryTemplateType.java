@@ -23,7 +23,8 @@ import java.util.function.Supplier;
 
 enum RepositoryTemplateType implements Supplier<Mustache> {
     DOCUMENT("repository_document.mustache"),
-    COLUMN("repository_column.mustache");
+    COLUMN("repository_column.mustache"),
+    KEY_VALUE("repository_key-value.mustache");
 
     private final String fileName;
 
@@ -41,6 +42,8 @@ enum RepositoryTemplateType implements Supplier<Mustache> {
                 return DOCUMENT;
             case COLUMN:
                 return COLUMN;
+            case KEY_VALUE:
+                return KEY_VALUE;
             default:
                 throw new UnsupportedOperationException("There is not template to this database type: " + type);
         }
