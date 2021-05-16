@@ -14,23 +14,10 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
-import jakarta.nosql.mapping.DatabaseType;
-
 import java.util.List;
 
 public interface MethodGenerator {
 
     List<String> getLines();
 
-    static MethodGenerator of(MethodMetadata metadata) {
-        DatabaseType type = metadata.getType();
-        switch (type) {
-            case DOCUMENT:
-                return new DocumentMethodGenerator(metadata);
-            case COLUMN:
-                return new ColumnMethodGenerator(metadata);
-            default:
-                throw new UnsupportedOperationException("There is not support to the type " + type);
-        }
-    }
 }
