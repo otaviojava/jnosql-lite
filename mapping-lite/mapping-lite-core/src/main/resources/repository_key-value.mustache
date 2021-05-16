@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import java.util.Objects;
 import java.util.Optional;
 
+import static java.util.Objects.requireNonNull;
 
 @Generated(value = "JNoSQL Lite KeyValue Repository Generator", date = "{{now}}")
 @javax.enterprise.context.ApplicationScoped
@@ -36,45 +37,45 @@ public class {{className}} implements {{repository}} {
 
     @Override
     public <S extends {{entityType}}> S save(S entity) {
-        Objects.requireNonNull(entity, "entity is required");
+        requireNonNull(entity, "entity is required");
         this.template.put(entity);
         return entity;
     }
 
     @Override
     public <S extends {{entityType}}> Iterable<S> save(Iterable<S> entities) {
-        Objects.requireNonNull(entities, "entities is required");
+        requireNonNull(entities, "entities is required");
         entities.forEach(this::save);
         return entities;
    }
 
     @Override
     public void deleteById({{keyType}} id) {
-       Objects.requireNonNull(id, "id is required");
+       requireNonNull(id, "id is required");
        this.template.delete(id);
     }
 
     @Override
     public void deleteById(Iterable<{{keyType}}> ids) {
-       Objects.requireNonNull(ids, "ids is required");
+       requireNonNull(ids, "ids is required");
        ids.forEach(this::deleteById);
     }
 
     @Override
     public Optional<{{entityType}}> findById({{keyType}} id) {
-        Objects.requireNonNull(id, "id is required");
+        requireNonNull(id, "id is required");
         return this.template.get(id, {{entityType}}.class);
     }
 
     @Override
     public Iterable<{{entityType}}> findById(Iterable<{{keyType}}> ids) {
-       Objects.requireNonNull(ids, "ids is required");
+       requireNonNull(ids, "ids is required");
        return this.template.get(ids, {{entityType}}.class);
     }
 
     @Override
     public boolean existsById({{keyType}} id) {
-        Objects.requireNonNull(id, "id is required");
+        requireNonNull(id, "id is required");
         return this.template.get(id, {{entityType}}.class).isPresent();
     }
 
