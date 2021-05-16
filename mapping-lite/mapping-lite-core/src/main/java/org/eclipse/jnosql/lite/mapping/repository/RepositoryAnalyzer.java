@@ -43,9 +43,9 @@ final class RepositoryAnalyzer implements Supplier<String> {
     public String get() {
         LOGGER.info("Starting to process the repository processor with the class ");
         RepositoryElement element = RepositoryElement.of(entity, processingEnv);
-        RepositoryTemplateType templateType = RepositoryTemplateType.of(element.getType());
         Filer filer = processingEnv.getFiler();
-        RepositoryMetadata metadata = element.getMetadata();
+        RepositoryMetadata metadata = element.getMetadata(element.getType());
+        RepositoryTemplateType templateType = metadata.getTemplateType();
         LOGGER.info("Starting to generate the generate class to " + metadata.getQualified());
         try {
             JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified(), entity);
