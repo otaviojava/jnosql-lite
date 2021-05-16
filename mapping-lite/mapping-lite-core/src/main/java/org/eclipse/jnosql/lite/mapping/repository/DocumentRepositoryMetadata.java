@@ -29,4 +29,9 @@ class DocumentRepositoryMetadata extends RepositoryMetadata {
     RepositoryTemplateType getTemplateType() {
         return RepositoryTemplateType.DOCUMENT;
     }
+
+    @Override
+    public MethodGenerator apply(MethodMetadata metadata) {
+        return new DocumentMethodGenerator(metadata);
+    }
 }

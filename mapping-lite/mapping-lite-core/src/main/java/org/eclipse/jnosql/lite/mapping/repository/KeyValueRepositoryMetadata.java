@@ -29,4 +29,9 @@ class KeyValueRepositoryMetadata extends RepositoryMetadata {
     RepositoryTemplateType getTemplateType() {
         return RepositoryTemplateType.KEY_VALUE;
     }
+
+    @Override
+    public MethodGenerator apply(MethodMetadata methodMetadata) {
+        return null;
+    }
 }

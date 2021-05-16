@@ -29,4 +29,9 @@ class ColumnRepositoryMetadata extends RepositoryMetadata {
     RepositoryTemplateType getTemplateType() {
         return RepositoryTemplateType.COLUMN;
     }
+
+    @Override
+    public MethodGenerator apply(MethodMetadata metadata) {
+        return new ColumnMethodGenerator(metadata);
+    }
 }
