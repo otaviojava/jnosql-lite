@@ -67,6 +67,19 @@ class RepositoryElement {
         return new RepositoryMetadata(this);
     }
 
+    public RepositoryMetadata getMetadata(DatabaseType type) {
+        switch (type) {
+            case DOCUMENT:
+                return new DocumentRepositoryMetadata(this);
+            case COLUMN:
+                return new ColumnRepositoryMetadata(this);
+            case KEY_VALUE:
+                return new KeyValueRepositoryMetadata(this);
+            default:
+                throw new UnsupportedOperationException("There is not template to this database type: " + type);
+        }
+    }
+
     public String getEntityType() {
         return entityType;
     }
@@ -117,5 +130,6 @@ class RepositoryElement {
         }
         throw new ValidationException("The interface " + element.toString() + "must extends " + Repository.class.getName());
     }
+
 
 }
