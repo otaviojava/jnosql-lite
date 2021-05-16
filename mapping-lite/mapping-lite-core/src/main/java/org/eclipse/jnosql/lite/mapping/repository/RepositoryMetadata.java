@@ -21,7 +21,7 @@ abstract class RepositoryMetadata {
 
     private final RepositoryElement element;
 
-    public RepositoryMetadata(RepositoryElement element) {
+    protected RepositoryMetadata(RepositoryElement element) {
         this.element = element;
     }
 
