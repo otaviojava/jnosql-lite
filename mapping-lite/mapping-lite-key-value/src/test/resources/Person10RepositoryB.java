@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 
-@RepositoryLite(DatabaseType.COLUMN)
+@RepositoryLite(DatabaseType.KEY_VALUE)
 public interface Person10RepositoryB extends Repository<Person10, Long> {
 
     Stream<Person10> findByName(String name);
