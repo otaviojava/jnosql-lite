@@ -17,7 +17,7 @@ package org.eclipse.jnosql.lite.mapping.repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-final class RepositoryMetadata {
+abstract class RepositoryMetadata {
 
     private final RepositoryElement element;
 
@@ -25,22 +25,12 @@ final class RepositoryMetadata {
         this.element = element;
     }
 
+    abstract String getClassName();
+
+    abstract RepositoryTemplateType getTemplateType();
+
     public String getQualified() {
         return this.getPackage() + '.' + getClassName();
-    }
-
-    public String getClassName() {
-        switch (this.element.getType()) {
-            case DOCUMENT:
-                return this.element.getSimpleName() + "LiteDocument";
-            case COLUMN:
-                return this.element.getSimpleName() + "LiteColumn";
-            default:
-                throw new UnsupportedOperationException("There is not support to the element type" +
-                        " in the medatadta: " + this.element.getType()
-                );
-        }
-
     }
 
     public String getPackage() {
