@@ -87,13 +87,9 @@ public class {{className}} implements {{repository}} {
     {{#methods}}
     @Override
     public {{{returnType}}} {{methodName}}({{{parametersSignature}}}) {
-    {{#parameters}}
-       requireNonNull({{name}}, "{{name}} is required");
-    {{/parameters}}
     {{#sourceCode}}
        {{{.}}};
     {{/sourceCode}}
-       return {{{returnValue}}};
     }
     {{/methods}}
 
