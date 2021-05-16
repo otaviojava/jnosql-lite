@@ -56,4 +56,8 @@ abstract class RepositoryMetadata {
     public List<MethodMetadata> getMethods() {
         return this.element.getMethods();
     }
+
+    protected RepositoryElement getElement() {
+        return element;
+    }
 }
