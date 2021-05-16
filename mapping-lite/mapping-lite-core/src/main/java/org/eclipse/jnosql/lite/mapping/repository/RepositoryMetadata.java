@@ -16,8 +16,9 @@ package org.eclipse.jnosql.lite.mapping.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Function;
 
-abstract class RepositoryMetadata {
+abstract class RepositoryMetadata implements Function<MethodMetadata, MethodGenerator> {
 
     private final RepositoryElement element;
 
