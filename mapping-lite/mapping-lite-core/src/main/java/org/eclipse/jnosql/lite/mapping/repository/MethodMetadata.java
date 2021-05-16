@@ -23,6 +23,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.joining;
@@ -41,7 +42,7 @@ class MethodMetadata {
 
     private final DatabaseType type;
 
-    private RepositoryMetadata metadata;
+    private MethodGenerator generator;
 
     public MethodMetadata(String methodName, TypeElement returnElement, String returnType,
                           List<Parameter> parameters, Query query, DatabaseType type) {
@@ -67,13 +68,16 @@ class MethodMetadata {
                 .collect(joining(","));
     }
 
+    void update(Function<MethodMetadata, MethodGenerator> methodGeneratorFactory) {
+        this.generator = methodGeneratorFactory.apply(this);
+    }
+
     public List<Parameter> getParameters() {
         return parameters;
     }
 
     public List<String> getSourceCode() {
-        MethodGenerator methodGenerator = this.metadata.apply(this);
-        return methodGenerator.getLines();
+        return this.generator.getLines();
     }
 
     public String getReturnValue() {

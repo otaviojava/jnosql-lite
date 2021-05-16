@@ -24,6 +24,7 @@ abstract class RepositoryMetadata implements Function<MethodMetadata, MethodGene
 
     protected RepositoryMetadata(RepositoryElement element) {
         this.element = element;
+        this.element.getMethods().forEach(m -> m.update(this));
     }
 
     abstract String getClassName();
