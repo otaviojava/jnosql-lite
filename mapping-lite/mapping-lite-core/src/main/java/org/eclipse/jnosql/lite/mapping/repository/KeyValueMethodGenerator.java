@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2021 Otavio Santana and others
+ *  Copyright (c) 2021 Otávio Santana and others
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the Eclipse Public License v1.0
  *   and Apache License v2.0 which accompanies this distribution.
@@ -14,24 +14,19 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
-class KeyValueRepositoryMetadata extends RepositoryMetadata {
+import java.util.List;
 
-    KeyValueRepositoryMetadata(RepositoryElement element) {
-        super(element);
+class KeyValueMethodGenerator implements MethodGenerator {
+
+    private final MethodMetadata metadata;
+
+    KeyValueMethodGenerator(MethodMetadata metadata) {
+        this.metadata = metadata;
     }
 
     @Override
-    String getClassName() {
-        return this.getElement().getSimpleName() + "LiteKeyValue";
-    }
-
-    @Override
-    RepositoryTemplateType getTemplateType() {
-        return RepositoryTemplateType.KEY_VALUE;
-    }
-
-    @Override
-    public MethodGenerator apply(MethodMetadata metadata) {
-        return new KeyValueMethodGenerator(metadata);
+    public List<String> getLines() {
+        ColumnMethodBuilder methodBuilder = ColumnMethodBuilder.of(this.metadata);
+        return methodBuilder.apply(this.metadata);
     }
 }
