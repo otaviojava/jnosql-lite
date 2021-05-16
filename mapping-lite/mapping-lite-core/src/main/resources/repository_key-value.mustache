@@ -62,7 +62,7 @@ private final KeyValueTemplate template;
     }
 
     @Override
-    public Optional<K> findById({{keyType}} id) {
+    public Optional<{{entityType}}> findById({{keyType}} id) {
         Objects.requireNonNull(id, "id is required");
         return this.template.get(id, Long.class);
     }
