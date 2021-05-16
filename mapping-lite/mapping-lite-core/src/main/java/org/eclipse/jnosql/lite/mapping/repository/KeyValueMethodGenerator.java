@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
+import java.util.Collections;
 import java.util.List;
 
 class KeyValueMethodGenerator implements MethodGenerator {
@@ -26,7 +27,7 @@ class KeyValueMethodGenerator implements MethodGenerator {
 
     @Override
     public List<String> getLines() {
-        KeyValueMethodBuilder methodBuilder = KeyValueMethodBuilder.of(this.metadata);
-        return methodBuilder.apply(this.metadata);
+        return Collections.singletonList("throw new UnsupportedOperationException" +
+                "(\"The Key-value repository implementation does not support method query\");");
     }
 }
