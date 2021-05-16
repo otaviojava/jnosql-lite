@@ -63,10 +63,6 @@ class RepositoryElement {
         return type;
     }
 
-    public RepositoryMetadata getMetadata() {
-        return new RepositoryMetadata(this);
-    }
-
     public RepositoryMetadata getMetadata(DatabaseType type) {
         switch (type) {
             case DOCUMENT:
