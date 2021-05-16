@@ -41,6 +41,8 @@ class MethodMetadata {
 
     private final DatabaseType type;
 
+    private RepositoryMetadata metadata;
+
     public MethodMetadata(String methodName, TypeElement returnElement, String returnType,
                           List<Parameter> parameters, Query query, DatabaseType type) {
 
@@ -70,7 +72,7 @@ class MethodMetadata {
     }
 
     public List<String> getSourceCode() {
-        MethodGenerator methodGenerator = MethodGenerator.of(this);
+        MethodGenerator methodGenerator = this.metadata.apply(this);
         return methodGenerator.getLines();
     }
 
@@ -111,6 +113,5 @@ class MethodMetadata {
         }
         return null;
     }
-
 
 }
