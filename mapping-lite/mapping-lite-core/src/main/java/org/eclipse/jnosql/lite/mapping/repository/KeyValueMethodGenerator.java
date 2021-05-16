@@ -28,6 +28,6 @@ class KeyValueMethodGenerator implements MethodGenerator {
     @Override
     public List<String> getLines() {
         return Collections.singletonList("throw new UnsupportedOperationException" +
-                "(\"The Key-value repository implementation does not support method query\");");
+                "(\"The Key-value repository implementation does not support method query\")");
     }
 }
