@@ -27,6 +27,6 @@ class ColumnRepositoryMetadata extends RepositoryMetadata {
 
     @Override
     RepositoryTemplateType getTemplateType() {
-        return RepositoryTemplateType.DOCUMENT;
+        return RepositoryTemplateType.COLUMN;
     }
 }
