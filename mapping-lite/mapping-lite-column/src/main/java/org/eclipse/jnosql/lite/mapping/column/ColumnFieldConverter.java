@@ -23,6 +23,6 @@ import java.util.Optional;
 
 interface ColumnFieldConverter {
 
-    <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column, FieldMetadata field,
+    <X, Y, T> void convert(T instance, List<Column> columns, Column column, FieldMetadata field,
                            LiteColumnEntityConverter converter, ClassMappings mappings);
 }
