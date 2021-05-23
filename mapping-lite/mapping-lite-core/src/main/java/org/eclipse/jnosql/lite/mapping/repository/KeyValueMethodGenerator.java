@@ -19,10 +19,7 @@ import java.util.List;
 
 class KeyValueMethodGenerator implements MethodGenerator {
 
-    private final MethodMetadata metadata;
-
-    KeyValueMethodGenerator(MethodMetadata metadata) {
-        this.metadata = metadata;
+    KeyValueMethodGenerator() {
     }
 
     @Override
