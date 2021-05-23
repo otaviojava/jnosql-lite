@@ -28,7 +28,7 @@ import static com.google.testing.compile.Compiler.javac;
 public class CompilerTest {
 
     @Test
-    public void shouldCompile() throws IOException {
+    public void shouldCompile() {
 
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person.java");
 
@@ -41,7 +41,7 @@ public class CompilerTest {
     }
 
     @Test
-    public void shouldReturnConstructorIssue() throws IOException {
+    public void shouldReturnConstructorIssue() {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person2.java");
         Assertions.assertThrows(RuntimeException.class, () ->
                 javac()
@@ -115,7 +115,7 @@ public class CompilerTest {
     }
 
     @Test
-    public void shouldCompileDefaultPackage() throws IOException {
+    public void shouldCompileDefaultPackage() {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person7.java");
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())
@@ -126,7 +126,7 @@ public class CompilerTest {
     }
 
     @Test
-    public void shouldCompileProtected() throws IOException {
+    public void shouldCompileProtected() {
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person8.java");
         Compilation compilation = javac()
                 .withClasspathFrom(this.getClass().getClassLoader())

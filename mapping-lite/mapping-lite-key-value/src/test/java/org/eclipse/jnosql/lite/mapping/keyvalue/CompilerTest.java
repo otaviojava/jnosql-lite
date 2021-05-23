@@ -30,7 +30,7 @@ import static com.google.testing.compile.Compiler.javac;
 public class CompilerTest {
 
     @Test
-    public void shouldCompile() throws IOException {
+    public void shouldCompile() {
         System.setProperty("document.provider", "org.eclipse.jnosql.lite.mapping.keyvalue.MockConfiguration");
         final JavaFileObject javaFileObject = JavaFileObjects.forResource("Person.java");
 
