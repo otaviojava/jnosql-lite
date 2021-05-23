@@ -21,7 +21,6 @@ import org.eclipse.jnosql.lite.mapping.repository.RepositoryProcessor;
 import org.junit.jupiter.api.Test;
 
 import javax.tools.JavaFileObject;
-import java.io.IOException;
 
 import static com.google.testing.compile.CompilationSubject.assertThat;
 import static com.google.testing.compile.Compiler.javac;
