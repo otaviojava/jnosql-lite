@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -65,12 +66,12 @@ class ColumnFieldConverters {
     private static class SubEntityConverter implements ColumnFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
 
-            if (column.isPresent()) {
-                Column sudColumn = column.get();
-                Object value = sudColumn.get();
+
+            if (Objects.nonNull(column)) {
+                Object value = column.get();
                 if (value instanceof Map) {
                     Map map = (Map) value;
                     List<Column> embeddedColumn = new ArrayList<>();
@@ -82,8 +83,7 @@ class ColumnFieldConverters {
 
                 } else {
                     field.write(instance, converter.toEntity(field.getType(),
-                            sudColumn.get(new TypeReference<List<Column>>() {
-                            })));
+                            column.get(new TypeReference<List<Column>>() {})));
                 }
 
             } else {
@@ -96,7 +96,7 @@ class ColumnFieldConverters {
 
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
 
             Object subEntity = converter.toEntity(field.getType(), columns);
@@ -108,10 +108,10 @@ class ColumnFieldConverters {
     private static class DefaultConverter implements ColumnFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
-            Value value = column.get().getValue();
 
+            Value value = column.getValue();
             Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
             if (optionalConverter.isPresent()) {
                 AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
@@ -145,27 +145,22 @@ class ColumnFieldConverters {
     private static class CollectionEmbeddableConverter implements ColumnFieldConverter {
 
         @Override
-        public <X, Y, T> void convert(T instance, List<Column> columns, Optional<Column> column,
+        public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
-            column.ifPresent(convertColumn(instance, field, converter));
-        }
-
-        private <T> Consumer<Column> convertColumn(T instance, FieldMetadata field, LiteColumnEntityConverter converter) {
-            return column -> {
-
+            if (Objects.nonNull(column)) {
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
                 Collection collection = supplier.get();
                 List<List<Column>> embeddable = (List<List<Column>>) column.get();
-                for (List<Column> columns : embeddable) {
+                for (List<Column> embeddableColumns : embeddable) {
                     List<Class<?>> arguments = field.getArguments();
                     Class<?> type = arguments.stream().findFirst()
                             .orElseThrow(() -> new MappingException("There is an issue in the field: "
                                     + field.getName() + " in the class " + instance.getClass()));
-                    Object element = converter.toEntity(type, columns);
+                    Object element = converter.toEntity(type, embeddableColumns);
                     collection.add(element);
                 }
                 field.write(instance, collection);
-            };
+            }
         }
     }
 
