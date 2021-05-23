@@ -181,7 +181,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     @Override
     public <T> Stream<T> query(String query) {
         requireNonNull(query, "query is required");
-        return PARSER.query(query, this.manager, this.observerParser).map(c -> this.converter.toEntity(c));
+        return PARSER.query(query, this.manager, this.observerParser).map(this.converter::toEntity);
     }
 
     @Override
