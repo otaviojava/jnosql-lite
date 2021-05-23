@@ -41,7 +41,7 @@ final class DocumentPreparedStatement implements PreparedStatement {
 
     @Override
     public <T> Stream<T> getResult() {
-        return preparedStatement.getResult().map(c -> (T) converter.toEntity(c));
+        return preparedStatement.getResult().map(c -> converter.toEntity(c));
     }
 
     @Override

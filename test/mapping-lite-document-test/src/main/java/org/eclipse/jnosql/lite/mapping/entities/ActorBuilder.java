@@ -31,7 +31,7 @@ public class ActorBuilder {
     }
 
     public ActorBuilder withId() {
-        this.id = (long) 12;
+        this.id = 12;
         return this;
     }
 

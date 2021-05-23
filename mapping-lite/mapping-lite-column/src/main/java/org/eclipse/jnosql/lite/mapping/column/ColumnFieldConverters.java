@@ -127,7 +127,6 @@ class ColumnFieldConverters {
                         return;
                     default:
                         field.write(instance, value.get(field.getType()));
-                        return;
                 }
 
             }
