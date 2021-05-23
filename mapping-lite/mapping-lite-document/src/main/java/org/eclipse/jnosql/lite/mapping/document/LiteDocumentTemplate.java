@@ -220,7 +220,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     private <T> Stream<T> executeQuery(DocumentQuery query) {
         requireNonNull(query, "query is required");
         Stream<DocumentEntity> entities = this.manager.select(query);
-        Function<DocumentEntity, T> function = e -> this.converter.toEntity(e);
+        Function<DocumentEntity, T> function = this.converter::toEntity;
         return entities.map(function);
     }
 

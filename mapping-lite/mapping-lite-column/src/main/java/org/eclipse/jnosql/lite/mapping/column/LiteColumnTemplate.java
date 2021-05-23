@@ -220,7 +220,7 @@ public class LiteColumnTemplate implements ColumnTemplate {
     private <T> Stream<T> executeQuery(ColumnQuery query) {
         requireNonNull(query, "query is required");
         Stream<ColumnEntity> entities = this.manager.select(query);
-        Function<ColumnEntity, T> function = e -> this.converter.toEntity(e);
+        Function<ColumnEntity, T> function = this.converter::toEntity;
         return entities.map(function);
     }
 
