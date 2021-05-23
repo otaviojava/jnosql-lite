@@ -108,12 +108,12 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
     private <T> Consumer<String> feedObject(T instance, List<Column> documents, Map<String, FieldMetadata> fieldsGroupByName) {
         return k -> {
-            Optional<Column> document = documents.stream().filter(c -> c.getName().equals(k)).findFirst();
+            Optional<Column> column = documents.stream().filter(c -> c.getName().equals(k)).findFirst();
 
             FieldMetadata field = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(field, mappings);
             ColumnFieldConverter fieldConverter = converterFactory.get(field, type, mappings);
-            fieldConverter.convert(instance, documents, document, field, this, mappings);
+            fieldConverter.convert(instance, documents, column.orElse(null), field, this, mappings);
         };
     }
 
