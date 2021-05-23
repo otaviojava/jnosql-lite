@@ -19,7 +19,6 @@ import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
 import java.util.List;
-import java.util.Optional;
 
 interface DocumentFieldConverter {
 
