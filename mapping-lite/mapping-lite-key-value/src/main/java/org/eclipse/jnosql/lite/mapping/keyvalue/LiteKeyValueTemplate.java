@@ -37,7 +37,7 @@ import static java.util.Objects.requireNonNull;
 @ApplicationScoped
 public class LiteKeyValueTemplate implements KeyValueTemplate {
 
-    private BucketManager manager;
+    private final BucketManager manager;
 
     private final KeyValueEntityConverter converter;
 
