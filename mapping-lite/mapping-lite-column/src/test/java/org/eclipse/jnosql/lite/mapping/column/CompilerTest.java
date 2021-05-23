@@ -17,7 +17,6 @@ package org.eclipse.jnosql.lite.mapping.column;
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.JavaFileObjects;
 import org.eclipse.jnosql.lite.mapping.ColumnLiteProcessor;
-import org.eclipse.jnosql.lite.mapping.EntityProcessor;
 import org.eclipse.jnosql.lite.mapping.repository.RepositoryProcessor;
 import org.junit.jupiter.api.Test;
 
