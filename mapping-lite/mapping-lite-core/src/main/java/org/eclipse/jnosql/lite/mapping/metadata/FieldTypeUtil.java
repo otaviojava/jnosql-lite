@@ -43,7 +43,7 @@ public final class FieldTypeUtil {
         }
         Class<?> type = field.getType();
         Optional<EntityMetadata> entityMetadata = mappings.findByClass(type);
-        if (!entityMetadata.isEmpty()) {
+        if (entityMetadata.isPresent()) {
             return entityMetadata
                     .map(EntityMetadata::isEmbedded)
                     .orElse(false)

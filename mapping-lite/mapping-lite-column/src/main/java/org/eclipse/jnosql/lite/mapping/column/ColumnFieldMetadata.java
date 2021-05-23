@@ -118,7 +118,7 @@ class ColumnFieldMetadata implements FieldMetadata {
         List<Class<?>> arguments = getArguments();
         if (!arguments.isEmpty()) {
             Class<?> entity = arguments.stream().findFirst().get();
-            return !mappings.findByClass(entity).isEmpty();
+            return mappings.findByClass(entity).isPresent();
         }
         return false;
     }

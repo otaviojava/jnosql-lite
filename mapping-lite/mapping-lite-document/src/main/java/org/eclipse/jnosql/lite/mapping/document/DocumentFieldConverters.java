@@ -58,7 +58,7 @@ class DocumentFieldConverters {
 
         private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type, ClassMappings mappings) {
             return FieldType.COLLECTION.equals(type) &&
-                    !mappings.findByClass(field.getArguments().get(0)).isEmpty();
+                    mappings.findByClass(field.getArguments().get(0)).isPresent();
         }
     }
 
