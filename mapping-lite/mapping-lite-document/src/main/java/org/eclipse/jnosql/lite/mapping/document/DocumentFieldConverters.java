@@ -22,6 +22,7 @@ import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.MappingException;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.CollectionSupplier;
+import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
@@ -98,8 +99,14 @@ class DocumentFieldConverters {
                                       FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
 
             Object subEntity = converter.toEntity(field.getType(), documents);
-            field.write(instance, subEntity);
-
+            EntityMetadata mapping = mappings.get(field.getType());
+            boolean areAllFieldsNull = mapping.getFields()
+                    .stream()
+                    .map(f -> f.read(subEntity))
+                    .allMatch(Objects::isNull);
+            if (!areAllFieldsNull) {
+                field.write(instance, subEntity);
+            }
         }
     }
 
