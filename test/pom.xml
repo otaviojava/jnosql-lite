@@ -33,6 +33,7 @@
     <modules>
         <module>mapping-lite-core-test</module>
         <module>mapping-lite-document-test</module>
+        <module>mapping-lite-column-test</module>
     </modules>
 
     <dependencies>
