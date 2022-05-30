@@ -23,6 +23,7 @@ import org.eclipse.jnosql.lite.mapping.document.LiteDocumentEntityConverter;
 import org.eclipse.jnosql.lite.mapping.entities.Actor;
 import org.eclipse.jnosql.lite.mapping.entities.Address;
 import org.eclipse.jnosql.lite.mapping.entities.AppointmentBook;
+import org.eclipse.jnosql.lite.mapping.entities.Citizen;
 import org.eclipse.jnosql.lite.mapping.entities.Contact;
 import org.eclipse.jnosql.lite.mapping.entities.ContactType;
 import org.eclipse.jnosql.lite.mapping.entities.Director;
@@ -56,6 +57,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -394,6 +396,35 @@ class LiteDocumentEntityConverterTest {
 
         Assertions.assertEquals(3, vendor.getPrefixes().size());
 
+    }
+
+    @Test
+    public void shouldCreateLazilyEntity() {
+        DocumentEntity entity = DocumentEntity.of("Citizen");
+        entity.add("id", "10");
+        entity.add("name", "Salvador");
+
+        Citizen citizen = converter.toEntity(entity);
+        Assertions.assertNotNull(citizen);
+        assertNull(citizen.getCity());
+    }
+
+    @Test
+    public void shouldReturnNullWhenThereIsNotSubEntity() {
+        DocumentEntity entity = DocumentEntity.of("Address");
+
+        entity.add(Document.of("street", "Rua Engenheiro Jose Anasoh"));
+        entity.add(Document.of("city", "Salvador"));
+        entity.add(Document.of("state", "Bahia"));
+        entity.add(Document.of("zip", "12321"));
+        entity.add(Document.of("plusFour", "1234"));
+
+        Address address = converter.toEntity(entity);
+
+        assertEquals("Rua Engenheiro Jose Anasoh", address.getStreet());
+        assertEquals("Salvador", address.getCity());
+        assertEquals("Bahia", address.getState());
+        assertNull(address.getZipCode());
     }
 
     @Test
