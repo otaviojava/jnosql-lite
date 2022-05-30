@@ -23,7 +23,7 @@ import org.eclipse.jnosql.lite.mapping.RepositoryLite;
 import java.util.List;
 import java.util.stream.Stream;
 
-@RepositoryLite(DatabaseType.DOCUMENT)
+@RepositoryLite(DatabaseType.COLUMN)
 public interface ActorRepository extends Repository<Actor, Long> {
 
     Stream<Actor> findByName(String name);

@@ -12,14 +12,14 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.document;
+package org.eclipse.jnosql.mapping.lite.column;
 
 import jakarta.nosql.TypeReference;
 import jakarta.nosql.Value;
-import jakarta.nosql.document.Document;
-import jakarta.nosql.document.DocumentEntity;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import org.eclipse.jnosql.lite.mapping.column.LiteDocumentEntityConverter;
+import jakarta.nosql.column.Column;
+import jakarta.nosql.column.ColumnEntity;
+import jakarta.nosql.mapping.column.ColumnEntityConverter;
+import org.eclipse.jnosql.lite.mapping.column.LiteColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.entities.Actor;
 import org.eclipse.jnosql.lite.mapping.entities.Address;
 import org.eclipse.jnosql.lite.mapping.entities.AppointmentBook;
@@ -61,12 +61,12 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class LiteDocumentEntityConverterTest {
+class LiteColumnEntityConverterTest {
 
 
-    private DocumentEntityConverter converter;
+    private ColumnEntityConverter converter;
 
-    private Document[] documents;
+    private Column[] columns;
 
     private final Actor actor = Actor.actorBuilder().withAge()
             .withId()
@@ -78,45 +78,45 @@ class LiteDocumentEntityConverterTest {
 
     @BeforeEach
     public void init() {
-        this.converter = new LiteDocumentEntityConverter();
-        documents = new Document[]{Document.of("_id", 12L),
-                Document.of("age", 10), Document.of("name", "Otavio"), Document.of("phones", Arrays.asList("234", "2342"))
-                , Document.of("movieCharacter", Collections.singletonMap("JavaZone", "Jedi"))
-                , Document.of("movieRating", Collections.singletonMap("JavaZone", 10))};
+        this.converter = new LiteColumnEntityConverter();
+        columns = new Column[]{Column.of("_id", 12L),
+                Column.of("age", 10), Column.of("name", "Otavio"), Column.of("phones", Arrays.asList("234", "2342"))
+                , Column.of("movieCharacter", Collections.singletonMap("JavaZone", "Jedi"))
+                , Column.of("movieRating", Collections.singletonMap("JavaZone", 10))};
     }
 
     @Test
-    public void shouldConvertDocumentEntityFromEntity() {
+    public void shouldConvertColumnEntityFromEntity() {
 
         Person person = Person.builder().withAge()
                 .withId(12)
                 .withName("Otavio")
                 .withPhones(Arrays.asList("234", "2342")).build();
 
-        DocumentEntity entity = converter.toDocument(person);
+        ColumnEntity entity = converter.toColumn(person);
         assertEquals("Person", entity.getName());
         assertEquals(4, entity.size());
-        assertThat(entity.getDocuments(), containsInAnyOrder(Document.of("_id", 12L),
-                Document.of("age", 10), Document.of("name", "Otavio"), Document.of("phones", Arrays.asList("234", "2342"))));
+        assertThat(entity.getColumns(), containsInAnyOrder(Column.of("_id", 12L),
+                Column.of("age", 10), Column.of("name", "Otavio"), Column.of("phones", Arrays.asList("234", "2342"))));
 
     }
 
     @Test
-    public void shouldConvertEntityFromDocumentEntity() {
+    public void shouldConvertEntityFromColumnEntity() {
 
 
-        DocumentEntity entity = converter.toDocument(actor);
+        ColumnEntity entity = converter.toColumn(actor);
         assertEquals("Actor", entity.getName());
         assertEquals(6, entity.size());
 
 
-        assertThat(entity.getDocuments(), containsInAnyOrder(documents));
+        assertThat(entity.getColumns(), containsInAnyOrder(columns));
     }
 
     @Test
-    public void shouldConvertDocumentEntityFromEntity2() {
-        DocumentEntity entity = DocumentEntity.of("Actor");
-        Stream.of(documents).forEach(entity::add);
+    public void shouldConvertColumnEntityFromEntity2() {
+        ColumnEntity entity = ColumnEntity.of("Actor");
+        Stream.of(columns).forEach(entity::add);
 
         Actor actor = converter.toEntity(Actor.class, entity);
         assertNotNull(actor);
@@ -130,8 +130,8 @@ class LiteDocumentEntityConverterTest {
 
     @Test
     public void shouldConvertColumnEntityToExistEntity() {
-        DocumentEntity entity = DocumentEntity.of("Actor");
-        Stream.of(documents).forEach(entity::add);
+        ColumnEntity entity = ColumnEntity.of("Actor");
+        Stream.of(columns).forEach(entity::add);
         Actor actor = Actor.actorBuilder().build();
         Actor result = converter.toEntity(actor, entity);
 
@@ -145,8 +145,8 @@ class LiteDocumentEntityConverterTest {
 
     @Test
     public void shouldReturnErrorWhenToEntityIsNull() {
-        DocumentEntity entity = DocumentEntity.of("Actor");
-        Stream.of(documents).forEach(entity::add);
+        ColumnEntity entity = ColumnEntity.of("Actor");
+        Stream.of(columns).forEach(entity::add);
         Actor actor = Actor.actorBuilder().build();
 
         assertThrows(NullPointerException.class, () -> converter.toEntity(null, entity));
@@ -155,9 +155,9 @@ class LiteDocumentEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertDocumentEntityFromEntity3() {
-        DocumentEntity entity = DocumentEntity.of("Actor");
-        Stream.of(documents).forEach(entity::add);
+    public void shouldConvertColumnEntityFromEntity3() {
+        ColumnEntity entity = ColumnEntity.of("Actor");
+        Stream.of(columns).forEach(entity::add);
 
         Actor actor = converter.toEntity(entity);
         assertNotNull(actor);
@@ -169,7 +169,7 @@ class LiteDocumentEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertEntityFromDocumentEntity2() {
+    public void shouldConvertEntityFromColumnEntity2() {
 
         Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
@@ -177,7 +177,7 @@ class LiteDocumentEntityConverterTest {
                 .withName("Otavio")
                 .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
 
-        DocumentEntity entity = converter.toDocument(director);
+        ColumnEntity entity = converter.toColumn(director);
         assertEquals(5, entity.size());
 
         assertEquals(getValue(entity.find("name")), director.getName());
@@ -185,29 +185,29 @@ class LiteDocumentEntityConverterTest {
         assertEquals(getValue(entity.find("_id")), director.getId());
         assertEquals(getValue(entity.find("phones")), director.getPhones());
 
-        Document subdocument = entity.find("movie").get();
-        List<Document> documents = subdocument.get(new TypeReference<>() {
+        Column subColumn = entity.find("movie").get();
+        List<Column> columns = subColumn.get(new TypeReference<>() {
         });
-        assertEquals(3, documents.size());
-        assertEquals("movie", subdocument.getName());
+        assertEquals(3, columns.size());
+        assertEquals("movie", subColumn.getName());
 
-        assertEquals(movie.getTitle(), getValue(documents.stream().filter(d -> "title".equals(d.getName())).findFirst()));
-        assertEquals(movie.getYear(), getValue(documents.stream().filter(d -> "year".equals(d.getName())).findFirst()));
-        assertEquals(movie.getActors(), getValue(documents.stream().filter(d -> "actors".equals(d.getName())).findFirst()));
+        assertEquals(movie.getTitle(), getValue(columns.stream().filter(d -> "title".equals(d.getName())).findFirst()));
+        assertEquals(movie.getYear(), getValue(columns.stream().filter(d -> "year".equals(d.getName())).findFirst()));
+        assertEquals(movie.getActors(), getValue(columns.stream().filter(d -> "actors".equals(d.getName())).findFirst()));
 
 
     }
 
 
     @Test
-    public void shouldConvertToEmbeddedClassWhenHasSubDocument() {
+    public void shouldConvertToEmbeddedClassWhenHasSubColumn() {
         Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
                 .withId(12)
                 .withName("Otavio")
                 .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
 
-        DocumentEntity entity = converter.toDocument(director);
+        ColumnEntity entity = converter.toColumn(director);
         Director director1 = converter.toEntity(entity);
 
         assertEquals(movie, director1.getMovie());
@@ -218,18 +218,18 @@ class LiteDocumentEntityConverterTest {
 
 
     @Test
-    public void shouldConvertToEmbeddedClassWhenHasSubDocument2() {
+    public void shouldConvertToEmbeddedClassWhenHasSubColumn2() {
         Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
                 .withId(12)
                 .withName("Otavio")
                 .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
 
-        DocumentEntity entity = converter.toDocument(director);
+        ColumnEntity entity = converter.toColumn(director);
         entity.remove("movie");
-        entity.add(Document.of("title", "Matrix"));
-        entity.add(Document.of("movie", Arrays.asList(Document.of("title", "Matrix"),
-                Document.of("year", 2012), Document.of("actors", singleton("Actor")))));
+        entity.add(Column.of("title", "Matrix"));
+        entity.add(Column.of("movie", Arrays.asList(Column.of("title", "Matrix"),
+                Column.of("year", 2012), Column.of("actors", singleton("Actor")))));
         Director director1 = converter.toEntity(entity);
 
         assertEquals(movie, director1.getMovie());
@@ -240,14 +240,14 @@ class LiteDocumentEntityConverterTest {
 
 
     @Test
-    public void shouldConvertToEmbeddedClassWhenHasSubDocument3() {
+    public void shouldConvertToEmbeddedClassWhenHasSubColumn3() {
         Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
                 .withId(12)
                 .withName("Otavio")
                 .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
 
-        DocumentEntity entity = converter.toDocument(director);
+        ColumnEntity entity = converter.toColumn(director);
         entity.remove("movie");
 
         Map<String, Object> map = new HashMap<>();
@@ -255,7 +255,7 @@ class LiteDocumentEntityConverterTest {
         map.put("year", 2012);
         map.put("actors", singleton("Actor"));
 
-        entity.add(Document.of("movie", map));
+        entity.add(Column.of("movie", map));
         Director director1 = converter.toEntity(entity);
 
         assertEquals(movie, director1.getMovie());
@@ -265,7 +265,7 @@ class LiteDocumentEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertToDocumentWhenHasConverter() {
+    public void shouldConvertToColumnWhenHasConverter() {
         Worker worker = new Worker();
         Job job = new Job();
         job.setCity("Sao Paulo");
@@ -273,7 +273,7 @@ class LiteDocumentEntityConverterTest {
         worker.setName("Bob");
         worker.setSalary(new Money("BRL", BigDecimal.TEN));
         worker.setJob(job);
-        DocumentEntity entity = converter.toDocument(worker);
+        ColumnEntity entity = converter.toColumn(worker);
         assertEquals("Worker", entity.getName());
         assertEquals("Bob", entity.find("name").get().get());
         assertEquals("Sao Paulo", entity.find("city").get().get());
@@ -290,7 +290,7 @@ class LiteDocumentEntityConverterTest {
         worker.setName("Bob");
         worker.setSalary(new Money("BRL", BigDecimal.TEN));
         worker.setJob(job);
-        DocumentEntity entity = converter.toDocument(worker);
+        ColumnEntity entity = converter.toColumn(worker);
         Worker worker1 = converter.toEntity(entity);
         assertEquals(worker.getSalary(), worker1.getSalary());
         assertEquals(job.getCity(), worker1.getJob().getCity());
@@ -304,32 +304,32 @@ class LiteDocumentEntityConverterTest {
         appointmentBook.add(Contact.builder().withType(ContactType.MOBILE).withName("Ada").withInformation("11 1231231 123").build());
         appointmentBook.add(Contact.builder().withType(ContactType.PHONE).withName("Ada").withInformation("12 123 1231 123123").build());
 
-        DocumentEntity entity = converter.toDocument(appointmentBook);
-        Document contacts = entity.find("contacts").get();
+        ColumnEntity entity = converter.toColumn(appointmentBook);
+        Column contacts = entity.find("contacts").get();
         assertEquals("ids", appointmentBook.getId());
-        List<List<Document>> documents = (List<List<Document>>) contacts.get();
+        List<List<Column>> columns = (List<List<Column>>) contacts.get();
 
-        assertEquals(3L, documents.stream().flatMap(Collection::stream)
+        assertEquals(3L, columns.stream().flatMap(Collection::stream)
                 .filter(c -> c.getName().equals("contact_name"))
                 .count());
     }
 
     @Test
     public void shouldConvertFromListEmbeddable() {
-        DocumentEntity entity = DocumentEntity.of("AppointmentBook");
-        entity.add(Document.of("_id", "ids"));
-        List<List<Document>> documents = new ArrayList<>();
+        ColumnEntity entity = ColumnEntity.of("AppointmentBook");
+        entity.add(Column.of("_id", "ids"));
+        List<List<Column>> columns = new ArrayList<>();
 
-        documents.add(asList(Document.of("contact_name", "Ada"), Document.of("type", ContactType.EMAIL),
-                Document.of("information", "ada@lovelace.com")));
+        columns.add(asList(Column.of("contact_name", "Ada"), Column.of("type", ContactType.EMAIL),
+                Column.of("information", "ada@lovelace.com")));
 
-        documents.add(asList(Document.of("contact_name", "Ada"), Document.of("type", ContactType.MOBILE),
-                Document.of("information", "11 1231231 123")));
+        columns.add(asList(Column.of("contact_name", "Ada"), Column.of("type", ContactType.MOBILE),
+                Column.of("information", "11 1231231 123")));
 
-        documents.add(asList(Document.of("contact_name", "Ada"), Document.of("type", ContactType.PHONE),
-                Document.of("information", "phone")));
+        columns.add(asList(Column.of("contact_name", "Ada"), Column.of("type", ContactType.PHONE),
+                Column.of("information", "phone")));
 
-        entity.add(Document.of("contacts", documents));
+        entity.add(Column.of("contacts", columns));
 
         AppointmentBook appointmentBook = converter.toEntity(entity);
 
@@ -351,36 +351,36 @@ class LiteDocumentEntityConverterTest {
         address.setStreet("Rua Engenheiro Jose Anasoh");
         address.setZipCode(zipcode);
 
-        DocumentEntity documentEntity = converter.toDocument(address);
-        List<Document> documents = documentEntity.getDocuments();
-        assertEquals("Address", documentEntity.getName());
-        assertEquals(4, documents.size());
-        List<Document> zip = documentEntity.find("zipCode").map(d -> d.get(new TypeReference<List<Document>>() {
+        ColumnEntity ColumnEntity = converter.toColumn(address);
+        List<Column> columns = ColumnEntity.getColumns();
+        assertEquals("Address", ColumnEntity.getName());
+        assertEquals(4, columns.size());
+        List<Column> zip = ColumnEntity.find("zipCode").map(d -> d.get(new TypeReference<List<Column>>() {
         })).orElse(Collections.emptyList());
-        assertEquals("Rua Engenheiro Jose Anasoh", getValue(documentEntity.find("street")));
-        assertEquals("Salvador", getValue(documentEntity.find("city")));
-        assertEquals("Bahia", getValue(documentEntity.find("state")));
+        assertEquals("Rua Engenheiro Jose Anasoh", getValue(ColumnEntity.find("street")));
+        assertEquals("Salvador", getValue(ColumnEntity.find("city")));
+        assertEquals("Bahia", getValue(ColumnEntity.find("state")));
         assertEquals("12321", getValue(zip.stream().filter(d -> d.getName().equals("zip")).findFirst()));
         assertEquals("1234", getValue(zip.stream().filter(d -> d.getName().equals("plusFour")).findFirst()));
     }
 
     @Test
-    public void shouldConvertDocumentInSubEntity() {
+    public void shouldConvertColumnInSubEntity() {
 
-        DocumentEntity entity = DocumentEntity.of("Address");
+        ColumnEntity entity = ColumnEntity.of("Address");
 
-        entity.add(Document.of("street", "Rua Engenheiro Jose Anasoh"));
-        entity.add(Document.of("city", "Salvador"));
-        entity.add(Document.of("state", "Bahia"));
-        entity.add(Document.of("zip", "12321"));
-        entity.add(Document.of("plusFour", "1234"));
+        entity.add(Column.of("street", "Rua Engenheiro Jose Anasoh"));
+        entity.add(Column.of("city", "Salvador"));
+        entity.add(Column.of("state", "Bahia"));
+        entity.add(Column.of("zip", "12321"));
+        entity.add(Column.of("plusFour", "1234"));
 
-        entity.add(Document.of("street", "Rua Engenheiro Jose Anasoh"));
-        entity.add(Document.of("city", "Salvador"));
-        entity.add(Document.of("state", "Bahia"));
-        entity.add(Document.of("zipCode", Arrays.asList(
-                Document.of("zip", "12321"),
-                Document.of("plusFour", "1234"))));
+        entity.add(Column.of("street", "Rua Engenheiro Jose Anasoh"));
+        entity.add(Column.of("city", "Salvador"));
+        entity.add(Column.of("state", "Bahia"));
+        entity.add(Column.of("zipCode", Arrays.asList(
+                Column.of("zip", "12321"),
+                Column.of("plusFour", "1234"))));
 
         Address address = converter.toEntity(entity);
 
@@ -394,7 +394,7 @@ class LiteDocumentEntityConverterTest {
 
     @Test
     public void shouldConvertAndDoNotUseUnmodifiableCollection() {
-        DocumentEntity entity = DocumentEntity.of("vendors");
+        ColumnEntity entity = ColumnEntity.of("vendors");
         entity.add("name", "name");
         entity.add("prefixes", Arrays.asList("value", "value2"));
 
@@ -407,7 +407,7 @@ class LiteDocumentEntityConverterTest {
 
     @Test
     public void shouldCreateLazilyEntity() {
-        DocumentEntity entity = DocumentEntity.of("Citizen");
+        ColumnEntity entity = ColumnEntity.of("Citizen");
         entity.add("id", "10");
         entity.add("name", "Salvador");
 
@@ -418,13 +418,13 @@ class LiteDocumentEntityConverterTest {
 
     @Test
     public void shouldReturnNullWhenThereIsNotSubEntity() {
-        DocumentEntity entity = DocumentEntity.of("Address");
+        ColumnEntity entity = ColumnEntity.of("Address");
 
-        entity.add(Document.of("street", "Rua Engenheiro Jose Anasoh"));
-        entity.add(Document.of("city", "Salvador"));
-        entity.add(Document.of("state", "Bahia"));
-        entity.add(Document.of("zip", "12321"));
-        entity.add(Document.of("plusFour", "1234"));
+        entity.add(Column.of("street", "Rua Engenheiro Jose Anasoh"));
+        entity.add(Column.of("city", "Salvador"));
+        entity.add(Column.of("state", "Bahia"));
+        entity.add(Column.of("zip", "12321"));
+        entity.add(Column.of("plusFour", "1234"));
 
         Address address = converter.toEntity(entity);
 
@@ -435,10 +435,10 @@ class LiteDocumentEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertEntityToDocumentWithArray() {
+    public void shouldConvertEntityToColumnWithArray() {
         byte[] contents = {1, 2, 3, 4, 5, 6};
 
-        DocumentEntity entity = DocumentEntity.of("download");
+        ColumnEntity entity = ColumnEntity.of("download");
         entity.add("_id", 1L);
         entity.add("contents", contents);
 
@@ -448,14 +448,14 @@ class LiteDocumentEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertDocumentToEntityWithArray() {
+    public void shouldConvertColumnToEntityWithArray() {
         byte[] contents = {1, 2, 3, 4, 5, 6};
 
         Download download = new Download();
         download.setId(1L);
         download.setContents(contents);
 
-        DocumentEntity entity = converter.toDocument(download);
+        ColumnEntity entity = converter.toColumn(download);
 
 
         Assertions.assertEquals(1L, entity.find("_id").get().get());
@@ -465,10 +465,10 @@ class LiteDocumentEntityConverterTest {
 
     @Test
     public void shouldCreateUserScope() {
-        DocumentEntity entity = DocumentEntity.of("UserScope");
+        ColumnEntity entity = ColumnEntity.of("UserScope");
         entity.add("_id", "userName");
         entity.add("scope", "scope");
-        entity.add("properties", Collections.singletonList(Document.of("halo", "weld")));
+        entity.add("properties", Collections.singletonList(Column.of("halo", "weld")));
 
         UserScope user = converter.toEntity(entity);
         Assertions.assertNotNull(user);
@@ -480,10 +480,10 @@ class LiteDocumentEntityConverterTest {
 
     @Test
     public void shouldCreateUserScope2() {
-        DocumentEntity entity = DocumentEntity.of("UserScope");
+        ColumnEntity entity = ColumnEntity.of("UserScope");
         entity.add("_id", "userName");
         entity.add("scope", "scope");
-        entity.add("properties", Document.of("halo", "weld"));
+        entity.add("properties", Column.of("halo", "weld"));
 
         UserScope user = converter.toEntity(entity);
         Assertions.assertNotNull(user);
@@ -494,7 +494,7 @@ class LiteDocumentEntityConverterTest {
     }
 
 
-    private Object getValue(Optional<Document> document) {
-        return document.map(Document::getValue).map(Value::get).orElse(null);
+    private Object getValue(Optional<Column> column) {
+        return column.map(Column::getValue).map(Value::get).orElse(null);
     }
 }

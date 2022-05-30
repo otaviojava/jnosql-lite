@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.document;
+package org.eclipse.jnosql.mapping.lite.column;
 
 import jakarta.nosql.NonUniqueResultException;
 import jakarta.nosql.document.Document;
