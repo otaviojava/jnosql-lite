@@ -46,6 +46,14 @@ public class City {
         return name;
     }
 
+    void setId(String id) {
+        this.id = id;
+    }
+
+    void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "City{" +

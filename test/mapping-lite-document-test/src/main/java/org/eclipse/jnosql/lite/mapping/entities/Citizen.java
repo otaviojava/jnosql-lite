@@ -53,6 +53,18 @@ public class Citizen {
         return city;
     }
 
+    void setId(String id) {
+        this.id = id;
+    }
+
+    void setName(String name) {
+        this.name = name;
+    }
+
+    void setCity(City city) {
+        this.city = city;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
