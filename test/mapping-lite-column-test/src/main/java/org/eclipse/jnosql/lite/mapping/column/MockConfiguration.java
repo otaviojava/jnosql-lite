@@ -15,17 +15,17 @@
 package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.Settings;
-import jakarta.nosql.document.DocumentCollectionManagerFactory;
-import jakarta.nosql.document.DocumentConfiguration;
+import jakarta.nosql.column.ColumnConfiguration;
+import jakarta.nosql.column.ColumnFamilyManagerFactory;
 
-public class MockConfiguration implements DocumentConfiguration {
+public class MockConfiguration implements ColumnConfiguration {
     @Override
-    public <T extends DocumentCollectionManagerFactory> T get() {
+    public <T extends ColumnFamilyManagerFactory> T get() {
         return null;
     }
 
     @Override
-    public <T extends DocumentCollectionManagerFactory> T get(Settings settings) {
+    public <T extends ColumnFamilyManagerFactory> T get(Settings settings) {
         return null;
     }
 }
