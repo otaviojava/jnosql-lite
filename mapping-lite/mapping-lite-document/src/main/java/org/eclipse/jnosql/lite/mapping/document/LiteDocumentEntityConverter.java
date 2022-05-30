@@ -34,6 +34,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
+import static org.eclipse.jnosql.lite.mapping.metadata.FieldType.SUB_ENTITY;
 
 public class LiteDocumentEntityConverter implements DocumentEntityConverter {
 
@@ -96,7 +97,7 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
         final Predicate<String> isElementType = k -> {
             FieldMetadata fieldMetadata = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(fieldMetadata, mappings);
-            return FieldType.EMBEDDED.equals(type) || FieldType.SUB_ENTITY.equals(type);
+            return FieldType.EMBEDDED.equals(type) || SUB_ENTITY.equals(type);
         };
 
         fieldsGroupByName.keySet().stream()
@@ -113,7 +114,15 @@ public class LiteDocumentEntityConverter implements DocumentEntityConverter {
             FieldMetadata field = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(field, mappings);
             DocumentFieldConverter fieldConverter = converterFactory.get(field, type, mappings);
-            fieldConverter.convert(instance, documents, document.orElse(null), field, this, mappings);
+            if (SUB_ENTITY.equals(field.getType())) {
+                if (document.isPresent()) {
+                    fieldConverter.convert(instance, null, document.orElse(null),
+                            field, this, mappings);
+                }
+            } else {
+                fieldConverter.convert(instance, documents, document.orElse(null),
+                        field, this, mappings);
+            }
         };
     }
 
