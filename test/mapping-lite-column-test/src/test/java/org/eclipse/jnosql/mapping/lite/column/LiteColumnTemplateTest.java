@@ -52,7 +52,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class LiteDocumentTemplateTest {
+class LiteColumnTemplateTest {
 
     private final Person person = Person.builder().
             withAge().
