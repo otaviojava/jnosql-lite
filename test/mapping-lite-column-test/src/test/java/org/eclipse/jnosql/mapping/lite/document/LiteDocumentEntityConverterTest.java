@@ -19,7 +19,7 @@ import jakarta.nosql.Value;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.document.DocumentEntity;
 import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import org.eclipse.jnosql.lite.mapping.document.LiteDocumentEntityConverter;
+import org.eclipse.jnosql.lite.mapping.column.LiteDocumentEntityConverter;
 import org.eclipse.jnosql.lite.mapping.entities.Actor;
 import org.eclipse.jnosql.lite.mapping.entities.Address;
 import org.eclipse.jnosql.lite.mapping.entities.AppointmentBook;
