@@ -34,6 +34,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
+import static org.eclipse.jnosql.lite.mapping.metadata.FieldType.SUB_ENTITY;
 
 public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
@@ -106,14 +107,22 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
         return instance;
     }
 
-    private <T> Consumer<String> feedObject(T instance, List<Column> documents, Map<String, FieldMetadata> fieldsGroupByName) {
+    private <T> Consumer<String> feedObject(T instance, List<Column> columns, Map<String, FieldMetadata> fieldsGroupByName) {
         return k -> {
-            Optional<Column> column = documents.stream().filter(c -> c.getName().equals(k)).findFirst();
+            Optional<Column> column = columns.stream().filter(c -> c.getName().equals(k)).findFirst();
 
             FieldMetadata field = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(field, mappings);
             ColumnFieldConverter fieldConverter = converterFactory.get(field, type, mappings);
-            fieldConverter.convert(instance, documents, column.orElse(null), field, this, mappings);
+            if (SUB_ENTITY.equals(type)) {
+                if (column.isPresent()) {
+                    fieldConverter.convert(instance, null, column.orElse(null),
+                            field, this, mappings);
+                }
+            } else {
+                fieldConverter.convert(instance, columns, column.orElse(null),
+                        field, this, mappings);
+            }
         };
     }
 
