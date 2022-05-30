@@ -228,8 +228,8 @@ class LiteDocumentEntityConverterTest {
         DocumentEntity entity = converter.toDocument(director);
         entity.remove("movie");
         entity.add(Document.of("title", "Matrix"));
-        entity.add(Document.of("year", 2012));
-        entity.add(Document.of("actors", singleton("Actor")));
+        entity.add(Document.of("movie", Arrays.asList(Document.of("title", "Matrix"),
+                Document.of("year", 2012), Document.of("actors", singleton("Actor")))));
         Director director1 = converter.toEntity(entity);
 
         assertEquals(movie, director1.getMovie());
@@ -374,6 +374,13 @@ class LiteDocumentEntityConverterTest {
         entity.add(Document.of("state", "Bahia"));
         entity.add(Document.of("zip", "12321"));
         entity.add(Document.of("plusFour", "1234"));
+
+        entity.add(Document.of("street", "Rua Engenheiro Jose Anasoh"));
+        entity.add(Document.of("city", "Salvador"));
+        entity.add(Document.of("state", "Bahia"));
+        entity.add(Document.of("zipCode", Arrays.asList(
+                Document.of("zip", "12321"),
+                Document.of("plusFour", "1234"))));
 
         Address address = converter.toEntity(entity);
 
