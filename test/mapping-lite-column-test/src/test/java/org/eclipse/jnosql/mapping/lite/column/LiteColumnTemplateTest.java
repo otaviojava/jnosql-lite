@@ -15,16 +15,16 @@
 package org.eclipse.jnosql.mapping.lite.column;
 
 import jakarta.nosql.NonUniqueResultException;
-import jakarta.nosql.document.Document;
-import jakarta.nosql.document.DocumentCollectionManager;
-import jakarta.nosql.document.DocumentCondition;
-import jakarta.nosql.document.DocumentDeleteQuery;
-import jakarta.nosql.document.DocumentEntity;
-import jakarta.nosql.document.DocumentQuery;
+import jakarta.nosql.column.Column;
+import jakarta.nosql.column.ColumnCondition;
+import jakarta.nosql.column.ColumnDeleteQuery;
+import jakarta.nosql.column.ColumnEntity;
+import jakarta.nosql.column.ColumnFamilyManager;
+import jakarta.nosql.column.ColumnQuery;
 import jakarta.nosql.mapping.IdNotFoundException;
 import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.document.DocumentTemplate;
-import org.eclipse.jnosql.lite.mapping.column.LiteDocumentTemplate;
+import jakarta.nosql.mapping.column.ColumnTemplate;
+import org.eclipse.jnosql.lite.mapping.column.LiteColumnTemplate;
 import org.eclipse.jnosql.lite.mapping.entities.Job;
 import org.eclipse.jnosql.lite.mapping.entities.Movie;
 import org.eclipse.jnosql.lite.mapping.entities.Person;
@@ -41,8 +41,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static jakarta.nosql.document.DocumentDeleteQuery.delete;
-import static jakarta.nosql.document.DocumentQuery.select;
+import static jakarta.nosql.column.ColumnDeleteQuery.delete;
+import static jakarta.nosql.column.ColumnQuery.select;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -61,57 +61,57 @@ class LiteColumnTemplateTest {
             .withId(19)
             .withIgnore().build();
 
-    private final Document[] documents = new Document[]{
-            Document.of("age", 10),
-            Document.of("phones", Arrays.asList("234", "432")),
-            Document.of("name", "Name"),
-            Document.of("id", 19L),
+    private final Column[] documents = new Column[]{
+            Column.of("age", 10),
+            Column.of("phones", Arrays.asList("234", "432")),
+            Column.of("name", "Name"),
+            Column.of("id", 19L),
     };
 
-    private DocumentCollectionManager managerMock;
+    private ColumnFamilyManager managerMock;
 
-    private DocumentTemplate subject;
+    private ColumnTemplate subject;
 
-    private ArgumentCaptor<DocumentEntity> captor;
+    private ArgumentCaptor<ColumnEntity> captor;
 
     @BeforeEach
     public void setUp() {
-        managerMock = Mockito.mock(DocumentCollectionManager.class);
-        captor = ArgumentCaptor.forClass(DocumentEntity.class);
-        Instance<DocumentCollectionManager> instance = Mockito.mock(Instance.class);
+        managerMock = Mockito.mock(ColumnFamilyManager.class);
+        captor = ArgumentCaptor.forClass(ColumnEntity.class);
+        Instance<ColumnFamilyManager> instance = Mockito.mock(Instance.class);
         when(instance.get()).thenReturn(managerMock);
-        this.subject = new LiteDocumentTemplate(managerMock);
+        this.subject = new LiteColumnTemplate(managerMock);
     }
 
     @Test
     public void shouldInsert() {
-        DocumentEntity document = DocumentEntity.of("Person");
-        document.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
         when(managerMock
-                .insert(any(DocumentEntity.class)))
-                .thenReturn(document);
+                .insert(any(ColumnEntity.class)))
+                .thenReturn(entity);
 
         subject.insert(this.person);
         verify(managerMock).insert(captor.capture());
-        DocumentEntity value = captor.getValue();
+        ColumnEntity value = captor.getValue();
         assertEquals("Person", value.getName());
-        assertEquals(4, value.getDocuments().size());
+        assertEquals(4, value.getColumns().size());
     }
 
     @Test
     public void shouldMergeOnInsert() {
-        DocumentEntity document = DocumentEntity.of("Person");
-        document.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
         when(managerMock
-                .insert(any(DocumentEntity.class)))
-                .thenReturn(document);
+                .insert(any(ColumnEntity.class)))
+                .thenReturn(entity);
 
         Person person = Person.builder().build();
         Person result = subject.insert(person);
         verify(managerMock).insert(captor.capture());
-        DocumentEntity value = captor.getValue();
+        ColumnEntity value = captor.getValue();
         assertSame(person, result);
         assertEquals(10, person.getAge());
     }
@@ -122,106 +122,106 @@ class LiteColumnTemplateTest {
 
         Duration twoHours = Duration.ofHours(2L);
 
-        DocumentEntity document = DocumentEntity.of("Person");
+        ColumnEntity document = ColumnEntity.of("Person");
         document.addAll(Stream.of(documents).collect(Collectors.toList()));
 
-        when(managerMock.insert(any(DocumentEntity.class),
+        when(managerMock.insert(any(ColumnEntity.class),
                 Mockito.eq(twoHours)))
                 .thenReturn(document);
 
         subject.insert(this.person, twoHours);
         verify(managerMock).insert(captor.capture(), Mockito.eq(twoHours));
-        DocumentEntity value = captor.getValue();
+        ColumnEntity value = captor.getValue();
         assertEquals("Person", value.getName());
-        assertEquals(4, value.getDocuments().size());
+        assertEquals(4, value.getColumns().size());
     }
 
 
     @Test
     public void shouldUpdate() {
-        DocumentEntity document = DocumentEntity.of("Person");
-        document.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
         when(managerMock
-                .update(any(DocumentEntity.class)))
-                .thenReturn(document);
+                .update(any(ColumnEntity.class)))
+                .thenReturn(entity);
 
         subject.update(this.person);
         verify(managerMock).update(captor.capture());
-        DocumentEntity value = captor.getValue();
+        ColumnEntity value = captor.getValue();
         assertEquals("Person", value.getName());
-        assertEquals(4, value.getDocuments().size());
+        assertEquals(4, value.getColumns().size());
     }
 
     @Test
     public void shouldMergeOnUpdate() {
-        DocumentEntity document = DocumentEntity.of("Person");
-        document.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
         when(managerMock
-                .update(any(DocumentEntity.class)))
-                .thenReturn(document);
+                .update(any(ColumnEntity.class)))
+                .thenReturn(entity);
 
         Person person = Person.builder().build();
         Person result = subject.update(person);
         verify(managerMock).update(captor.capture());
-        DocumentEntity value = captor.getValue();
+        ColumnEntity value = captor.getValue();
         assertSame(person, result);
         assertEquals(10, person.getAge());
     }
 
     @Test
     public void shouldInsertEntitiesTTL() {
-        DocumentEntity documentEntity = DocumentEntity.of("Person");
-        documentEntity.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
         Duration duration = Duration.ofHours(2);
 
         Mockito.when(managerMock
-                .insert(any(DocumentEntity.class), Mockito.eq(duration)))
-                .thenReturn(documentEntity);
+                .insert(any(ColumnEntity.class), Mockito.eq(duration)))
+                .thenReturn(entity);
 
         subject.insert(Arrays.asList(person, person), duration);
-        verify(managerMock, times(2)).insert(any(DocumentEntity.class), any(Duration.class));
+        verify(managerMock, times(2)).insert(any(ColumnEntity.class), any(Duration.class));
     }
 
     @Test
     public void shouldInsertEntities() {
-        DocumentEntity documentEntity = DocumentEntity.of("Person");
-        documentEntity.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
         Mockito.when(managerMock
-                .insert(any(DocumentEntity.class)))
-                .thenReturn(documentEntity);
+                .insert(any(ColumnEntity.class)))
+                .thenReturn(entity);
 
         subject.insert(Arrays.asList(person, person));
-        verify(managerMock, times(2)).insert(any(DocumentEntity.class));
+        verify(managerMock, times(2)).insert(any(ColumnEntity.class));
     }
 
     @Test
     public void shouldUpdateEntities() {
-        DocumentEntity documentEntity = DocumentEntity.of("Person");
-        documentEntity.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
         Mockito.when(managerMock
-                .update(any(DocumentEntity.class)))
-                .thenReturn(documentEntity);
+                .update(any(ColumnEntity.class)))
+                .thenReturn(entity);
 
         subject.update(Arrays.asList(person, person));
-        verify(managerMock, times(2)).update(any(DocumentEntity.class));
+        verify(managerMock, times(2)).update(any(ColumnEntity.class));
     }
 
 
     @Test
     public void shouldDelete() {
 
-        DocumentDeleteQuery query = delete().from("delete").build();
+        ColumnDeleteQuery query = delete().from("delete").build();
         subject.delete(query);
         verify(managerMock).delete(query);
     }
 
     @Test
     public void shouldSelect() {
-        DocumentQuery query = select().from("delete").build();
+        ColumnQuery query = select().from("delete").build();
         subject.select(query);
         verify(managerMock).select(query);
     }
@@ -229,14 +229,14 @@ class LiteColumnTemplateTest {
 
     @Test
     public void shouldReturnSingleResult() {
-        DocumentEntity documentEntity = DocumentEntity.of("Person");
-        documentEntity.addAll(Stream.of(documents).collect(Collectors.toList()));
+        ColumnEntity entity = ColumnEntity.of("Person");
+        entity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
         Mockito.when(managerMock
-                .select(any(DocumentQuery.class)))
-                .thenReturn(Stream.of(documentEntity));
+                .select(any(ColumnQuery.class)))
+                .thenReturn(Stream.of(entity));
 
-        DocumentQuery query = select().from("person").build();
+        ColumnQuery query = select().from("person").build();
 
         Optional<Person> result = subject.singleResult(query);
         assertTrue(result.isPresent());
@@ -245,10 +245,10 @@ class LiteColumnTemplateTest {
     @Test
     public void shouldReturnSingleResultIsEmpty() {
         Mockito.when(managerMock
-                .select(any(DocumentQuery.class)))
+                .select(any(ColumnQuery.class)))
                 .thenReturn(Stream.empty());
 
-        DocumentQuery query = select().from("person").build();
+        ColumnQuery query = select().from("person").build();
 
         Optional<Person> result = subject.singleResult(query);
         assertFalse(result.isPresent());
@@ -257,14 +257,14 @@ class LiteColumnTemplateTest {
     @Test
     public void shouldReturnErrorWhenThereMoreThanASingleResult() {
         Assertions.assertThrows(NonUniqueResultException.class, () -> {
-            DocumentEntity documentEntity = DocumentEntity.of("Person");
+            ColumnEntity documentEntity = ColumnEntity.of("Person");
             documentEntity.addAll(Stream.of(documents).collect(Collectors.toList()));
 
             Mockito.when(managerMock
-                    .select(any(DocumentQuery.class)))
+                    .select(any(ColumnQuery.class)))
                     .thenReturn(Stream.of(documentEntity, documentEntity));
 
-            DocumentQuery query = select().from("person").build();
+            ColumnQuery query = select().from("person").build();
 
             subject.singleResult(query);
         });
@@ -288,45 +288,45 @@ class LiteColumnTemplateTest {
     @Test
     public void shouldReturnFind() {
         subject.find(Person.class, "10");
-        ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
+        ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
-        DocumentQuery query = queryCaptor.getValue();
-        DocumentCondition condition = query.getCondition().get();
+        ColumnQuery query = queryCaptor.getValue();
+        ColumnCondition condition = query.getCondition().get();
 
-        assertEquals("Person", query.getDocumentCollection());
-        assertEquals(DocumentCondition.eq(Document.of("_id", 10L)), condition);
+        assertEquals("Person", query.getColumnFamily());
+        assertEquals(ColumnCondition.eq(Column.of("_id", 10L)), condition);
 
     }
 
     @Test
     public void shouldDeleteEntity() {
         subject.delete(Person.class, "10");
-        ArgumentCaptor<DocumentDeleteQuery> queryCaptor = ArgumentCaptor.forClass(DocumentDeleteQuery.class);
+        ArgumentCaptor<ColumnDeleteQuery> queryCaptor = ArgumentCaptor.forClass(ColumnDeleteQuery.class);
         verify(managerMock).delete(queryCaptor.capture());
-        DocumentDeleteQuery query = queryCaptor.getValue();
-        DocumentCondition condition = query.getCondition().get();
+        ColumnDeleteQuery query = queryCaptor.getValue();
+        ColumnCondition condition = query.getCondition().get();
 
-        assertEquals("Person", query.getDocumentCollection());
-        assertEquals(DocumentCondition.eq(Document.of("_id", 10L)), condition);
+        assertEquals("Person", query.getColumnFamily());
+        assertEquals(ColumnCondition.eq(Column.of("_id", 10L)), condition);
 
     }
 
     @Test
     public void shouldExecuteQuery() {
         Stream<Person> people = subject.query("select * from Person");
-        ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
+        ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
-        DocumentQuery query = queryCaptor.getValue();
-        assertEquals("Person", query.getDocumentCollection());
+        ColumnQuery query = queryCaptor.getValue();
+        assertEquals("Person", query.getColumnFamily());
     }
 
     @Test
     public void shouldConvertEntity() {
         Stream<Movie> movies = subject.query("select * from Movie");
-        ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
+        ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
-        DocumentQuery query = queryCaptor.getValue();
-        assertEquals("movie", query.getDocumentCollection());
+        ColumnQuery query = queryCaptor.getValue();
+        assertEquals("movie", query.getColumnFamily());
     }
 
     @Test
@@ -334,10 +334,10 @@ class LiteColumnTemplateTest {
         PreparedStatement preparedStatement = subject.prepare("select * from Person where name = @name");
         preparedStatement.bind("name", "Ada");
         preparedStatement.getResult();
-        ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
+        ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
-        DocumentQuery query = queryCaptor.getValue();
-        assertEquals("Person", query.getDocumentCollection());
+        ColumnQuery query = queryCaptor.getValue();
+        assertEquals("Person", query.getColumnFamily());
     }
 
     @Test
