@@ -43,6 +43,9 @@ private final InheritanceMetadata inheritance;
     {{#fields}}
         this.fields.add(new {{.}}());
     {{/fields}}
+    {{#inheritance}}
+        this.inheritance= new InheritanceMetadata();
+    {{/inheritance}}
     {{^inheritance}}
         this.inheritance= null;
     {{/inheritance}}
@@ -133,7 +136,7 @@ private final InheritanceMetadata inheritance;
 
     @Override
     public Optional<InheritanceMetadata> getInheritance() {
-      return null;
+      return Optional.ofNullable(inheritance);
     }
 
 }
