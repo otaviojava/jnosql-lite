@@ -36,11 +36,16 @@ public final class {{className}} implements EntityMetadata {
 
 private final List<FieldMetadata> fields;
 
+private final InheritanceMetadata inheritance;
+
     public {{className}}() {
         this.fields = new ArrayList<>();
     {{#fields}}
         this.fields.add(new {{.}}());
     {{/fields}}
+    {{^inheritance}}
+        this.inheritance= null;
+    {{/inheritance}}
     }
 
     @Override
