@@ -115,8 +115,9 @@ public class ClassAnalyzer implements Supplier<String> {
         final  boolean embedded = Objects.nonNull(element.getAnnotation(Embeddable.class));
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
+        boolean inheritance;
         String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
-        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded);
+        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded, inheritance);
     }
 
     private void error(IOException exception) {
