@@ -112,6 +112,16 @@ private final List<FieldMetadata> fields;
 
     @Override
     public boolean isEmbedded() {
-    return {{embedded}};
+      return {{embedded}};
+    }
+
+    @Override
+    public boolean hasEntityName() {
+      return {{entityName}};
+    }
+
+    @Override
+    public boolean isInheritance() {
+      return {{inheritance}};
     }
 }
