@@ -19,7 +19,7 @@ import java.util.Objects;
 /**
  * The mapping information about {@link jakarta.nosql.mapping.Inheritance}
  */
-public class InheritanceMetadata {
+public final class InheritanceMetadata {
 
     private final String discriminatorValue;
 
