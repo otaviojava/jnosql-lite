@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping.metadata;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -67,4 +68,13 @@ public interface ClassMappings {
      * @throws NullPointerException              when the classEntity is null
      */
     Optional<EntityMetadata> findByClass(Class<?> classEntity);
+
+    /**
+     * Find the {@link InheritanceMetadata} where the parameter is the parent parameter
+     * and it returns a map group by the {@link jakarta.nosql.mapping.DiscriminatorValue}
+     * @param parent the parent
+     * @return a {@link Map}
+     * @throws NullPointerException when parent is null
+     */
+    Map<String, InheritanceMetadata> findByParentGroupByDiscriminatorValue(Class<?> parent);
 }
