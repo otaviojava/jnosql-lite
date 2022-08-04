@@ -28,20 +28,16 @@ public class EntityModel extends BaseMappingModel {
 
     private final boolean embedded;
 
-    private final boolean entityName;
-
     private final boolean inheritance;
 
     public EntityModel(String packageName, String entity, String name,
                        List<String> fields, boolean embedded,
-                       boolean entityName,
                        boolean inheritance) {
         this.packageName = packageName;
         this.entity = entity;
         this.name = name;
         this.fields = fields;
         this.embedded = embedded;
-        this.entityName = entityName;
         this.inheritance = inheritance;
     }
 
@@ -77,9 +73,6 @@ public class EntityModel extends BaseMappingModel {
         return embedded;
     }
 
-    public boolean isEntityName() {
-        return entityName;
-    }
 
     public boolean isInheritance() {
         return inheritance;
@@ -93,7 +86,6 @@ public class EntityModel extends BaseMappingModel {
                 ", name='" + name + '\'' +
                 ", fields=" + fields +
                 ", embedded=" + embedded +
-                ", entityName=" + entityName +
                 ", inheritance=" + inheritance +
                 '}';
     }
