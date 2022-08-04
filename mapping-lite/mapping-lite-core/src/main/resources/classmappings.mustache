@@ -29,6 +29,7 @@ public final class DefaultClassMappings implements ClassMappings {
 
     private final List<EntityMetadata> entities;
 
+
     public DefaultClassMappings() {
         this.entities = new ArrayList<>();
     {{#entities}}
@@ -81,7 +82,7 @@ public final class DefaultClassMappings implements ClassMappings {
    @Override
    public Map<String, InheritanceMetadata> findByParentGroupByDiscriminatorValue(Class<?> parent) {
        Objects.requireNonNull(parent, "parent is required");
-       return this.classes.values().stream()
+       return this.entities.stream()
                 .flatMap(c -> c.getInheritance().stream())
                 .filter(p -> p.isParent(parent))
                 .collect(Collectors.toMap(i -> i.getDiscriminatorValue(), Function.identity()));
