@@ -73,7 +73,7 @@ private final InheritanceMetadata inheritance;
         return (T)new {{entity}}();
     {{/inheritance}}
    {{#inheritance}}
-       throw new UnsupportedOperationException("You cannot create a constructor to the class {{entityQualified}}");
+       throw new UnsupportedOperationException("You cannot use the constructor method to the class {{entityQualified}}");
    {{/inheritance}}
     }
 
