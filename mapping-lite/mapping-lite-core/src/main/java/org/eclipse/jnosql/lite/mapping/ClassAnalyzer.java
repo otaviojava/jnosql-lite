@@ -128,7 +128,8 @@ public class ClassAnalyzer implements Supplier<String> {
         String inheritanceParameter = null;
         if (inheritance != null) {
             inheritanceParameter = getInheritanceParameter(element, superclass);
-
+            Entity superEntity = superclass.getAnnotation(Entity.class);
+            entityName = superEntity.value().isBlank() ? ProcessorUtil.getSimpleNameAsString(superclass) : annotation.value();
         }
         return new EntityModel(packageName, sourceClassName, entityName, fields, embedded,
                 element.getAnnotation(Inheritance.class) != null,
