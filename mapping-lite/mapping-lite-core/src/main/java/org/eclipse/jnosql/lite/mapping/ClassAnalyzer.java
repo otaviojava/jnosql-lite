@@ -146,11 +146,11 @@ public class ClassAnalyzer implements Supplier<String> {
                 .map(DiscriminatorValue::value)
                 .orElse(element.getSimpleName().toString());
 
-        return new StringJoiner(",")
-                .add(discriminatorColumn)
-                .add(discriminatorValue)
-                .add(superclass.getQualifiedName().toString())
-                .add(element.getQualifiedName().toString())
+        return new StringJoiner(",\n")
+                .add("\"" + discriminatorColumn + "\"")
+                .add("\"" + discriminatorValue + "\"")
+                .add(superclass.getQualifiedName().toString() + ".class")
+                .add(element.getQualifiedName().toString() + ".class")
                 .toString();
     }
 
