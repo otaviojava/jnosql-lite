@@ -131,7 +131,7 @@ public class ClassAnalyzer implements Supplier<String> {
 
         }
         return new EntityModel(packageName, sourceClassName, entityName, fields, embedded,
-                inheritance != null,
+                element.getAnnotation(Inheritance.class) != null,
                 inheritanceParameter);
     }
 
