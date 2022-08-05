@@ -17,8 +17,12 @@ package org.eclipse.jnosql.lite.mapping;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import jakarta.nosql.mapping.*;
-import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
+import jakarta.nosql.mapping.DiscriminatorColumn;
+import jakarta.nosql.mapping.DiscriminatorValue;
+import jakarta.nosql.mapping.Embeddable;
+import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.mapping.Inheritance;
+import jakarta.nosql.mapping.MappedSuperclass;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
