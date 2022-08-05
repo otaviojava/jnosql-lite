@@ -148,8 +148,8 @@ public class ClassAnalyzer implements Supplier<String> {
                 .orElse(element.getSimpleName().toString());
 
         return new StringJoiner(",\n")
-                .add("\"" + discriminatorColumn + "\"")
                 .add("\"" + discriminatorValue + "\"")
+                .add("\"" + discriminatorColumn + "\"")
                 .add(superclass.getQualifiedName().toString() + ".class")
                 .add(element.getQualifiedName().toString() + ".class")
                 .toString();
