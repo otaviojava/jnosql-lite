@@ -44,7 +44,7 @@ private final InheritanceMetadata inheritance;
         this.fields.add(new {{.}}());
     {{/fields}}
     {{#inheritance}}
-        this.inheritance= new InheritanceMetadata({{inheritanceParameter}});
+        this.inheritance= new InheritanceMetadata({{{inheritanceParameter}}});
     {{/inheritance}}
     {{^inheritance}}
         this.inheritance= null;
