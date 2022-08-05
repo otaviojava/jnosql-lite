@@ -43,12 +43,12 @@ private final InheritanceMetadata inheritance;
     {{#fields}}
         this.fields.add(new {{.}}());
     {{/fields}}
-    {{#inheritance}}
+    {{#inheritanceParameter}}
         this.inheritance= new InheritanceMetadata({{{inheritanceParameter}}});
-    {{/inheritance}}
-    {{^inheritance}}
+    {{/inheritanceParameter}}
+    {{^inheritanceParameter}}
         this.inheritance= null;
-    {{/inheritance}}
+    {{/inheritanceParameter}}
     }
 
     @Override
@@ -69,7 +69,12 @@ private final InheritanceMetadata inheritance;
 
     @Override 
     public <T> T newInstance() {
+    {{^inheritance}}
         return (T)new {{entity}}();
+    {{/inheritance}}
+   {{#inheritance}}
+       throw new UnsupportedOperationException("You cannot create a constructor to the class {{entity}}");
+   {{/inheritance}}
     }
 
     @Override
