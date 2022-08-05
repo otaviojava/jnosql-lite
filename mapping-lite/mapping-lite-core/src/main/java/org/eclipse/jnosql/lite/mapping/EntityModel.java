@@ -30,15 +30,19 @@ public class EntityModel extends BaseMappingModel {
 
     private final boolean inheritance;
 
+    private final String inheritanceParameter;
+
     public EntityModel(String packageName, String entity, String name,
                        List<String> fields, boolean embedded,
-                       boolean inheritance) {
+                       boolean inheritance,
+                       String inheritanceParameter) {
         this.packageName = packageName;
         this.entity = entity;
         this.name = name;
         this.fields = fields;
         this.embedded = embedded;
         this.inheritance = inheritance;
+        this.inheritanceParameter = inheritanceParameter;
     }
 
     public String getPackageName() {
@@ -78,6 +82,10 @@ public class EntityModel extends BaseMappingModel {
         return inheritance;
     }
 
+    public String getInheritanceParameter() {
+        return inheritanceParameter;
+    }
+
     @Override
     public String toString() {
         return "EntityModel{" +
@@ -87,6 +95,7 @@ public class EntityModel extends BaseMappingModel {
                 ", fields=" + fields +
                 ", embedded=" + embedded +
                 ", inheritance=" + inheritance +
+                ", inheritanceParameter='" + inheritanceParameter + '\'' +
                 '}';
     }
 }
