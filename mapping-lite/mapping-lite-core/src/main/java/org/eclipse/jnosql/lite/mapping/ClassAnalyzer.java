@@ -17,9 +17,8 @@ package org.eclipse.jnosql.lite.mapping;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import jakarta.nosql.mapping.Embeddable;
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.MappedSuperclass;
+import jakarta.nosql.mapping.*;
+import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -32,6 +31,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -111,13 +111,30 @@ public class ClassAnalyzer implements Supplier<String> {
     }
 
     private EntityModel getMetadata(TypeElement element, List<String> fields) {
+
+        TypeElement superclass =
+                (TypeElement) ((DeclaredType) element.getSuperclass()).asElement();
+        Inheritance inheritance = superclass.getAnnotation(Inheritance.class);
         final Entity annotation = element.getAnnotation(Entity.class);
         final  boolean embedded = Objects.nonNull(element.getAnnotation(Embeddable.class));
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
-        boolean inheritance;
         String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
-        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded, inheritance);
+        if(inheritance != null) {
+            String discriminatorColumn = Optional
+                    .ofNullable(superclass.getAnnotation(DiscriminatorColumn.class))
+                    .map(DiscriminatorColumn::value)
+                    .orElse(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN);
+
+            String discriminatorValue = Optional
+                    .ofNullable(element.getAnnotation(DiscriminatorValue.class))
+                    .map(DiscriminatorValue::value)
+                    .orElse(element.getSimpleName().toString());
+
+            /*InheritanceMetadata inheritanceMetadata = new InheritanceMetadata(discriminatorColumn, discriminatorValue,
+                    superclass.getQualifiedName().toString(), element.getQualifiedName().toString());*/
+        }
+        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded, inheritance!= null);
     }
 
     private void error(IOException exception) {
