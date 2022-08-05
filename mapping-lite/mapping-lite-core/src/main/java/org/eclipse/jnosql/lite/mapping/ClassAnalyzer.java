@@ -32,6 +32,7 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.function.Supplier;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -116,25 +117,37 @@ public class ClassAnalyzer implements Supplier<String> {
                 (TypeElement) ((DeclaredType) element.getSuperclass()).asElement();
         Inheritance inheritance = superclass.getAnnotation(Inheritance.class);
         final Entity annotation = element.getAnnotation(Entity.class);
-        final  boolean embedded = Objects.nonNull(element.getAnnotation(Embeddable.class));
+        final boolean embedded = Objects.nonNull(element.getAnnotation(Embeddable.class));
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
         String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
-        if(inheritance != null) {
-            String discriminatorColumn = Optional
-                    .ofNullable(superclass.getAnnotation(DiscriminatorColumn.class))
-                    .map(DiscriminatorColumn::value)
-                    .orElse(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN);
+        String inheritanceParameter = null;
+        if (inheritance != null) {
+            inheritanceParameter = getInheritanceParameter(element, superclass);
 
-            String discriminatorValue = Optional
-                    .ofNullable(element.getAnnotation(DiscriminatorValue.class))
-                    .map(DiscriminatorValue::value)
-                    .orElse(element.getSimpleName().toString());
-
-            /*InheritanceMetadata inheritanceMetadata = new InheritanceMetadata(discriminatorColumn, discriminatorValue,
-                    superclass.getQualifiedName().toString(), element.getQualifiedName().toString());*/
         }
-        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded, inheritance!= null);
+        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded,
+                inheritance != null,
+                inheritanceParameter);
+    }
+
+    private String getInheritanceParameter(TypeElement element, TypeElement superclass) {
+        String discriminatorColumn = Optional
+                .ofNullable(superclass.getAnnotation(DiscriminatorColumn.class))
+                .map(DiscriminatorColumn::value)
+                .orElse(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN);
+
+        String discriminatorValue = Optional
+                .ofNullable(element.getAnnotation(DiscriminatorValue.class))
+                .map(DiscriminatorValue::value)
+                .orElse(element.getSimpleName().toString());
+
+        return new StringJoiner(",")
+                .add(discriminatorColumn)
+                .add(discriminatorValue)
+                .add(superclass.getQualifiedName().toString())
+                .add(element.getQualifiedName().toString())
+                .toString();
     }
 
     private void error(IOException exception) {
