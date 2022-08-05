@@ -14,11 +14,14 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
+import jakarta.nosql.mapping.DiscriminatorColumn;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
 import org.eclipse.jnosql.mapping.lite.inheritance.EmailNotification;
+import org.eclipse.jnosql.mapping.lite.inheritance.Notification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,5 +93,14 @@ public class EmailNotificationTest {
         Assertions.assertNotNull(groupByName.get("name"));
     }
 
+    @Test
+    public void shouldGetInheritanceMetadata() {
+        InheritanceMetadata inheritance = this.entityMetadata.getInheritance()
+                .orElseThrow();
+        Assertions.assertEquals("Email", inheritance.getDiscriminatorValue());
+        Assertions.assertEquals(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN, inheritance.getDiscriminatorColumn());
+        Assertions.assertEquals(EmailNotification.class, inheritance.getEntity());
+        Assertions.assertEquals(Notification.class, inheritance.getParent());
+    }
 
 }
