@@ -27,6 +27,8 @@ import javax.annotation.processing.Generated;
 @Generated(value= "JNoSQL Lite ClassMappings Generator", date = "{{now}}")
 public final class DefaultClassMappings implements ClassMappings {
 
+    private static final Predicate<EntityMetadata> HAS_NAME= EntityMetadata::hasEntityName;
+
     private final List<EntityMetadata> entities;
 
 
@@ -67,7 +69,7 @@ public final class DefaultClassMappings implements ClassMappings {
     public Optional<EntityMetadata> findByClassName(String name) {
         Objects.requireNonNull(name, "name is required");
         return entities.stream()
-                .filter(e -> name.equals(e.getClassName()))
+                .filter(HAS_NAME.and(e -> name.equals(e.getName())))
                 .findFirst();
     }
 
