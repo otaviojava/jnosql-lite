@@ -39,7 +39,7 @@ public final class DefaultClassMappings implements ClassMappings {
 
     @Override
     public EntityMetadata get(Class<?> entity) {
-        Objects.requireNonNull(entity, "classEntity is required");
+        Objects.requireNonNull(entity, "entity is required");
         return entities.stream()
                 .filter(e -> entity.equals(e.getClassInstance()))
                 .findFirst()
