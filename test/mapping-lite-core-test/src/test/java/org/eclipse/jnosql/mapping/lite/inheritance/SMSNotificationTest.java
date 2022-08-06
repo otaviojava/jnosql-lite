@@ -51,17 +51,17 @@ public class SMSNotificationTest {
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(EmailNotification.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(SmsNotification.class.getSimpleName(), entityMetadata.getSimpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(EmailNotification.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(SmsNotification.class.getName(), entityMetadata.getClassName());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(EmailNotification.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(SmsNotification.class, entityMetadata.getClassInstance());
     }
 
     @Test
@@ -72,9 +72,9 @@ public class SMSNotificationTest {
 
     @Test
     public void shouldCreateNewInstance() {
-        EmailNotification notification = entityMetadata.newInstance();
+        SmsNotification notification = entityMetadata.newInstance();
         Assertions.assertNotNull(notification);
-        Assertions.assertTrue(notification instanceof EmailNotification);
+        Assertions.assertTrue(notification instanceof SmsNotification);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class SMSNotificationTest {
         Assertions.assertEquals(4, fields.size());
         Assertions.assertTrue(fields.contains("id"));
         Assertions.assertTrue(fields.contains("name"));
-        Assertions.assertTrue(fields.contains("email"));
+        Assertions.assertTrue(fields.contains("phone"));
     }
 
     @Test
@@ -91,16 +91,16 @@ public class SMSNotificationTest {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("_id"));
-        Assertions.assertNotNull(groupByName.get("name"));
+        Assertions.assertNotNull(groupByName.get("phone"));
     }
 
     @Test
     public void shouldGetInheritanceMetadata() {
         InheritanceMetadata inheritance = this.entityMetadata.getInheritance()
                 .orElseThrow();
-        Assertions.assertEquals("Email", inheritance.getDiscriminatorValue());
+        Assertions.assertEquals("SMS", inheritance.getDiscriminatorValue());
         Assertions.assertEquals(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN, inheritance.getDiscriminatorColumn());
-        Assertions.assertEquals(EmailNotification.class, inheritance.getEntity());
+        Assertions.assertEquals(SmsNotification.class, inheritance.getEntity());
         Assertions.assertEquals(Notification.class, inheritance.getParent());
     }
 
