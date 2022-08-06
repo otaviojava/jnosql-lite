@@ -38,7 +38,7 @@ public class SocialMediaNotificationTest {
     @BeforeEach
     public void setUp() {
         this.mappings = new DefaultClassMappings();
-        this.entityMetadata = this.mappings.get(EmailNotification.class);
+        this.entityMetadata = this.mappings.get(SocialMediaNotification.class);
     }
 
     @Test
@@ -48,17 +48,17 @@ public class SocialMediaNotificationTest {
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(EmailNotification.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(SocialMediaNotification.class.getSimpleName(), entityMetadata.getSimpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(EmailNotification.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(SocialMediaNotification.class.getName(), entityMetadata.getClassName());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(EmailNotification.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(SocialMediaNotification.class, entityMetadata.getClassInstance());
     }
 
     @Test
@@ -69,9 +69,9 @@ public class SocialMediaNotificationTest {
 
     @Test
     public void shouldCreateNewInstance() {
-        EmailNotification notification = entityMetadata.newInstance();
+        SocialMediaNotification notification = entityMetadata.newInstance();
         Assertions.assertNotNull(notification);
-        Assertions.assertTrue(notification instanceof EmailNotification);
+        Assertions.assertTrue(notification instanceof SocialMediaNotification);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class SocialMediaNotificationTest {
         Assertions.assertEquals(4, fields.size());
         Assertions.assertTrue(fields.contains("id"));
         Assertions.assertTrue(fields.contains("name"));
-        Assertions.assertTrue(fields.contains("email"));
+        Assertions.assertTrue(fields.contains("nickname"));
     }
 
     @Test
@@ -95,9 +95,9 @@ public class SocialMediaNotificationTest {
     public void shouldGetInheritanceMetadata() {
         InheritanceMetadata inheritance = this.entityMetadata.getInheritance()
                 .orElseThrow();
-        Assertions.assertEquals("Email", inheritance.getDiscriminatorValue());
+        Assertions.assertEquals("SocialMediaNotification", inheritance.getDiscriminatorValue());
         Assertions.assertEquals(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN, inheritance.getDiscriminatorColumn());
-        Assertions.assertEquals(EmailNotification.class, inheritance.getEntity());
+        Assertions.assertEquals(SocialMediaNotification.class, inheritance.getEntity());
         Assertions.assertEquals(Notification.class, inheritance.getParent());
     }
 
