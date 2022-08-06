@@ -16,6 +16,7 @@ package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.column.Column;
 import jakarta.nosql.column.ColumnEntity;
+import jakarta.nosql.mapping.MappingException;
 import jakarta.nosql.mapping.column.ColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.column.ColumnFieldConverters.DocumentFieldConverterFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
@@ -24,6 +25,7 @@ import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
+import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
 
 import java.util.Collections;
 import java.util.List;
@@ -58,6 +60,7 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
                 .map(f -> f.toColumn(this, this.mappings))
                 .flatMap(List::stream)
                 .forEach(entity::add);
+        mapping.getInheritance().ifPresent(i -> entity.add(i.getDiscriminatorColumn(), i.getDiscriminatorValue()));
         return entity;
     }
 
@@ -80,6 +83,9 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
     public <T> T toEntity(ColumnEntity entity) {
         requireNonNull(entity, "entity is required");
         EntityMetadata mapping = mappings.findByName(entity.getName());
+        if (mapping.isInheritance()) {
+            return mapInheritanceEntity(entity, mapping.getClassInstance());
+        }
         T instance = mapping.newInstance();
         return convertEntity(entity.getColumns(), mapping, instance);
     }
@@ -90,6 +96,32 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
         return convertEntity(documents, mapping, instance);
     }
 
+    private <T> T mapInheritanceEntity(ColumnEntity entity, Class<?> entityClass) {
+        Map<String, InheritanceMetadata> group = mappings.findByParentGroupByDiscriminatorValue(entityClass);
+
+        if (group.isEmpty()) {
+            throw new MappingException("There is no discriminator inheritance to the document collection "
+                    + entity.getName());
+        }
+        String column = group.values()
+                .stream()
+                .findFirst()
+                .map(InheritanceMetadata::getDiscriminatorColumn)
+                .orElseThrow();
+
+        String discriminator = entity.find(column, String.class)
+                .orElseThrow(
+                        () -> new MappingException("To inheritance there is the discriminator column missing" +
+                                " on the Document Collection, the document name: " + column));
+
+        InheritanceMetadata inheritance = Optional.ofNullable(group.get(discriminator))
+                .orElseThrow(() -> new MappingException("There is no inheritance map to the discriminator" +
+                        " column value " + discriminator));
+
+        EntityMetadata mapping = mappings.get(inheritance.getEntity());
+        T instance = mapping.newInstance();
+        return convertEntity(entity.getColumns(), mapping, instance);
+    }
     private <T> T convertEntity(List<Column> documents, EntityMetadata mapping, T instance) {
         final Map<String, FieldMetadata> fieldsGroupByName = mapping.getFieldsGroupByName();
         final List<String> names = documents.stream().map(Column::getName).sorted().collect(Collectors.toList());
