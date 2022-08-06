@@ -131,11 +131,6 @@ private final InheritanceMetadata inheritance;
     }
 
     @Override
-    public boolean hasEntityName() {
-      return Objects.isNull(inheritance);
-    }
-
-    @Override
     public boolean isInheritance() {
       return {{inheritance}};
     }
