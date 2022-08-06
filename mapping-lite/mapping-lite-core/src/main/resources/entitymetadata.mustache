@@ -69,13 +69,13 @@ private final InheritanceMetadata inheritance;
 
     @Override 
     public <T> T newInstance() {
-    {{^inheritance}}
+    {{^notConcrete}}
         return (T)new {{entity}}();
-    {{/inheritance}}
-   {{#inheritance}}
+    {{/notConcrete}}
+   {{#notConcrete}}
        throw new UnsupportedOperationException("You cannot use the constructor method to the class " +
        "{{entityQualified}}");
-   {{/inheritance}}
+   {{/notConcrete}}
     }
 
     @Override
