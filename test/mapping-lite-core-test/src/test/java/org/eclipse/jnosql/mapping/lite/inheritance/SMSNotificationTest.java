@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.mapping.lite.inheritance;
 
 import jakarta.nosql.mapping.DiscriminatorColumn;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
@@ -22,6 +22,7 @@ import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
 import org.eclipse.jnosql.mapping.lite.inheritance.EmailNotification;
 import org.eclipse.jnosql.mapping.lite.inheritance.Notification;
+import org.eclipse.jnosql.mapping.lite.inheritance.SmsNotification;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class EmailNotificationTest {
+public class SMSNotificationTest {
 
 
     private ClassMappings mappings;
@@ -40,7 +41,7 @@ public class EmailNotificationTest {
     @BeforeEach
     public void setUp() {
         this.mappings = new DefaultClassMappings();
-        this.entityMetadata = this.mappings.get(EmailNotification.class);
+        this.entityMetadata = this.mappings.get(SmsNotification.class);
     }
 
     @Test

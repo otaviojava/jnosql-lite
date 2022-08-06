@@ -12,7 +12,7 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.mapping.lite.inheritance;
 
 import jakarta.nosql.mapping.DiscriminatorColumn;
 import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class SMSNotificationTest {
+public class EmailNotificationTest {
 
 
     private ClassMappings mappings;
