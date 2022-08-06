@@ -96,7 +96,7 @@ public class NotificationTest {
                 .orElseThrow();
         Assertions.assertEquals("Notification", inheritance.getDiscriminatorValue());
         Assertions.assertEquals(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN, inheritance.getDiscriminatorColumn());
-        Assertions.assertEquals(SocialMediaNotification.class, inheritance.getEntity());
+        Assertions.assertEquals(Notification.class, inheritance.getEntity());
         Assertions.assertEquals(Notification.class, inheritance.getParent());
     }
 
