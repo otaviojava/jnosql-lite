@@ -27,6 +27,7 @@ import jakarta.nosql.mapping.MappedSuperclass;
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.tools.Diagnostic;
@@ -125,7 +126,7 @@ public class ClassAnalyzer implements Supplier<String> {
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
         String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
         String inheritanceParameter = null;
-
+        boolean notConcrete = element.getModifiers().contains(Modifier.ABSTRACT);
         if (superclass.getAnnotation(Inheritance.class) != null) {
             inheritanceParameter = getInheritanceParameter(element, superclass);
             Entity superEntity = superclass.getAnnotation(Entity.class);
@@ -134,7 +135,7 @@ public class ClassAnalyzer implements Supplier<String> {
             inheritanceParameter = getInheritanceParameter(element, element);
         }
         return new EntityModel(packageName, sourceClassName, entityName, fields, embedded,
-                element.getAnnotation(Inheritance.class) != null,
+                element.getAnnotation(Inheritance.class) != null, notConcrete,
                 inheritanceParameter);
     }
 

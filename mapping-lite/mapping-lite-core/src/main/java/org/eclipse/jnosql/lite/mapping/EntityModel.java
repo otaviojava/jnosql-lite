@@ -32,9 +32,10 @@ public class EntityModel extends BaseMappingModel {
 
     private final String inheritanceParameter;
 
+    private final boolean notConcrete;
     public EntityModel(String packageName, String entity, String name,
                        List<String> fields, boolean embedded,
-                       boolean inheritance,
+                       boolean inheritance, boolean notConcrete,
                        String inheritanceParameter) {
         this.packageName = packageName;
         this.entity = entity;
@@ -42,6 +43,7 @@ public class EntityModel extends BaseMappingModel {
         this.fields = fields;
         this.embedded = embedded;
         this.inheritance = inheritance;
+        this.notConcrete = notConcrete;
         this.inheritanceParameter = inheritanceParameter;
     }
 
@@ -86,6 +88,10 @@ public class EntityModel extends BaseMappingModel {
         return inheritanceParameter;
     }
 
+    public boolean isNotConcrete() {
+        return notConcrete;
+    }
+
     @Override
     public String toString() {
         return "EntityModel{" +
@@ -96,6 +102,7 @@ public class EntityModel extends BaseMappingModel {
                 ", embedded=" + embedded +
                 ", inheritance=" + inheritance +
                 ", inheritanceParameter='" + inheritanceParameter + '\'' +
+                ", notConcrete=" + notConcrete +
                 '}';
     }
 }
