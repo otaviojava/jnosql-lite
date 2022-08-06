@@ -59,10 +59,10 @@ public final class DefaultClassMappings implements ClassMappings {
     }
 
     @Override
-    public Optional<EntityMetadata> findBySimpleName(String name) {
-        Objects.requireNonNull(name, "name is required");
+    public Optional<EntityMetadata> findBySimpleName(String simpleName) {
+        Objects.requireNonNull(simpleName, "simpleName is required");
         return entities.stream()
-                .filter(e -> name.equals(e.getSimpleName()))
+                .filter(e -> simpleName.equals(e.getSimpleName()))
                 .findFirst();
     }
 
@@ -75,10 +75,10 @@ public final class DefaultClassMappings implements ClassMappings {
     }
 
    @Override
-   public Optional<EntityMetadata> findByClass(Class<?> classEntity) {
-       Objects.requireNonNull(classEntity, "classEntity is required");
+   public Optional<EntityMetadata> findByClass(Class<?> entity) {
+       Objects.requireNonNull(entity, "entity is required");
        return entities.stream()
-               .filter(e -> classEntity.equals(e.getClassInstance()))
+               .filter(e -> entity.equals(e.getClassInstance()))
                .findFirst();
    }
 
