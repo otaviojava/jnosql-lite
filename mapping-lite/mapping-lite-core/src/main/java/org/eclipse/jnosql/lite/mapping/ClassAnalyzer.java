@@ -119,17 +119,19 @@ public class ClassAnalyzer implements Supplier<String> {
 
         TypeElement superclass =
                 (TypeElement) ((DeclaredType) element.getSuperclass()).asElement();
-        Inheritance inheritance = superclass.getAnnotation(Inheritance.class);
         final Entity annotation = element.getAnnotation(Entity.class);
         final boolean embedded = Objects.nonNull(element.getAnnotation(Embeddable.class));
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
         String entityName = annotation.value().isBlank() ? sourceClassName : annotation.value();
         String inheritanceParameter = null;
-        if (inheritance != null) {
+
+        if (superclass.getAnnotation(Inheritance.class) != null) {
             inheritanceParameter = getInheritanceParameter(element, superclass);
             Entity superEntity = superclass.getAnnotation(Entity.class);
             entityName = superEntity.value().isBlank() ? ProcessorUtil.getSimpleNameAsString(superclass) : annotation.value();
+        } else if (element.getAnnotation(Inheritance.class) != null) {
+            inheritanceParameter = getInheritanceParameter(element, element);
         }
         return new EntityModel(packageName, sourceClassName, entityName, fields, embedded,
                 element.getAnnotation(Inheritance.class) != null,
