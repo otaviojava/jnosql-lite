@@ -36,7 +36,7 @@ public class LargeProjectTest {
     @BeforeEach
     public void setUp() {
         this.mappings = new DefaultClassMappings();
-        this.entityMetadata = this.mappings.get(SmallProject.class);
+        this.entityMetadata = this.mappings.get(LargeProject.class);
     }
 
     @Test
@@ -46,17 +46,17 @@ public class LargeProjectTest {
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(SmallProject.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(LargeProject.class.getSimpleName(), entityMetadata.getSimpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(SmallProject.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(LargeProject.class.getName(), entityMetadata.getClassName());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(SmallProject.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(LargeProject.class, entityMetadata.getClassInstance());
     }
 
     @Test
@@ -67,17 +67,17 @@ public class LargeProjectTest {
 
     @Test
     public void shouldCreateNewInstance() {
-        SmallProject project = entityMetadata.newInstance();
+        LargeProject project = entityMetadata.newInstance();
         Assertions.assertNotNull(project);
-        Assertions.assertTrue(project instanceof SmallProject);
+        Assertions.assertTrue(project instanceof LargeProject);
     }
 
     @Test
     public void shouldGetFieldsName() {
         List<String> fields = entityMetadata.getFieldsName();
         Assertions.assertEquals(2, fields.size());
-        Assertions.assertTrue(fields.contains("id"));
-        Assertions.assertTrue(fields.contains("investor"));
+        Assertions.assertTrue(fields.contains("name"));
+        Assertions.assertTrue(fields.contains("budget"));
     }
 
     @Test
@@ -85,16 +85,16 @@ public class LargeProjectTest {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("_id"));
-        Assertions.assertNotNull(groupByName.get("investor"));
+        Assertions.assertNotNull(groupByName.get("budget"));
     }
 
     @Test
     public void shouldGetInheritanceMetadata() {
         InheritanceMetadata inheritance = this.entityMetadata.getInheritance()
                 .orElseThrow();
-        Assertions.assertEquals("Small", inheritance.getDiscriminatorValue());
+        Assertions.assertEquals("Large", inheritance.getDiscriminatorValue());
         Assertions.assertEquals("size", inheritance.getDiscriminatorColumn());
-        Assertions.assertEquals(SmallProject.class, inheritance.getEntity());
+        Assertions.assertEquals(LargeProject.class, inheritance.getEntity());
         Assertions.assertEquals(Project.class, inheritance.getParent());
     }
 
