@@ -103,7 +103,7 @@ public class DefaultDocumentEntityConverterInheritanceTest {
         entity.add("name", "Social Media");
         entity.add("nickname", "otaviojava");
         entity.add("createdOn",date);
-        entity.add("type", SocialMediaNotification.class.getSimpleName());
+        entity.add("dtype", SocialMediaNotification.class.getSimpleName());
         SocialMediaNotification notification = this.converter.toEntity(entity);
         assertEquals(100L, notification.getId());
         assertEquals("Social Media", notification.getName());
@@ -119,7 +119,7 @@ public class DefaultDocumentEntityConverterInheritanceTest {
         entity.add("name", "SMS Notification");
         entity.add("phone", "+351987654123");
         entity.add("createdOn", date);
-        entity.add("type", "SMS");
+        entity.add("dtype", "SMS");
         SmsNotification notification = this.converter.toEntity(entity);
         Assertions.assertEquals(100L, notification.getId());
         Assertions.assertEquals("SMS Notification", notification.getName());
@@ -135,7 +135,7 @@ public class DefaultDocumentEntityConverterInheritanceTest {
         entity.add("name", "Email Notification");
         entity.add("email", "otavio@otavio.test");
         entity.add("createdOn", date);
-        entity.add("type", "Email");
+        entity.add("dtype", "Email");
         EmailNotification notification = this.converter.toEntity(entity);
         Assertions.assertEquals(100L, notification.getId());
         Assertions.assertEquals("Email Notification", notification.getName());
