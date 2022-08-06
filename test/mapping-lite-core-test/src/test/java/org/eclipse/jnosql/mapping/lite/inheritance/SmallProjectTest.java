@@ -78,7 +78,7 @@ public class SmallProjectTest {
     public void shouldGetFieldsName() {
         List<String> fields = entityMetadata.getFieldsName();
         Assertions.assertEquals(2, fields.size());
-        Assertions.assertTrue(fields.contains("id"));
+        Assertions.assertTrue(fields.contains("name"));
         Assertions.assertTrue(fields.contains("investor"));
     }
 
