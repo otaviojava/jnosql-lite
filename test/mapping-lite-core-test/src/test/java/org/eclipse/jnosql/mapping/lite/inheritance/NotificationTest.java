@@ -38,7 +38,7 @@ public class NotificationTest {
     @BeforeEach
     public void setUp() {
         this.mappings = new DefaultClassMappings();
-        this.entityMetadata = this.mappings.get(SocialMediaNotification.class);
+        this.entityMetadata = this.mappings.get(Notification.class);
     }
 
     @Test
@@ -48,17 +48,17 @@ public class NotificationTest {
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(SocialMediaNotification.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(Notification.class.getSimpleName(), entityMetadata.getSimpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(SocialMediaNotification.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(Notification.class.getName(), entityMetadata.getClassName());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(SocialMediaNotification.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(Notification.class, entityMetadata.getClassInstance());
     }
 
     @Test
@@ -68,19 +68,18 @@ public class NotificationTest {
     }
 
     @Test
-    public void shouldCreateNewInstance() {
-        SocialMediaNotification notification = entityMetadata.newInstance();
-        Assertions.assertNotNull(notification);
-        Assertions.assertTrue(notification instanceof SocialMediaNotification);
+    public void shouldReturnIssueWhenIsAbstractClass() {
+        Assertions.assertThrows(UnsupportedOperationException.class, () ->
+                entityMetadata.newInstance());
     }
 
     @Test
     public void shouldGetFieldsName() {
         List<String> fields = entityMetadata.getFieldsName();
-        Assertions.assertEquals(4, fields.size());
+        Assertions.assertEquals(3, fields.size());
         Assertions.assertTrue(fields.contains("id"));
         Assertions.assertTrue(fields.contains("name"));
-        Assertions.assertTrue(fields.contains("nickname"));
+        Assertions.assertTrue(fields.contains("createdOn"));
     }
 
     @Test
@@ -88,14 +87,14 @@ public class NotificationTest {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("_id"));
-        Assertions.assertNotNull(groupByName.get("name"));
+        Assertions.assertNotNull(groupByName.get("createdOn"));
     }
 
     @Test
     public void shouldGetInheritanceMetadata() {
         InheritanceMetadata inheritance = this.entityMetadata.getInheritance()
                 .orElseThrow();
-        Assertions.assertEquals("SocialMediaNotification", inheritance.getDiscriminatorValue());
+        Assertions.assertEquals("Notification", inheritance.getDiscriminatorValue());
         Assertions.assertEquals(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN, inheritance.getDiscriminatorColumn());
         Assertions.assertEquals(SocialMediaNotification.class, inheritance.getEntity());
         Assertions.assertEquals(Notification.class, inheritance.getParent());
