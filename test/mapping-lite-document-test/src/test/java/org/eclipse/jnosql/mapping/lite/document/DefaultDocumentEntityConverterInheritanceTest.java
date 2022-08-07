@@ -95,10 +95,10 @@ public class DefaultDocumentEntityConverterInheritanceTest {
         assertEquals("Small", entity.find("size", String.class).get());
     }
 
-    //
+
     @Test
     public void shouldConvertProject() {
-        ColumnEntity entity = ColumnEntity.of("Project");
+        DocumentEntity entity = DocumentEntity.of("Project");
         entity.add("_id", "Project");
         entity.add("size", "Project");
         Project project = this.converter.toEntity(entity);
@@ -109,13 +109,12 @@ public class DefaultDocumentEntityConverterInheritanceTest {
     public void shouldConvertProjectToCommunicationEntity() {
         Project project = new Project();
         project.setName("Large Project");
-        ColumnEntity entity = this.converter.toColumn(project);
+        DocumentEntity entity = this.converter.toDocument(project);
         assertNotNull(entity);
         assertEquals("Project", entity.getName());
         assertEquals(project.getName(), entity.find("_id", String.class).get());
         assertEquals("Project", entity.find("size", String.class).get());
     }
-    //
 
     @Test
     public void shouldConvertDocumentEntityToSocialMedia(){
