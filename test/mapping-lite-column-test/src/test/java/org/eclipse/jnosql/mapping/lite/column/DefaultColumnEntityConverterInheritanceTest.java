@@ -85,33 +85,26 @@ public class DefaultColumnEntityConverterInheritanceTest {
         assertEquals(project.getBudget(), entity.find("budget", BigDecimal.class).get());
         assertEquals("Large", entity.find("size", String.class).get());
     }
-    //
+
     @Test
     public void shouldConvertProject() {
         ColumnEntity entity = ColumnEntity.of("Project");
-        entity.add("_id", "Large Project");
-        entity.add("budget", BigDecimal.TEN);
-        entity.add("size", "Large");
+        entity.add("_id", "Project");
+        entity.add("size", "Project");
         Project project = this.converter.toEntity(entity);
-        assertEquals("Large Project", project.getName());
-        assertEquals(LargeProject.class, project.getClass());
-        LargeProject smallProject = LargeProject.class.cast(project);
-        assertEquals(BigDecimal.TEN, smallProject.getBudget());
+        assertEquals("Project", project.getName());
     }
 
     @Test
     public void shouldConvertProjectToCommunicationEntity() {
-        LargeProject project = new LargeProject();
+        Project project = new Project();
         project.setName("Large Project");
-        project.setBudget(BigDecimal.TEN);
         ColumnEntity entity = this.converter.toColumn(project);
         assertNotNull(entity);
         assertEquals("Project", entity.getName());
         assertEquals(project.getName(), entity.find("_id", String.class).get());
-        assertEquals(project.getBudget(), entity.find("budget", BigDecimal.class).get());
-        assertEquals("Large", entity.find("size", String.class).get());
+        assertEquals("Project", entity.find("size", String.class).get());
     }
-    //
 
     @Test
     public void shouldConvertSmallProjectToCommunicationEntity() {
