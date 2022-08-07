@@ -55,8 +55,8 @@ public class {{className}} implements {{repository}} {
     @javax.inject.Inject
     public {{className}}(DocumentTemplate template) {
         this.template = Objects.requireNonNull(template, "template is required");
-        ClassMappings mappings = new DefaultClassMappings();
-        this.metadata = mappings.get({{entityType}}.class);
+        EntitiesMetadata entities = new DefaultEntitiesMetadata();
+        this.metadata = entities.get({{entityType}}.class);
         this.selectProvider = new FindByMethodQueryProvider();
         this.parser = new RepositoryDocumentObserverParser(this.metadata);
         this.converter = new SelectQueryParser();
@@ -66,7 +66,7 @@ public class {{className}} implements {{repository}} {
         return template;
     }
 
-    EntityMetadata getClassMapping(){
+    EntityMetadata getEntityMetadata(){
         return metadata;
     }
 
@@ -136,7 +136,7 @@ public class {{className}} implements {{repository}} {
     {{/methods}}
 
     private FieldMetadata getIdField() {
-        return getClassMapping().getId().orElseThrow(KEY_NOT_FOUND_EXCEPTION_SUPPLIER);
+        return getEntityMetadata().getId().orElseThrow(KEY_NOT_FOUND_EXCEPTION_SUPPLIER);
     }
 
     private Function optionalToStream() {
@@ -147,7 +147,7 @@ public class {{className}} implements {{repository}} {
     }
 
     private Class<{{entityType}}> getEntityClass() {
-        return (Class<{{entityType}}>) getClassMapping().getClassInstance();
+        return (Class<{{entityType}}>) getEntityMetadata().getClassInstance();
     }
 
 }
