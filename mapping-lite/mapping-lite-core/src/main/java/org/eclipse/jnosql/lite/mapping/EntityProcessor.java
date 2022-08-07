@@ -93,7 +93,7 @@ public class EntityProcessor extends AbstractProcessor {
 
     private void createClassMapping(List<String> entities) throws IOException {
         LOGGER.info("Creating mapping class");
-        ClassMappingsModel metadata = new ClassMappingsModel(entities);
+        EntitiesMetadataModel metadata = new EntitiesMetadataModel(entities);
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified());
         try (Writer writer = fileObject.openWriter()) {

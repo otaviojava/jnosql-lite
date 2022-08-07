@@ -16,11 +16,11 @@ package org.eclipse.jnosql.lite.mapping;
 
 import java.util.List;
 
-public class ClassMappingsModel extends BaseMappingModel {
+public class EntitiesMetadataModel extends BaseMappingModel {
 
     private final List<String> entities;
 
-    public ClassMappingsModel(List<String> entities) {
+    public EntitiesMetadataModel(List<String> entities) {
         this.entities = entities;
     }
 
@@ -29,6 +29,6 @@ public class ClassMappingsModel extends BaseMappingModel {
     }
 
     public String getQualified() {
-        return "org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings";
+        return "org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata";
     }
 }
