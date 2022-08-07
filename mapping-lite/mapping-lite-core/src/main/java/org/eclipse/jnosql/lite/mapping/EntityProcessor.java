@@ -81,7 +81,7 @@ public class EntityProcessor extends AbstractProcessor {
 
         try {
             if (!entities.isEmpty()) {
-                createClassMapping(entities);
+                createEntitiesMetadata(entities);
                 LOGGER.info("Appending the metadata interfaces");
                 MetadataAppender.append(processingEnv);
             }
@@ -91,8 +91,8 @@ public class EntityProcessor extends AbstractProcessor {
         return false;
     }
 
-    private void createClassMapping(List<String> entities) throws IOException {
-        LOGGER.info("Creating mapping class");
+    private void createEntitiesMetadata(List<String> entities) throws IOException {
+        LOGGER.info("Creating the default EntitiesMetadata class");
         EntitiesMetadataModel metadata = new EntitiesMetadataModel(entities);
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = filer.createSourceFile(metadata.getQualified());
