@@ -48,7 +48,7 @@ public class EntityProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(EntityProcessor.class.getName());
     private static final EnumSet<Modifier> MODIFIERS = EnumSet.of(PUBLIC, PROTECTED);
-    private static final String TEMPLATE = "classmappings.mustache";
+    private static final String TEMPLATE = "entitiesmetadata.mustache";
     static final Predicate<Element> IS_CONSTRUCTOR = el -> el.getKind() == ElementKind.CONSTRUCTOR;
     static final Predicate<String> IS_BLANK = String::isBlank;
     static final Predicate<String> IS_NOT_BLANK = IS_BLANK.negate();
