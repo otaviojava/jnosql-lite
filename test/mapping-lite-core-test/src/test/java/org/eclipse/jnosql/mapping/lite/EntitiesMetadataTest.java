@@ -14,20 +14,20 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ClassMappingsTest {
+public class EntitiesMetadataTest {
 
-    private ClassMappings mappings;
+    private EntitiesMetadata mappings;
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultClassMappings();
+        this.mappings = new DefaultEntitiesMetadata();
     }
 
     @Test

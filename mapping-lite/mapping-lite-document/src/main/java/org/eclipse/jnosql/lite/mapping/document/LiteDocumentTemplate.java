@@ -30,8 +30,8 @@ import jakarta.nosql.mapping.document.DocumentEntityConverter;
 import jakarta.nosql.mapping.document.DocumentQueryPagination;
 import jakarta.nosql.mapping.document.DocumentTemplate;
 import org.eclipse.jnosql.communication.document.query.DefaultDocumentQueryParser;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
@@ -57,7 +57,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
 
     private final DocumentCollectionManager manager;
 
-    private final ClassMappings mappings;
+    private final EntitiesMetadata mappings;
 
     private final DocumentObserverParser observerParser;
 
@@ -65,7 +65,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     public LiteDocumentTemplate(DocumentCollectionManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteDocumentEntityConverter();
-        this.mappings = new DefaultClassMappings();
+        this.mappings = new DefaultEntitiesMetadata();
         this.observerParser = new LiteDocumentMapperObserver(this.mappings);
     }
 

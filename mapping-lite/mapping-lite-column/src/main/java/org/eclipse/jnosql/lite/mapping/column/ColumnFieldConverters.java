@@ -20,7 +20,7 @@ import jakarta.nosql.Value;
 import jakarta.nosql.column.Column;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.MappingException;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.CollectionSupplier;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
@@ -45,7 +45,7 @@ class ColumnFieldConverters {
         private final CollectionEmbeddableConverter embeddableConverter = new CollectionEmbeddableConverter();
         private final SubEntityConverter subEntityConverter = new SubEntityConverter();
 
-        ColumnFieldConverter get(FieldMetadata field, FieldType type, ClassMappings mappings) {
+        ColumnFieldConverter get(FieldMetadata field, FieldType type, EntitiesMetadata mappings) {
             if (FieldType.EMBEDDED.equals(type)) {
                 return embeddedFieldConverter;
             } else if (FieldType.SUB_ENTITY.equals(type)) {
@@ -57,7 +57,7 @@ class ColumnFieldConverters {
             }
         }
 
-        private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type, ClassMappings mappings) {
+        private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type, EntitiesMetadata mappings) {
             return FieldType.COLLECTION.equals(type) &&
                     mappings.findByClass(field.getArguments().get(0)).isPresent();
         }
@@ -67,7 +67,7 @@ class ColumnFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
-                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, EntitiesMetadata mappings) {
 
 
             if (Objects.nonNull(column)) {
@@ -97,7 +97,7 @@ class ColumnFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
-                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, EntitiesMetadata mappings) {
 
             Object subEntity = converter.toEntity(field.getType(), columns);
             EntityMetadata mapping = mappings.get(field.getType());
@@ -115,7 +115,7 @@ class ColumnFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
-                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, EntitiesMetadata mappings) {
 
             Value value = column.getValue();
             Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
@@ -152,7 +152,7 @@ class ColumnFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
-                                      FieldMetadata field, LiteColumnEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteColumnEntityConverter converter, EntitiesMetadata mappings) {
             if (Objects.nonNull(column)) {
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
                 Collection collection = supplier.get();

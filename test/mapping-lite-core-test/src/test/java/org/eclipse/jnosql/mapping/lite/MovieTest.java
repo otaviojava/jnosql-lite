@@ -14,8 +14,8 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.junit.jupiter.api.Assertions;
@@ -28,13 +28,13 @@ import java.util.Optional;
 
 public class MovieTest {
 
-    private ClassMappings mappings;
+    private EntitiesMetadata mappings;
 
     private EntityMetadata entityMetadata;
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultClassMappings();
+        this.mappings = new DefaultEntitiesMetadata();
         this.entityMetadata = this.mappings.get(Movie.class);
     }
 

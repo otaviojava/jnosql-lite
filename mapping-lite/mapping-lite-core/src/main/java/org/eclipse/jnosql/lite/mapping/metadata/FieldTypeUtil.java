@@ -34,7 +34,7 @@ public final class FieldTypeUtil {
      * @param field - the field with annotation
      * @return the type
      */
-    public static FieldType of(FieldMetadata field, ClassMappings mappings) {
+    public static FieldType of(FieldMetadata field, EntitiesMetadata mappings) {
         if (Collection.class.isAssignableFrom(field.getType())) {
             return FieldType.COLLECTION;
         }

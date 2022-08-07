@@ -15,7 +15,7 @@
 package org.eclipse.jnosql.lite.mapping.document;
 
 import jakarta.nosql.document.Document;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
 import java.util.List;
@@ -23,5 +23,5 @@ import java.util.List;
 interface DocumentFieldConverter {
 
     <X, Y, T> void convert(T instance, List<Document> documents, Document document, FieldMetadata field,
-                           LiteDocumentEntityConverter converter, ClassMappings mappings);
+                           LiteDocumentEntityConverter converter, EntitiesMetadata mappings);
 }

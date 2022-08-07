@@ -20,8 +20,8 @@ import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.IdNotFoundException;
 import jakarta.nosql.mapping.MappingException;
 import jakarta.nosql.mapping.keyvalue.KeyValueEntityConverter;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
@@ -31,11 +31,11 @@ import static java.util.Objects.requireNonNull;
 
 public class LiteKeyValueEntityConverter implements KeyValueEntityConverter {
 
-    private final ClassMappings mappings;
+    private final EntitiesMetadata mappings;
 
 
     public LiteKeyValueEntityConverter() {
-        this.mappings = new DefaultClassMappings();
+        this.mappings = new DefaultEntitiesMetadata();
     }
 
     @Override

@@ -15,7 +15,7 @@
 package org.eclipse.jnosql.lite.mapping.column;
 
 import jakarta.nosql.column.Column;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
 import java.util.List;
@@ -23,5 +23,5 @@ import java.util.List;
 interface ColumnFieldConverter {
 
     <X, Y, T> void convert(T instance, List<Column> columns, Column column, FieldMetadata field,
-                           LiteColumnEntityConverter converter, ClassMappings mappings);
+                           LiteColumnEntityConverter converter, EntitiesMetadata mappings);
 }

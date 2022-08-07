@@ -19,8 +19,8 @@ import jakarta.nosql.column.ColumnEntity;
 import jakarta.nosql.mapping.MappingException;
 import jakarta.nosql.mapping.column.ColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.column.ColumnFieldConverters.DocumentFieldConverterFactory;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
@@ -40,12 +40,12 @@ import static org.eclipse.jnosql.lite.mapping.metadata.FieldType.SUB_ENTITY;
 
 public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
-    private final ClassMappings mappings;
+    private final EntitiesMetadata mappings;
 
     private final DocumentFieldConverterFactory converterFactory;
 
     public LiteColumnEntityConverter() {
-        this.mappings = new DefaultClassMappings();
+        this.mappings = new DefaultEntitiesMetadata();
         this.converterFactory = new DocumentFieldConverterFactory();
     }
 

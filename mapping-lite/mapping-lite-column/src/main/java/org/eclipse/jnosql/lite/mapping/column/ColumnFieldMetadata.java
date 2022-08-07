@@ -18,7 +18,7 @@ package org.eclipse.jnosql.lite.mapping.column;
 import jakarta.nosql.column.Column;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.column.ColumnEntityConverter;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
@@ -92,7 +92,7 @@ class ColumnFieldMetadata implements FieldMetadata {
         return this.read() != null;
     }
 
-    public <X, Y> List<Column> toColumn(ColumnEntityConverter converter, ClassMappings mappings) {
+    public <X, Y> List<Column> toColumn(ColumnEntityConverter converter, EntitiesMetadata mappings) {
         FieldType fieldType = FieldTypeUtil.of(this, mappings);
 
         if (FieldType.EMBEDDED.equals(fieldType)) {
@@ -110,11 +110,11 @@ class ColumnFieldMetadata implements FieldMetadata {
         return singletonList(Column.of(getName(), this.read()));
     }
 
-    private boolean isEmbeddableCollection(FieldType fieldType, ClassMappings mappings) {
+    private boolean isEmbeddableCollection(FieldType fieldType, EntitiesMetadata mappings) {
         return FieldType.COLLECTION.equals(fieldType) && isEmbeddableElement(mappings);
     }
 
-    private boolean isEmbeddableElement(ClassMappings mappings) {
+    private boolean isEmbeddableElement(EntitiesMetadata mappings) {
         List<Class<?>> arguments = getArguments();
         if (!arguments.isEmpty()) {
             Class<?> entity = arguments.stream().findFirst().get();

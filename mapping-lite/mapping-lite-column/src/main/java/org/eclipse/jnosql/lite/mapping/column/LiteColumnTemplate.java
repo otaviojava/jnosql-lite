@@ -30,8 +30,8 @@ import jakarta.nosql.mapping.column.ColumnEntityConverter;
 import jakarta.nosql.mapping.column.ColumnQueryPagination;
 import jakarta.nosql.mapping.column.ColumnTemplate;
 import org.eclipse.jnosql.communication.column.query.DefaultColumnQueryParser;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
@@ -57,7 +57,7 @@ public class LiteColumnTemplate implements ColumnTemplate {
 
     private final ColumnFamilyManager manager;
 
-    private final ClassMappings mappings;
+    private final EntitiesMetadata mappings;
 
     private final ColumnObserverParser observerParser;
 
@@ -65,7 +65,7 @@ public class LiteColumnTemplate implements ColumnTemplate {
     public LiteColumnTemplate(ColumnFamilyManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteColumnEntityConverter();
-        this.mappings = new DefaultClassMappings();
+        this.mappings = new DefaultEntitiesMetadata();
         this.observerParser = new LiteColumnMapperObserver(this.mappings);
     }
 

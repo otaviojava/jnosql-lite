@@ -15,8 +15,8 @@
 package org.eclipse.jnosql.mapping.lite.inheritance;
 
 import jakarta.nosql.mapping.DiscriminatorColumn;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
@@ -31,13 +31,13 @@ import java.util.Optional;
 public class SocialMediaNotificationTest {
 
 
-    private ClassMappings mappings;
+    private EntitiesMetadata mappings;
 
     private EntityMetadata entityMetadata;
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultClassMappings();
+        this.mappings = new DefaultEntitiesMetadata();
         this.entityMetadata = this.mappings.get(SocialMediaNotification.class);
     }
 

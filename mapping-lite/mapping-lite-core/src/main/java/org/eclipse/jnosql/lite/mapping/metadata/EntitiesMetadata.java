@@ -18,9 +18,10 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * This class contains all the class in cached way to be used inside mapping.
+ * This class is the {@link EntityMetadata} repository.
+ * So it contains entities that has the {@link jakarta.nosql.mapping.Entity} annotation.
  */
-public interface ClassMappings {
+public interface EntitiesMetadata {
 
     /**
      * Find a class in the cached way and return in a class,

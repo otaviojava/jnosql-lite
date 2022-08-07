@@ -20,7 +20,7 @@ import jakarta.nosql.Value;
 import jakarta.nosql.document.Document;
 import jakarta.nosql.mapping.AttributeConverter;
 import jakarta.nosql.mapping.MappingException;
-import org.eclipse.jnosql.lite.mapping.metadata.ClassMappings;
+import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.CollectionSupplier;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
@@ -45,7 +45,7 @@ class DocumentFieldConverters {
         private final CollectionEmbeddableConverter embeddableConverter = new CollectionEmbeddableConverter();
         private final SubEntityConverter subEntityConverter = new SubEntityConverter();
 
-        DocumentFieldConverter get(FieldMetadata field, FieldType type, ClassMappings mappings) {
+        DocumentFieldConverter get(FieldMetadata field, FieldType type, EntitiesMetadata mappings) {
             if (FieldType.EMBEDDED.equals(type)) {
                 return embeddedFieldConverter;
             } else if (FieldType.SUB_ENTITY.equals(type)) {
@@ -57,7 +57,7 @@ class DocumentFieldConverters {
             }
         }
 
-        private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type, ClassMappings mappings) {
+        private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type, EntitiesMetadata mappings) {
             return FieldType.COLLECTION.equals(type) &&
                     mappings.findByClass(field.getArguments().get(0)).isPresent();
         }
@@ -67,7 +67,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Document document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
 
 
             if (Objects.nonNull(document)) {
@@ -96,7 +96,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Document document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
 
             Object subEntity = converter.toEntity(field.getType(), documents);
             EntityMetadata mapping = mappings.get(field.getType());
@@ -114,7 +114,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Document document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
             Value value = document.getValue();
 
             Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
@@ -151,7 +151,7 @@ class DocumentFieldConverters {
 
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Document document,
-                                      FieldMetadata field, LiteDocumentEntityConverter converter, ClassMappings mappings) {
+                                      FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
             if(Objects.nonNull(document)) {
                 CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
                 Collection collection = supplier.get();

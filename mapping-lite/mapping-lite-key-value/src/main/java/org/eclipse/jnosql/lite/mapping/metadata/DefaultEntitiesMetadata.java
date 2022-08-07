@@ -17,7 +17,7 @@ package org.eclipse.jnosql.lite.mapping.metadata;
 import java.util.Map;
 import java.util.Optional;
 
-public class DefaultClassMappings implements ClassMappings {
+public class DefaultEntitiesMetadata implements EntitiesMetadata {
     @Override
     public EntityMetadata get(Class<?> classEntity) {
         throw new UnsupportedOperationException("This method is not implemented yet");
