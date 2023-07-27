@@ -19,14 +19,12 @@ import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Param;
 import jakarta.nosql.mapping.Query;
 import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.RepositoryLite;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 
-@RepositoryLite(DatabaseType.KEY_VALUE)
 public interface Person10RepositoryB extends Repository<Person10, Long> {
 
     Stream<Person10> findByName(String name);
