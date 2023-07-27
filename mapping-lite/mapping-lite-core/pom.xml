@@ -32,58 +32,53 @@
     <dependencies>
         <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
-            <artifactId>communication-core</artifactId>
+            <artifactId>jnosql-communication-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
-            <artifactId>communication-query</artifactId>
+            <artifactId>jnosql-communication-query</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jnosql.lite.mapping</groupId>
-            <artifactId>mapping-lite-api</artifactId>
+            <groupId>jakarta.nosql</groupId>
+            <artifactId>nosql-core</artifactId>
+            <version>${jakarta.nosql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.nosql</groupId>
+            <artifactId>nosql-document</artifactId>
+            <version>${jakarta.nosql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.nosql</groupId>
+            <artifactId>nosql-column</artifactId>
+            <version>${jakarta.nosql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.nosql</groupId>
+            <artifactId>nosql-key-value</artifactId>
+            <version>${jakarta.nosql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jnosql.communication</groupId>
+            <artifactId>jnosql-communication-document</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.nosql.mapping</groupId>
-            <artifactId>mapping-core</artifactId>
-            <version>${jakarta.nosql.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.nosql.mapping</groupId>
-            <artifactId>mapping-document</artifactId>
-            <version>${jakarta.nosql.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.nosql.mapping</groupId>
-            <artifactId>mapping-column</artifactId>
-            <version>${jakarta.nosql.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.nosql.mapping</groupId>
-            <artifactId>mapping-key-value</artifactId>
-            <version>${jakarta.nosql.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
-            <artifactId>communication-document</artifactId>
-            <version>${jakarta.nosql.version}</version>
+            <artifactId>jnosql-communication-column</artifactId>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jnosql.communication</groupId>
-            <artifactId>communication-column</artifactId>
-            <version>${jakarta.nosql.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jnosql.communication</groupId>
-            <artifactId>communication-key-value</artifactId>
-            <version>${jakarta.nosql.version}</version>
+            <artifactId>jnosql-communication-key-value</artifactId>
+            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -92,15 +87,9 @@
             <version>0.9.6</version>
         </dependency>
         <dependency>
-            <groupId>jakarta.nosql.tck.mapping</groupId>
-            <artifactId>mapping-tck-core</artifactId>
-            <version>${jakarta.nosql.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>com.google.testing.compile</groupId>
             <artifactId>compile-testing</artifactId>
-            <version>0.18</version>
+            <version>0.21.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
