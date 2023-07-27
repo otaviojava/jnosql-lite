@@ -1,2 +1,4 @@
-# jnosql-lite
+= JNoSQL Lite implementation
+:toc: auto
+
 An experimental implementation that uses Java Annotation Processing instead of Reflection.
