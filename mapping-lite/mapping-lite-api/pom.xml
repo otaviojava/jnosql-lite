@@ -32,8 +32,8 @@
     <dependencies>
         <dependency>
             <groupId>jakarta.nosql</groupId>
-            <artifactId>mapping-core</artifactId>
-            <version>${project.version}</version>
+            <artifactId>nosql-key-value</artifactId>
+            <version>${jakarta.nosql.version}</version>
         </dependency>
     </dependencies>
 </project>
