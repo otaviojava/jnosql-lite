@@ -14,7 +14,8 @@
  */
 package org.eclipse.jnosql.lite.mapping;
 
-import jakarta.nosql.mapping.MappingException;
+
+import jakarta.data.exceptions.MappingException;
 
 public class ValidationException extends MappingException {
 
