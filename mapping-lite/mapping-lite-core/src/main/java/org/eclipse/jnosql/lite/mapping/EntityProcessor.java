@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 import static javax.lang.model.element.Modifier.PROTECTED;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
-@SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
+@SupportedAnnotationTypes("jakarta.nosql.Entity")
 public class EntityProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(EntityProcessor.class.getName());
