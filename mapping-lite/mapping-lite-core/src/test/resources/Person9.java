@@ -14,10 +14,10 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Convert;
-import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
+import org.eclipse.jnosql.mapping.AttributeConverter;
+import org.eclipse.jnosql.mapping.Convert;
 
 @Entity("table")
 public class Person9 {

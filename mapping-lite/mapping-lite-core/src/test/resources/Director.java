@@ -15,9 +15,9 @@
 package org.eclipse.jnosql.mapping.lite;
 
 
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.MappedSuperclass;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Column;
+import org.eclipse.jnosql.mapping.MappedSuperclass;
 
 @Entity
 public class Director extends Person10 {

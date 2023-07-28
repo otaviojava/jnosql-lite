@@ -15,10 +15,10 @@
 package org.eclipse.jnosql.mapping.lite;
 
 
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Column;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Column;
 import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.MappedSuperclass;
+import org.eclipse.jnosql.mapping.MappedSuperclass;
 
 @Entity
 @MappedSuperclass
