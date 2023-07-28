@@ -14,7 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
-import jakarta.nosql.mapping.Repository;
+import jakarta.data.repository.PageableRepository;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
@@ -34,7 +34,7 @@ final class RepositoryUtil {
                                                ProcessingEnvironment processingEnv) {
         for (TypeMirror mirror : interfaces) {
             TypeElement element = (TypeElement) processingEnv.getTypeUtils().asElement(mirror);
-            if (Repository.class.getName().equals(element.getQualifiedName().toString())) {
+            if (PageableRepository.class.getName().equals(element.getQualifiedName().toString())) {
                 return Optional.of(mirror);
             }
         }
