@@ -17,8 +17,8 @@ package org.eclipse.jnosql.lite.mapping;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Id;
+import jakarta.nosql.Column;
+import jakarta.nosql.Id;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;

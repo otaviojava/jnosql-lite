@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping;
 
+import jakarta.data.exceptions.MappingException;
 import jakarta.nosql.mapping.MappingException;
 
 import javax.annotation.processing.Filer;
