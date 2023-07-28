@@ -14,8 +14,8 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Query;
+import jakarta.data.repository.Query;
+import org.eclipse.jnosql.mapping.DatabaseType;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;

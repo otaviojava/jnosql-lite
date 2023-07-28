@@ -14,9 +14,9 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Repository;
+import jakarta.data.repository.Repository;
 import org.eclipse.jnosql.lite.mapping.ValidationException;
+import org.eclipse.jnosql.mapping.DatabaseType;
 
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
@@ -110,9 +110,11 @@ class RepositoryElement {
                 List<String> parameters = RepositoryUtil.findParameters(typeMirror);
                 String entityType = parameters.get(0);
                 String keyType = parameters.get(1);
-                RepositoryLite annotation = typeElement.getAnnotation(RepositoryLite.class);
+                Repository annotation = typeElement.getAnnotation(Repository.class);
                 DatabaseType type = Optional.ofNullable(annotation)
-                        .map(RepositoryLite::value).orElse(DatabaseType.DOCUMENT);
+                        .map(Repository::dataStore)
+                        .map(DatabaseType::valueOf)
+                        .orElse(DatabaseType.DOCUMENT);
                 String repositoryInterface = typeElement.getQualifiedName().toString();
                 List<MethodMetadata> methods = typeElement.getEnclosedElements()
                         .stream()

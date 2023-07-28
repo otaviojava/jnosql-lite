@@ -14,8 +14,8 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
-import jakarta.nosql.mapping.Param;
-import jakarta.nosql.mapping.Query;
+import jakarta.data.repository.Param;
+import jakarta.data.repository.Query;
 
 import java.util.ArrayList;
 import java.util.List;
