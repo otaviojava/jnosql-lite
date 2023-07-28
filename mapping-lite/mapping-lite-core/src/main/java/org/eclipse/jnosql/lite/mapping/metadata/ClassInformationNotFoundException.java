@@ -14,7 +14,8 @@
  */
 package org.eclipse.jnosql.lite.mapping.metadata;
 
-import jakarta.nosql.mapping.MappingException;
+
+import jakarta.data.exceptions.MappingException;
 
 /**
  * Exception when a class is not loaded to the cached way

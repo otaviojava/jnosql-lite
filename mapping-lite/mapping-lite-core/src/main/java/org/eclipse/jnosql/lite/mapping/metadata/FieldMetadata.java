@@ -15,22 +15,23 @@
 package org.eclipse.jnosql.lite.mapping.metadata;
 
 
-import jakarta.nosql.mapping.AttributeConverter;
+
+import org.eclipse.jnosql.mapping.AttributeConverter;
 
 import java.util.List;
 import java.util.Optional;
 
 /**
  * This class represents the information from
- * {@link jakarta.nosql.mapping.Column} or {@link jakarta.nosql.mapping.Id}.
+ * {@link jakarta.nosql.Column} or {@link jakarta.nosql.Id}.
  * The strategy is do cache in all fields in a class to either read and writer faster from Field
  */
 public interface FieldMetadata {
 
     /**
-     * Returns true is the field is annotated with {@link jakarta.nosql.mapping.Id}
+     * Returns true is the field is annotated with {@link jakarta.nosql.Id}
      *
-     * @return true is annotated with {@link jakarta.nosql.mapping.Id}
+     * @return true is annotated with {@link jakarta.nosql.Id}
      */
     boolean isId();
 
@@ -53,7 +54,7 @@ public interface FieldMetadata {
 
     /**
      * Returns the name of the field that can be either the field name
-     * or {@link jakarta.nosql.mapping.Column#value()}
+     * or {@link jakarta.nosql.Column#value()}
      *
      * @return the name
      */
