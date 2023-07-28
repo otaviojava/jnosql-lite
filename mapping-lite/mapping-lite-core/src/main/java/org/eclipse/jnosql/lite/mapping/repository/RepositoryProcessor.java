@@ -14,6 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping.repository;
 
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
-@SupportedAnnotationTypes("org.eclipse.jnosql.lite.mapping.RepositoryLite")
+@SupportedAnnotationTypes("jakarta.data.repository.Repository")
 public class RepositoryProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(RepositoryProcessor.class.getName());
