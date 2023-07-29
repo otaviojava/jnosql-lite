@@ -20,6 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
     <parent>
         <groupId>org.eclipse.jnosql.mapping</groupId>
         <artifactId>jnosql-mapping-extensions</artifactId>
@@ -33,18 +34,6 @@
 
     <description>An experimental implementation that uses Java Annotation Processing instead of Reflection.</description>
     <url>http://jnosql.org/</url>
-
-    <licenses>
-        <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-        <license>
-            <name>The Eclipse Public License v1.0</name>
-            <url>http://www.eclipse.org/legal/epl-v10.html</url>
-        </license>
-    </licenses>
-
 
 
     <properties>
