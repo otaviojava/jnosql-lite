@@ -18,6 +18,7 @@ import jakarta.data.exceptions.NonUniqueResultException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.nosql.PreparedStatement;
+import jakarta.nosql.QueryMapper;
 import jakarta.nosql.column.ColumnTemplate;
 import org.eclipse.jnosql.communication.Value;
 import org.eclipse.jnosql.communication.column.ColumnDeleteQuery;
@@ -110,26 +111,17 @@ public class LiteColumnTemplate implements ColumnTemplate {
                 .map(this::update).collect(Collectors.toList());
     }
 
-    @Override
     public void delete(ColumnDeleteQuery query) {
         requireNonNull(query, "query is required");
         this.manager.delete(query);
     }
 
-    @Override
     public <T> Stream<T> select(ColumnQuery query) {
         Objects.requireNonNull(query, "query is required");
         return executeQuery(query);
     }
 
-    @Override
-    public <T> Page<T> select(ColumnQueryPagination query) {
-        Objects.requireNonNull(query, "query is required");
-        Stream<T> entities = executeQuery(query);
-        return new ColumnPage<>(this, entities, query);
-    }
 
-    @Override
     public <T> Optional<T> singleResult(ColumnQuery query) {
         Objects.requireNonNull(query, "query is required");
         final Stream<T> entities = select(query);
@@ -172,6 +164,16 @@ public class LiteColumnTemplate implements ColumnTemplate {
         ColumnDeleteQuery query = ColumnDeleteQuery.delete().from(entityMetadata.getName())
                 .where(idField.getName()).eq(value).build();
         delete(query);
+    }
+
+    @Override
+    public <T> QueryMapper.MapperFrom select(Class<T> type) {
+        return null;
+    }
+
+    @Override
+    public <T> QueryMapper.MapperDeleteFrom delete(Class<T> type) {
+        return null;
     }
 
     @Override
