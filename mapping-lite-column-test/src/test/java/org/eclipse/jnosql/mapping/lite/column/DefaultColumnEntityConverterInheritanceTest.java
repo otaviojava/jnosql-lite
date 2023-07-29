@@ -14,10 +14,8 @@
  */
 package org.eclipse.jnosql.mapping.lite.column;
 
-import jakarta.nosql.column.Column;
-import jakarta.nosql.column.ColumnEntity;
-import jakarta.nosql.mapping.MappingException;
-import jakarta.nosql.mapping.column.ColumnEntityConverter;
+import jakarta.data.exceptions.MappingException;
+import org.eclipse.jnosql.communication.column.ColumnEntity;
 import org.eclipse.jnosql.lite.mapping.column.LiteColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.EmailNotification;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.LargeProject;
@@ -39,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class DefaultColumnEntityConverterInheritanceTest {
 
-    private ColumnEntityConverter converter;
+    private LiteColumnEntityConverter converter;
 
     @BeforeEach
     public void init() {
@@ -80,7 +78,7 @@ public class DefaultColumnEntityConverterInheritanceTest {
         project.setBudget(BigDecimal.TEN);
         ColumnEntity entity = this.converter.toColumn(project);
         assertNotNull(entity);
-        assertEquals("Project", entity.getName());
+        assertEquals("Project", entity.name());
         assertEquals(project.getName(), entity.find("_id", String.class).get());
         assertEquals(project.getBudget(), entity.find("budget", BigDecimal.class).get());
         assertEquals("Large", entity.find("size", String.class).get());
@@ -101,7 +99,7 @@ public class DefaultColumnEntityConverterInheritanceTest {
         project.setName("Large Project");
         ColumnEntity entity = this.converter.toColumn(project);
         assertNotNull(entity);
-        assertEquals("Project", entity.getName());
+        assertEquals("Project", entity.name());
         assertEquals(project.getName(), entity.find("_id", String.class).get());
         assertEquals("Project", entity.find("size", String.class).get());
     }
@@ -113,7 +111,7 @@ public class DefaultColumnEntityConverterInheritanceTest {
         project.setInvestor("Otavio Santana");
         ColumnEntity entity = this.converter.toColumn(project);
         assertNotNull(entity);
-        assertEquals("Project", entity.getName());
+        assertEquals("Project", entity.name());
         assertEquals(project.getName(), entity.find("_id", String.class).get());
         assertEquals(project.getInvestor(), entity.find("investor", String.class).get());
         assertEquals("Small", entity.find("size", String.class).get());
@@ -176,7 +174,7 @@ public class DefaultColumnEntityConverterInheritanceTest {
         notification.setNickname("otaviojava");
         ColumnEntity entity = this.converter.toColumn(notification);
         assertNotNull(entity);
-        assertEquals("Notification", entity.getName());
+        assertEquals("Notification", entity.name());
         assertEquals(notification.getId(), entity.find("_id", Long.class).get());
         assertEquals(notification.getName(), entity.find("name", String.class).get());
         assertEquals(notification.getNickname(), entity.find("nickname", String.class).get());
@@ -192,7 +190,7 @@ public class DefaultColumnEntityConverterInheritanceTest {
         notification.setPhone("+351123456987");
         ColumnEntity entity = this.converter.toColumn(notification);
         assertNotNull(entity);
-        assertEquals("Notification", entity.getName());
+        assertEquals("Notification", entity.name());
         assertEquals(notification.getId(), entity.find("_id", Long.class).get());
         assertEquals(notification.getName(), entity.find("name", String.class).get());
         assertEquals(notification.getPhone(), entity.find("phone", String.class).get());
@@ -208,7 +206,7 @@ public class DefaultColumnEntityConverterInheritanceTest {
         notification.setEmail("otavio@otavio.test.com");
         ColumnEntity entity = this.converter.toColumn(notification);
         assertNotNull(entity);
-        assertEquals("Notification", entity.getName());
+        assertEquals("Notification", entity.name());
         assertEquals(notification.getId(), entity.find("_id", Long.class).get());
         assertEquals(notification.getName(), entity.find("name", String.class).get());
         assertEquals(notification.getEmail(), entity.find("email", String.class).get());

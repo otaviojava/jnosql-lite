@@ -14,11 +14,10 @@
  */
 package org.eclipse.jnosql.mapping.lite.column;
 
-import jakarta.nosql.TypeReference;
-import jakarta.nosql.Value;
-import jakarta.nosql.column.Column;
-import jakarta.nosql.column.ColumnEntity;
-import jakarta.nosql.mapping.column.ColumnEntityConverter;
+import org.eclipse.jnosql.communication.TypeReference;
+import org.eclipse.jnosql.communication.Value;
+import org.eclipse.jnosql.communication.column.Column;
+import org.eclipse.jnosql.communication.column.ColumnEntity;
 import org.eclipse.jnosql.lite.mapping.column.LiteColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.entities.Actor;
 import org.eclipse.jnosql.lite.mapping.entities.Address;
@@ -64,7 +63,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class LiteColumnEntityConverterTest {
 
 
-    private ColumnEntityConverter converter;
+    private LiteColumnEntityConverter converter;
 
     private Column[] columns;
 
@@ -94,9 +93,9 @@ class LiteColumnEntityConverterTest {
                 .withPhones(Arrays.asList("234", "2342")).build();
 
         ColumnEntity entity = converter.toColumn(person);
-        assertEquals("Person", entity.getName());
+        assertEquals("Person", entity.name());
         assertEquals(4, entity.size());
-        assertThat(entity.getColumns(), containsInAnyOrder(Column.of("_id", 12L),
+        assertThat(entity.columns(), containsInAnyOrder(Column.of("_id", 12L),
                 Column.of("age", 10), Column.of("name", "Otavio"), Column.of("phones", Arrays.asList("234", "2342"))));
 
     }
@@ -106,11 +105,11 @@ class LiteColumnEntityConverterTest {
 
 
         ColumnEntity entity = converter.toColumn(actor);
-        assertEquals("Actor", entity.getName());
+        assertEquals("Actor", entity.name());
         assertEquals(6, entity.size());
 
 
-        assertThat(entity.getColumns(), containsInAnyOrder(columns));
+        assertThat(entity.columns(), containsInAnyOrder(columns));
     }
 
     @Test
@@ -189,11 +188,11 @@ class LiteColumnEntityConverterTest {
         List<Column> columns = subColumn.get(new TypeReference<>() {
         });
         assertEquals(3, columns.size());
-        assertEquals("movie", subColumn.getName());
+        assertEquals("movie", subColumn.name());
 
-        assertEquals(movie.getTitle(), getValue(columns.stream().filter(d -> "title".equals(d.getName())).findFirst()));
-        assertEquals(movie.getYear(), getValue(columns.stream().filter(d -> "year".equals(d.getName())).findFirst()));
-        assertEquals(movie.getActors(), getValue(columns.stream().filter(d -> "actors".equals(d.getName())).findFirst()));
+        assertEquals(movie.getTitle(), getValue(columns.stream().filter(d -> "title".equals(d.name())).findFirst()));
+        assertEquals(movie.getYear(), getValue(columns.stream().filter(d -> "year".equals(d.name())).findFirst()));
+        assertEquals(movie.getActors(), getValue(columns.stream().filter(d -> "actors".equals(d.name())).findFirst()));
 
 
     }
@@ -274,7 +273,7 @@ class LiteColumnEntityConverterTest {
         worker.setSalary(new Money("BRL", BigDecimal.TEN));
         worker.setJob(job);
         ColumnEntity entity = converter.toColumn(worker);
-        assertEquals("Worker", entity.getName());
+        assertEquals("Worker", entity.name());
         assertEquals("Bob", entity.find("name").get().get());
         assertEquals("Sao Paulo", entity.find("city").get().get());
         assertEquals("Java Developer", entity.find("description").get().get());
@@ -310,7 +309,7 @@ class LiteColumnEntityConverterTest {
         List<List<Column>> columns = (List<List<Column>>) contacts.get();
 
         assertEquals(3L, columns.stream().flatMap(Collection::stream)
-                .filter(c -> c.getName().equals("contact_name"))
+                .filter(c -> c.name().equals("contact_name"))
                 .count());
     }
 
@@ -352,16 +351,16 @@ class LiteColumnEntityConverterTest {
         address.setZipCode(zipcode);
 
         ColumnEntity ColumnEntity = converter.toColumn(address);
-        List<Column> columns = ColumnEntity.getColumns();
-        assertEquals("Address", ColumnEntity.getName());
+        List<Column> columns = ColumnEntity.columns();
+        assertEquals("Address", ColumnEntity.name());
         assertEquals(4, columns.size());
         List<Column> zip = ColumnEntity.find("zipCode").map(d -> d.get(new TypeReference<List<Column>>() {
         })).orElse(Collections.emptyList());
         assertEquals("Rua Engenheiro Jose Anasoh", getValue(ColumnEntity.find("street")));
         assertEquals("Salvador", getValue(ColumnEntity.find("city")));
         assertEquals("Bahia", getValue(ColumnEntity.find("state")));
-        assertEquals("12321", getValue(zip.stream().filter(d -> d.getName().equals("zip")).findFirst()));
-        assertEquals("1234", getValue(zip.stream().filter(d -> d.getName().equals("plusFour")).findFirst()));
+        assertEquals("12321", getValue(zip.stream().filter(d -> d.name().equals("zip")).findFirst()));
+        assertEquals("1234", getValue(zip.stream().filter(d -> d.name().equals("plusFour")).findFirst()));
     }
 
     @Test
@@ -495,6 +494,6 @@ class LiteColumnEntityConverterTest {
 
 
     private Object getValue(Optional<Column> column) {
-        return column.map(Column::getValue).map(Value::get).orElse(null);
+        return column.map(Column::value).map(Value::get).orElse(null);
     }
 }
