@@ -14,17 +14,16 @@
  */
 package org.eclipse.jnosql.lite.mapping.entities;
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Param;
-import jakarta.nosql.mapping.Query;
-import jakarta.nosql.mapping.Repository;
-import org.eclipse.jnosql.lite.mapping.RepositoryLite;
+import jakarta.data.repository.PageableRepository;
+import jakarta.data.repository.Param;
+import jakarta.data.repository.Query;
+import jakarta.data.repository.Repository;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-@RepositoryLite(DatabaseType.COLUMN)
-public interface ActorRepository extends Repository<Actor, Long> {
+@Repository
+public interface ActorRepository extends PageableRepository<Actor, Long> {
 
     Stream<Actor> findByName(String name);
 

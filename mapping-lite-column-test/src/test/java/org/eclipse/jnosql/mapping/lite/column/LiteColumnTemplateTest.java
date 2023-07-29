@@ -14,43 +14,38 @@
  */
 package org.eclipse.jnosql.mapping.lite.column;
 
-import jakarta.nosql.NonUniqueResultException;
-import jakarta.nosql.column.Column;
-import jakarta.nosql.column.ColumnCondition;
-import jakarta.nosql.column.ColumnDeleteQuery;
-import jakarta.nosql.column.ColumnEntity;
-import jakarta.nosql.column.ColumnFamilyManager;
-import jakarta.nosql.column.ColumnQuery;
-import jakarta.nosql.mapping.IdNotFoundException;
-import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.column.ColumnTemplate;
-import org.eclipse.jnosql.lite.mapping.column.LiteColumnTemplate;
+
+import jakarta.data.exceptions.NonUniqueResultException;
+import jakarta.enterprise.inject.Instance;
+import jakarta.nosql.PreparedStatement;
+import jakarta.nosql.column.ColumnTemplate;
+import org.eclipse.jnosql.communication.column.Column;
+import org.eclipse.jnosql.communication.column.ColumnCondition;
+import org.eclipse.jnosql.communication.column.ColumnDeleteQuery;
+import org.eclipse.jnosql.communication.column.ColumnEntity;
+import org.eclipse.jnosql.communication.column.ColumnManager;
+import org.eclipse.jnosql.communication.column.ColumnQuery;
 import org.eclipse.jnosql.lite.mapping.entities.Job;
 import org.eclipse.jnosql.lite.mapping.entities.Movie;
 import org.eclipse.jnosql.lite.mapping.entities.Person;
+import org.eclipse.jnosql.mapping.IdNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import javax.enterprise.inject.Instance;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static jakarta.nosql.column.ColumnDeleteQuery.delete;
-import static jakarta.nosql.column.ColumnQuery.select;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.eclipse.jnosql.communication.column.ColumnDeleteQuery.delete;
+import static org.eclipse.jnosql.communication.column.ColumnQuery.select;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class LiteColumnTemplateTest {
 
@@ -68,17 +63,17 @@ class LiteColumnTemplateTest {
             Column.of("id", 19L),
     };
 
-    private ColumnFamilyManager managerMock;
+    private ColumnManager managerMock;
 
-    private ColumnTemplate subject;
+    private LiteColumnTemplate subject;
 
     private ArgumentCaptor<ColumnEntity> captor;
 
     @BeforeEach
     public void setUp() {
-        managerMock = Mockito.mock(ColumnFamilyManager.class);
+        managerMock = Mockito.mock(ColumnManager.class);
         captor = ArgumentCaptor.forClass(ColumnEntity.class);
-        Instance<ColumnFamilyManager> instance = Mockito.mock(Instance.class);
+        Instance<ColumnManager> instance = Mockito.mock(Instance.class);
         when(instance.get()).thenReturn(managerMock);
         this.subject = new LiteColumnTemplate(managerMock);
     }
@@ -95,8 +90,8 @@ class LiteColumnTemplateTest {
         subject.insert(this.person);
         verify(managerMock).insert(captor.capture());
         ColumnEntity value = captor.getValue();
-        assertEquals("Person", value.getName());
-        assertEquals(4, value.getColumns().size());
+        assertEquals("Person", value.name());
+        assertEquals(4, value.columns().size());
     }
 
     @Test
@@ -132,8 +127,8 @@ class LiteColumnTemplateTest {
         subject.insert(this.person, twoHours);
         verify(managerMock).insert(captor.capture(), Mockito.eq(twoHours));
         ColumnEntity value = captor.getValue();
-        assertEquals("Person", value.getName());
-        assertEquals(4, value.getColumns().size());
+        assertEquals("Person", value.name());
+        assertEquals(4, value.columns().size());
     }
 
 
@@ -149,8 +144,8 @@ class LiteColumnTemplateTest {
         subject.update(this.person);
         verify(managerMock).update(captor.capture());
         ColumnEntity value = captor.getValue();
-        assertEquals("Person", value.getName());
-        assertEquals(4, value.getColumns().size());
+        assertEquals("Person", value.name());
+        assertEquals(4, value.columns().size());
     }
 
     @Test
@@ -291,9 +286,9 @@ class LiteColumnTemplateTest {
         ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         ColumnQuery query = queryCaptor.getValue();
-        ColumnCondition condition = query.getCondition().get();
+        ColumnCondition condition = query.condition().get();
 
-        assertEquals("Person", query.getColumnFamily());
+        assertEquals("Person", query.name());
         assertEquals(ColumnCondition.eq(Column.of("_id", 10L)), condition);
 
     }
@@ -304,9 +299,9 @@ class LiteColumnTemplateTest {
         ArgumentCaptor<ColumnDeleteQuery> queryCaptor = ArgumentCaptor.forClass(ColumnDeleteQuery.class);
         verify(managerMock).delete(queryCaptor.capture());
         ColumnDeleteQuery query = queryCaptor.getValue();
-        ColumnCondition condition = query.getCondition().get();
+        ColumnCondition condition = query.condition().get();
 
-        assertEquals("Person", query.getColumnFamily());
+        assertEquals("Person", query.name());
         assertEquals(ColumnCondition.eq(Column.of("_id", 10L)), condition);
 
     }
@@ -317,7 +312,7 @@ class LiteColumnTemplateTest {
         ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         ColumnQuery query = queryCaptor.getValue();
-        assertEquals("Person", query.getColumnFamily());
+        assertEquals("Person", query.name());
     }
 
     @Test
@@ -326,18 +321,18 @@ class LiteColumnTemplateTest {
         ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         ColumnQuery query = queryCaptor.getValue();
-        assertEquals("movie", query.getColumnFamily());
+        assertEquals("movie", query.name());
     }
 
     @Test
     public void shouldPreparedStatement() {
         PreparedStatement preparedStatement = subject.prepare("select * from Person where name = @name");
         preparedStatement.bind("name", "Ada");
-        preparedStatement.getResult();
+        preparedStatement.result();
         ArgumentCaptor<ColumnQuery> queryCaptor = ArgumentCaptor.forClass(ColumnQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         ColumnQuery query = queryCaptor.getValue();
-        assertEquals("Person", query.getColumnFamily());
+        assertEquals("Person", query.name());
     }
 
     @Test

@@ -14,18 +14,14 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.Settings;
-import jakarta.nosql.column.ColumnConfiguration;
-import jakarta.nosql.column.ColumnFamilyManagerFactory;
+import org.eclipse.jnosql.communication.Settings;
+import org.eclipse.jnosql.communication.column.ColumnConfiguration;
+import org.eclipse.jnosql.communication.column.ColumnManagerFactory;
 
 public class MockConfiguration implements ColumnConfiguration {
-    @Override
-    public <T extends ColumnFamilyManagerFactory> T get() {
-        return null;
-    }
 
     @Override
-    public <T extends ColumnFamilyManagerFactory> T get(Settings settings) {
+    public ColumnManagerFactory apply(Settings settings) {
         return null;
     }
 }
