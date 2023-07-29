@@ -117,7 +117,7 @@ class DocumentFieldConverters {
         @Override
         public <X, Y, T> void convert(T instance, List<Document> documents, Document document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
-            Value value = document.getValue();
+            Value value = document.value();
 
             Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
             if (optionalConverter.isPresent()) {
