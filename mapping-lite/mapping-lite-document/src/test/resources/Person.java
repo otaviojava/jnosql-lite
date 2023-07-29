@@ -12,10 +12,10 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.document;
 
 
-import jakarta.nosql.mapping.Entity;
+import jakarta.nosql.Entity;
 
 @Entity("table")
 public class Person {

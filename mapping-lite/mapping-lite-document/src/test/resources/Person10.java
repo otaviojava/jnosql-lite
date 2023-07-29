@@ -12,13 +12,13 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.document;
 
 
-import jakarta.nosql.mapping.Entity;
-import jakarta.nosql.mapping.Column;
-import jakarta.nosql.mapping.Id;
-import jakarta.nosql.mapping.MappedSuperclass;
+import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
+import org.eclipse.jnosql.mapping.MappedSuperclass;
 
 @Entity
 @MappedSuperclass
