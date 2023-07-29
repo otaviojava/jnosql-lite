@@ -35,13 +35,13 @@ public final class FieldTypeUtil {
      * @return the type
      */
     public static FieldType of(FieldMetadata field, EntitiesMetadata mappings) {
-        if (Collection.class.isAssignableFrom(field.getType())) {
+        if (Collection.class.isAssignableFrom(field.type())) {
             return FieldType.COLLECTION;
         }
-        if (Map.class.isAssignableFrom(field.getType())) {
+        if (Map.class.isAssignableFrom(field.type())) {
             return FieldType.MAP;
         }
-        Class<?> type = field.getType();
+        Class<?> type = field.type();
         Optional<EntityMetadata> entityMetadata = mappings.findByClass(type);
         if (entityMetadata.isPresent()) {
             return entityMetadata

@@ -50,14 +50,14 @@ public class LiteColumnEntityConverter  {
     public ColumnEntity toColumn(Object entityInstance) {
         requireNonNull(entityInstance, "Object is required");
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
-        ColumnEntity entity = ColumnEntity.of(mapping.getName());
+        ColumnEntity entity = ColumnEntity.of(mapping.name());
         mapping.getFields().stream()
                 .map(f -> ColumnFieldMetadata.of(f, entityInstance))
                 .filter(ColumnFieldMetadata::isNotEmpty)
                 .map(f -> f.toColumn(this, this.mappings))
                 .flatMap(List::stream)
                 .forEach(entity::add);
-        mapping.getInheritance().ifPresent(i -> entity.add(i.getDiscriminatorColumn(), i.getDiscriminatorValue()));
+        mapping.inheritance().ifPresent(i -> entity.add(i.discriminatorColumn(), i.discriminatorValue()));
         return entity;
     }
 
@@ -78,7 +78,7 @@ public class LiteColumnEntityConverter  {
         requireNonNull(entity, "entity is required");
         EntityMetadata mapping = mappings.findByName(entity.name());
         if (mapping.isInheritance()) {
-            return mapInheritanceEntity(entity, mapping.getClassInstance());
+            return mapInheritanceEntity(entity, mapping.type());
         }
         T instance = mapping.newInstance();
         return convertEntity(entity.columns(), mapping, instance);
@@ -100,7 +100,7 @@ public class LiteColumnEntityConverter  {
         String column = group.values()
                 .stream()
                 .findFirst()
-                .map(InheritanceMetadata::getDiscriminatorColumn)
+                .map(InheritanceMetadata::discriminatorColumn)
                 .orElseThrow();
 
         String discriminator = entity.find(column, String.class)
@@ -112,12 +112,12 @@ public class LiteColumnEntityConverter  {
                 .orElseThrow(() -> new MappingException("There is no inheritance map to the discriminator" +
                         " column value " + discriminator));
 
-        EntityMetadata mapping = mappings.get(inheritance.getEntity());
+        EntityMetadata mapping = mappings.get(inheritance.entity());
         T instance = mapping.newInstance();
         return convertEntity(entity.columns(), mapping, instance);
     }
     private <T> T convertEntity(List<Column> documents, EntityMetadata mapping, T instance) {
-        final Map<String, FieldMetadata> fieldsGroupByName = mapping.getFieldsGroupByName();
+        final Map<String, FieldMetadata> fieldsGroupByName = mapping.fieldsGroupByName();
         final List<String> names = documents.stream().map(Column::name).sorted().collect(Collectors.toList());
         final Predicate<String> existField = k -> Collections.binarySearch(names, k) >= 0;
         final Predicate<String> isElementType = k -> {

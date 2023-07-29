@@ -37,7 +37,7 @@ public interface EntitiesMetadata {
     EntityMetadata get(Class<?> classEntity);
 
     /**
-     * Returns the {@link EntityMetadata} instance from {@link EntityMetadata#getName()} in ignore case
+     * Returns the {@link EntityMetadata} instance from {@link EntityMetadata#name()} in ignore case
      *
      * @param name the name to select ah {@link EntityMetadata} instance
      * @return the {@link EntityMetadata} from name

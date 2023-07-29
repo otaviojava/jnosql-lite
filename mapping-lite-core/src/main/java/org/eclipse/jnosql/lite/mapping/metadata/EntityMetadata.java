@@ -29,27 +29,27 @@ public interface EntityMetadata {
     /**
      * @return the {@link jakarta.nosql.Entity#value()}  value
      */
-    String getName();
+    String name();
 
     /**
      * @return the {@link Class#getSimpleName()}
      */
-    String getSimpleName();
+    String simpleName();
 
     /**
      * @return the {@link Class#getName()} ()}
      */
-    String getClassName();
+    String className();
 
     /**
      * @return the fields name
      */
-    List<String> getFieldsName();
+    List<String> fieldsName();
 
     /**
      * @return The class
      */
-    Class<?> getClassInstance();
+    Class<?> type();
 
     /**
      * @return The fields from this class
@@ -70,7 +70,7 @@ public interface EntityMetadata {
      * @return the column name or column
      * @throws NullPointerException when javaField is null
      */
-    String getColumnField(String javaField);
+    String columnField(String javaField);
 
     /**
      * Gets the {@link FieldMetadata} from the java field name
@@ -78,26 +78,26 @@ public interface EntityMetadata {
      * @return the field otherwise {@link Optional#empty()}
      * @throws NullPointerException when the javaField is null
      */
-    Optional<FieldMetadata> getFieldMapping(String javaField);
+    Optional<FieldMetadata> fieldMapping(String javaField);
 
     /**
      * Returns a Fields grouped by the name
      *
      * @return a {@link FieldMetadata} grouped by
-     * {@link FieldMetadata#getName()}
-     * @see FieldMetadata#getName()
+     * {@link FieldMetadata#name()}
+     * @see FieldMetadata#name()
      */
-    Map<String, FieldMetadata> getFieldsGroupByName();
+    Map<String, FieldMetadata> fieldsGroupByName();
 
     /**
      * Returns the field that has {@link jakarta.nosql.Id} annotation
      * @return the field with ID annotation
      */
-    Optional<FieldMetadata> getId();
+    Optional<FieldMetadata> id();
 
     /**
      * Returns true if the class has the {@link org.eclipse.jnosql.mapping.Embeddable} annotation
-     * @return true if has {@link org.eclipse.jnosql.mapping.Embeddable} annotation
+     * @return true if it has {@link org.eclipse.jnosql.mapping.Embeddable} annotation
      */
     boolean isEmbedded();
 
@@ -107,7 +107,7 @@ public interface EntityMetadata {
      *
      * @return the parent annotation otherwise {@link  Optional#empty()}
      */
-    Optional<InheritanceMetadata> getInheritance();
+    Optional<InheritanceMetadata> inheritance();
 
     /**
      * A class that has a parent with {@link org.eclipse.jnosql.mapping.Inheritance} annotation

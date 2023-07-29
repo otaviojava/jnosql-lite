@@ -40,11 +40,11 @@ public class LiteKeyValueEntityConverter  {
     public KeyValueEntity toKeyValue(Object entity) {
         requireNonNull(entity, "entity is required");
         EntityMetadata metadata = this.mappings.get(entity.getClass());
-        FieldMetadata id = metadata.getId()
+        FieldMetadata id = metadata.id()
                 .orElseThrow(() -> new MappingException("The @Id annotations is required in the class: "
                 + entity.getClass()));
         Object key = id.read(entity);
-        requireNonNull(key, String.format("The key field %s is required", id.getName()));
+        requireNonNull(key, String.format("The key field %s is required", id.name()));
         return KeyValueEntity.of(getKey(key, entity.getClass(), false), entity);
     }
 
@@ -64,21 +64,21 @@ public class LiteKeyValueEntityConverter  {
 
     private <T> Object getKey(Object key, Class<T> entityClass, boolean toEntity) {
         FieldMetadata id = getId(entityClass);
-        if (id.getConverter().isPresent()) {
+        if (id.converter().isPresent()) {
             AttributeConverter<Object, Object> attributeConverter = (AttributeConverter<Object, Object>)
-                    id.getConverter().get();
+                    id.converter().get();
             if (toEntity) {
                 return attributeConverter.convertToEntityAttribute(key);
             } else {
                 return attributeConverter.convertToDatabaseColumn(key);
             }
         } else {
-            return Value.of(key).get(id.getType());
+            return Value.of(key).get(id.type());
         }
     }
 
     private FieldMetadata getId(Class<?> type) {
         EntityMetadata metadata = this.mappings.get(type);
-        return metadata.getId().orElseThrow(() -> IdNotFoundException.newInstance(type));
+        return metadata.id().orElseThrow(() -> IdNotFoundException.newInstance(type));
     }
 }

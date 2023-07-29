@@ -42,7 +42,7 @@ public interface FieldMetadata {
      * @param <T> the Converter
      * @return the converter if present
      */
-    <X, Y, T extends AttributeConverter<X, Y>> Optional<X> getConverter();
+    <X, Y, T extends AttributeConverter<X, Y>> Optional<X> converter();
 
     /**
      * Returns the Java Fields name.
@@ -50,7 +50,7 @@ public interface FieldMetadata {
      *
      * @return The Java Field name {@link java.lang.reflect.Field#getName()}
      */
-    String getFieldName();
+    String fieldName();
 
     /**
      * Returns the name of the field that can be either the field name
@@ -58,7 +58,7 @@ public interface FieldMetadata {
      *
      * @return the name
      */
-    String getName();
+    String name();
 
     /**
      * Writes the bean from the value
@@ -79,11 +79,11 @@ public interface FieldMetadata {
     /**
      * @return returns the Field type
      */
-    Class<?> getType();
+    Class<?> type();
 
     /**
      * Returns the parameters in the field.
      * @return the field arguments
      */
-    List<Class<?>> getArguments();
+    List<Class<?>> arguments();
 }

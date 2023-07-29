@@ -140,13 +140,13 @@ public class LiteColumnTemplate implements ColumnTemplate {
         requireNonNull(entityClass, "entityClass is required");
         requireNonNull(id, "id is required");
         EntityMetadata entityMetadata = mappings.get(entityClass);
-        FieldMetadata idField = entityMetadata.getId()
+        FieldMetadata idField = entityMetadata.id()
                 .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
-        Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
+        Optional<AttributeConverter<K, Object>> converter = idField.converter();
         Object value = converter.map(c -> c.convertToDatabaseColumn(id))
-                .orElse(Value.of(id).get(idField.getType()));
-        ColumnQuery query = ColumnQuery.select().from(entityMetadata.getName())
-                .where(idField.getName()).eq(value).build();
+                .orElse(Value.of(id).get(idField.type()));
+        ColumnQuery query = ColumnQuery.select().from(entityMetadata.name())
+                .where(idField.name()).eq(value).build();
         return singleResult(query);
     }
 
@@ -155,13 +155,13 @@ public class LiteColumnTemplate implements ColumnTemplate {
         requireNonNull(entityClass, "entityClass is required");
         requireNonNull(id, "id is required");
         EntityMetadata entityMetadata = mappings.get(entityClass);
-        FieldMetadata idField = entityMetadata.getId()
+        FieldMetadata idField = entityMetadata.id()
                 .orElseThrow(() -> IdNotFoundException.newInstance(entityClass));
-        Optional<AttributeConverter<K, Object>> converter = idField.getConverter();
+        Optional<AttributeConverter<K, Object>> converter = idField.converter();
         Object value = converter.map(c -> c.convertToDatabaseColumn(id))
-                .orElse(Value.of(id).get(idField.getType()));
-        ColumnDeleteQuery query = ColumnDeleteQuery.delete().from(entityMetadata.getName())
-                .where(idField.getName()).eq(value).build();
+                .orElse(Value.of(id).get(idField.type()));
+        ColumnDeleteQuery query = ColumnDeleteQuery.delete().from(entityMetadata.name())
+                .where(idField.name()).eq(value).build();
         delete(query);
     }
 
@@ -211,7 +211,7 @@ public class LiteColumnTemplate implements ColumnTemplate {
     public <T> long count(Class<T> entityClass) {
         requireNonNull(entityClass, "entityClass is required");
         EntityMetadata entityMetadata = mappings.get(entityClass);
-        return this.manager.count(entityMetadata.getName());
+        return this.manager.count(entityMetadata.name());
     }
 
     private <T> Stream<T> executeQuery(ColumnQuery query) {

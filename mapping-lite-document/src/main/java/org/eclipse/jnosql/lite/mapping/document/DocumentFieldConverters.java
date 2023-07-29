@@ -59,7 +59,7 @@ class DocumentFieldConverters {
 
         private boolean isCollectionEmbeddable(FieldMetadata field, FieldType type, EntitiesMetadata mappings) {
             return FieldType.COLLECTION.equals(type) &&
-                    mappings.findByClass(field.getArguments().get(0)).isPresent();
+                    mappings.findByClass(field.arguments().get(0)).isPresent();
         }
     }
 
@@ -79,14 +79,14 @@ class DocumentFieldConverters {
                     for (Map.Entry entry : (Set<Map.Entry>) map.entrySet()) {
                         embeddedDocument.add(Document.of(entry.getKey().toString(), entry.getValue()));
                     }
-                    field.write(instance, converter.toEntity(field.getType(), embeddedDocument));
+                    field.write(instance, converter.toEntity(field.type(), embeddedDocument));
                 } else {
-                    field.write(instance, converter.toEntity(field.getType(),
+                    field.write(instance, converter.toEntity(field.type(),
                             document.get(new TypeReference<List<Document>>() {})));
                 }
 
             } else {
-                field.write(instance, converter.toEntity(field.getType(), documents));
+                field.write(instance, converter.toEntity(field.type(), documents));
             }
         }
 
@@ -100,8 +100,8 @@ class DocumentFieldConverters {
         public <X, Y, T> void convert(T instance, List<Document> documents, Document document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
 
-            Object subEntity = converter.toEntity(field.getType(), documents);
-            EntityMetadata mapping = mappings.get(field.getType());
+            Object subEntity = converter.toEntity(field.type(), documents);
+            EntityMetadata mapping = mappings.get(field.type());
             boolean areAllFieldsNull = mapping.getFields()
                     .stream()
                     .map(f -> f.read(subEntity))
@@ -119,11 +119,11 @@ class DocumentFieldConverters {
                                       FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
             Value value = document.value();
 
-            Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
+            Optional<AttributeConverter<X, Y>> optionalConverter = field.converter();
             if (optionalConverter.isPresent()) {
                 AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
                 Object attributeConverted = attributeConverter.convertToEntityAttribute((Y) value.get());
-                field.write(instance, Value.of(attributeConverted).get(field.getType()));
+                field.write(instance, Value.of(attributeConverted).get(field.type()));
             } else {
                 switch (FieldTypeUtil.of(field, mappings)) {
                     case COLLECTION:
@@ -133,7 +133,7 @@ class DocumentFieldConverters {
                         field.write(instance, getMapValue(value).get(() -> DocumentLiteParameterizedType.of(field)));
                         return;
                     default:
-                        field.write(instance, value.get(field.getType()));
+                        field.write(instance, value.get(field.type()));
                 }
 
             }
@@ -155,14 +155,14 @@ class DocumentFieldConverters {
         public <X, Y, T> void convert(T instance, List<Document> documents, Document document,
                                       FieldMetadata field, LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
             if(Objects.nonNull(document)) {
-                CollectionSupplier<?> supplier = CollectionSupplier.find(field.getType());
+                CollectionSupplier<?> supplier = CollectionSupplier.find(field.type());
                 Collection collection = supplier.get();
                 List<List<Document>> embeddable = (List<List<Document>>) document.get();
                 for (List<Document> embeddableDocuments : embeddable) {
-                    List<Class<?>> arguments = field.getArguments();
+                    List<Class<?>> arguments = field.arguments();
                     Class<?> type = arguments.stream().findFirst()
                             .orElseThrow(() -> new MappingException("There is an issue in the field: "
-                                    + field.getName() + " in the class " + instance.getClass()));
+                                    + field.name() + " in the class " + instance.getClass()));
                     Object element = converter.toEntity(type, embeddableDocuments);
                     collection.add(element);
                 }

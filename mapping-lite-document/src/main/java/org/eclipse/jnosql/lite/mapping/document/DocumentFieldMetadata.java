@@ -45,18 +45,18 @@ class DocumentFieldMetadata implements FieldMetadata {
     }
 
     @Override
-    public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> getConverter() {
-        return field.getConverter();
+    public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> converter() {
+        return field.converter();
     }
 
     @Override
-    public String getFieldName() {
-        return field.getFieldName();
+    public String fieldName() {
+        return field.fieldName();
     }
 
     @Override
-    public String getName() {
-        return field.getName();
+    public String name() {
+        return field.name();
     }
 
     @Override
@@ -78,13 +78,13 @@ class DocumentFieldMetadata implements FieldMetadata {
     }
 
     @Override
-    public Class<?> getType() {
-        return field.getType();
+    public Class<?> type() {
+        return field.type();
     }
 
     @Override
-    public List<Class<?>> getArguments() {
-        return field.getArguments();
+    public List<Class<?>> arguments() {
+        return field.arguments();
     }
 
     public boolean isNotEmpty() {
@@ -97,16 +97,16 @@ class DocumentFieldMetadata implements FieldMetadata {
         if (FieldType.EMBEDDED.equals(fieldType)) {
             return converter.toDocument(read()).documents();
         } else if (FieldType.SUB_ENTITY.equals(fieldType)) {
-            return singletonList(Document.of(getName(), converter.toDocument(this.read()).documents()));
+            return singletonList(Document.of(name(), converter.toDocument(this.read()).documents()));
         } else if (isEmbeddableCollection(fieldType, mappings)) {
-            return singletonList(Document.of(getName(), getDocuments(converter)));
+            return singletonList(Document.of(name(), getDocuments(converter)));
         }
-        Optional<AttributeConverter<X, Y>> optionalConverter = this.getConverter();
+        Optional<AttributeConverter<X, Y>> optionalConverter = this.converter();
         if (optionalConverter.isPresent()) {
             AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
-            return singletonList(Document.of(getName(), attributeConverter.convertToDatabaseColumn((X) this.read())));
+            return singletonList(Document.of(name(), attributeConverter.convertToDatabaseColumn((X) this.read())));
         }
-        return singletonList(Document.of(getName(), this.read()));
+        return singletonList(Document.of(name(), this.read()));
     }
 
     private boolean isEmbeddableCollection(FieldType fieldType, EntitiesMetadata mappings) {
@@ -114,7 +114,7 @@ class DocumentFieldMetadata implements FieldMetadata {
     }
 
     private boolean isEmbeddableElement(EntitiesMetadata mappings) {
-        List<Class<?>> arguments = getArguments();
+        List<Class<?>> arguments = arguments();
         if (!arguments.isEmpty()) {
             Class<?> entity = arguments.stream().findFirst().get();
             return mappings.findByClass(entity).isPresent();

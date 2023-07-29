@@ -29,12 +29,12 @@ final class ColumnLiteParameterizedType implements ParameterizedType {
 
     @Override
     public Type[] getActualTypeArguments() {
-        return field.getArguments().toArray(Type[]::new);
+        return field.arguments().toArray(Type[]::new);
     }
 
     @Override
     public Type getRawType() {
-        return field.getType();
+        return field.type();
     }
 
     @Override

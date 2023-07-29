@@ -45,18 +45,18 @@ class ColumnFieldMetadata implements FieldMetadata {
     }
 
     @Override
-    public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> getConverter() {
-        return field.getConverter();
+    public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> converter() {
+        return field.converter();
     }
 
     @Override
-    public String getFieldName() {
-        return field.getFieldName();
+    public String fieldName() {
+        return field.fieldName();
     }
 
     @Override
-    public String getName() {
-        return field.getName();
+    public String name() {
+        return field.name();
     }
 
     @Override
@@ -78,13 +78,13 @@ class ColumnFieldMetadata implements FieldMetadata {
     }
 
     @Override
-    public Class<?> getType() {
-        return field.getType();
+    public Class<?> type() {
+        return field.type();
     }
 
     @Override
-    public List<Class<?>> getArguments() {
-        return field.getArguments();
+    public List<Class<?>> arguments() {
+        return field.arguments();
     }
 
     public boolean isNotEmpty() {
@@ -97,16 +97,16 @@ class ColumnFieldMetadata implements FieldMetadata {
         if (FieldType.EMBEDDED.equals(fieldType)) {
             return converter.toColumn(read()).columns();
         } else if (FieldType.SUB_ENTITY.equals(fieldType)) {
-            return singletonList(Column.of(getName(), converter.toColumn(this.read()).columns()));
+            return singletonList(Column.of(name(), converter.toColumn(this.read()).columns()));
         } else if (isEmbeddableCollection(fieldType, mappings)) {
-            return singletonList(Column.of(getName(), getColumns(converter)));
+            return singletonList(Column.of(name(), getColumns(converter)));
         }
-        Optional<AttributeConverter<X, Y>> optionalConverter = this.getConverter();
+        Optional<AttributeConverter<X, Y>> optionalConverter = this.converter();
         if (optionalConverter.isPresent()) {
             AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
-            return singletonList(Column.of(getName(), attributeConverter.convertToDatabaseColumn((X) this.read())));
+            return singletonList(Column.of(name(), attributeConverter.convertToDatabaseColumn((X) this.read())));
         }
-        return singletonList(Column.of(getName(), this.read()));
+        return singletonList(Column.of(name(), this.read()));
     }
 
     private boolean isEmbeddableCollection(FieldType fieldType, EntitiesMetadata mappings) {
@@ -114,7 +114,7 @@ class ColumnFieldMetadata implements FieldMetadata {
     }
 
     private boolean isEmbeddableElement(EntitiesMetadata mappings) {
-        List<Class<?>> arguments = getArguments();
+        List<Class<?>> arguments = arguments();
         if (!arguments.isEmpty()) {
             Class<?> entity = arguments.stream().findFirst().get();
             return mappings.findByClass(entity).isPresent();

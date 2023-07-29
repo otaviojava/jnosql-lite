@@ -30,11 +30,11 @@ public class RepositoryDocumentObserverParser implements DocumentObserverParser 
 
     @Override
     public String fireEntity(String entity) {
-        return entityMetadata.getName();
+        return entityMetadata.name();
     }
 
     @Override
     public String fireField(String entity, String field) {
-        return Optional.ofNullable(entityMetadata.getColumnField(field)).orElse(field);
+        return Optional.ofNullable(entityMetadata.columnField(field)).orElse(field);
     }
 }
