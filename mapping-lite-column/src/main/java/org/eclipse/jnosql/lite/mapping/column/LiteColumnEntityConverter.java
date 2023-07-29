@@ -19,7 +19,6 @@ import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.communication.column.ColumnEntity;
 import org.eclipse.jnosql.lite.mapping.column.ColumnFieldConverters.DocumentFieldConverterFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
@@ -44,7 +43,7 @@ public class LiteColumnEntityConverter  {
     private final DocumentFieldConverterFactory converterFactory;
 
     public LiteColumnEntityConverter() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = EntitiesMetadata.get();
         this.converterFactory = new DocumentFieldConverterFactory();
     }
 

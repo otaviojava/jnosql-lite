@@ -17,12 +17,10 @@ package org.eclipse.jnosql.lite.mapping.entities;
 import jakarta.data.repository.PageableRepository;
 import jakarta.data.repository.Param;
 import jakarta.data.repository.Query;
-import jakarta.data.repository.Repository;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-@Repository
 public interface ActorRepository extends PageableRepository<Actor, Long> {
 
     Stream<Actor> findByName(String name);

@@ -41,7 +41,7 @@
             <version>${jakarta.nosql.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jnosql.lite.mapping</groupId>
+            <groupId>org.eclipse.jnosql.lite</groupId>
             <artifactId>mapping-lite-core</artifactId>
             <version>${project.version}</version>
         </dependency>

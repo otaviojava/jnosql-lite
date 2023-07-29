@@ -28,7 +28,6 @@ import org.eclipse.jnosql.communication.column.ColumnObserverParser;
 import org.eclipse.jnosql.communication.column.ColumnQuery;
 import org.eclipse.jnosql.communication.column.ColumnQueryParser;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.mapping.AttributeConverter;
@@ -62,7 +61,7 @@ public class LiteColumnTemplate implements ColumnTemplate {
     public LiteColumnTemplate(ColumnManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteColumnEntityConverter();
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = EntitiesMetadata.get();
         this.observerParser = new LiteColumnMapperObserver(this.mappings);
     }
 

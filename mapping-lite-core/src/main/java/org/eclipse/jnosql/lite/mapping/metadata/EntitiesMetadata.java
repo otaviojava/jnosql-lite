@@ -14,8 +14,11 @@
  */
 package org.eclipse.jnosql.lite.mapping.metadata;
 
+import jakarta.nosql.NoSQLException;
+
 import java.util.Map;
 import java.util.Optional;
+import java.util.ServiceLoader;
 
 /**
  * This class is the {@link EntityMetadata} repository.
@@ -78,4 +81,14 @@ public interface EntitiesMetadata {
      * @throws NullPointerException when parent is null
      */
     Map<String, InheritanceMetadata> findByParentGroupByDiscriminatorValue(Class<?> parent);
+
+    /**
+     * Return an instance create dynamically using Service Loader
+     * @return the default implementation of EntitiesMetadata
+     */
+    static EntitiesMetadata get() {
+        return ServiceLoader.load(EntitiesMetadata.class)
+                .findFirst().orElseThrow(() -> new NoSQLException("There is no EntitiesMetadata implementation" +
+                        " at the classpath"));
+    }
 }
