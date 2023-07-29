@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@SupportedAnnotationTypes("jakarta.nosql.mapping.Entity")
+@SupportedAnnotationTypes("jakarta.nosql.Entity")
 public class KeyValueLiteProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(KeyValueLiteProcessor.class.getName());
