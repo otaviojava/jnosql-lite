@@ -14,12 +14,12 @@
  */
 package org.eclipse.jnosql.mapping.lite.inheritance;
 
-import jakarta.nosql.mapping.DiscriminatorColumn;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
+import org.eclipse.jnosql.mapping.DiscriminatorColumn;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
