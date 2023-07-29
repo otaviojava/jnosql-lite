@@ -14,29 +14,16 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.NonUniqueResultException;
-import jakarta.nosql.Value;
-import jakarta.nosql.column.ColumnDeleteQuery;
-import jakarta.nosql.column.ColumnEntity;
-import jakarta.nosql.column.ColumnFamilyManager;
-import jakarta.nosql.column.ColumnObserverParser;
-import jakarta.nosql.column.ColumnQuery;
-import jakarta.nosql.column.ColumnQueryParser;
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.IdNotFoundException;
-import jakarta.nosql.mapping.Page;
-import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.column.ColumnEntityConverter;
-import jakarta.nosql.mapping.column.ColumnQueryPagination;
-import jakarta.nosql.mapping.column.ColumnTemplate;
-import org.eclipse.jnosql.communication.column.query.DefaultColumnQueryParser;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.nosql.column.ColumnTemplate;
+import org.eclipse.jnosql.communication.column.ColumnObserverParser;
+import org.eclipse.jnosql.communication.column.ColumnQueryParser;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;

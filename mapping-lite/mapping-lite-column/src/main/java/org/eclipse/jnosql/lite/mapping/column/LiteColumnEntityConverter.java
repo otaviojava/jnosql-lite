@@ -14,10 +14,9 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.column.Column;
-import jakarta.nosql.column.ColumnEntity;
-import jakarta.nosql.mapping.MappingException;
-import jakarta.nosql.mapping.column.ColumnEntityConverter;
+import jakarta.data.exceptions.MappingException;
+import org.eclipse.jnosql.communication.column.Column;
+import org.eclipse.jnosql.communication.column.ColumnEntity;
 import org.eclipse.jnosql.lite.mapping.column.ColumnFieldConverters.DocumentFieldConverterFactory;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
 import static java.util.Objects.requireNonNull;
 import static org.eclipse.jnosql.lite.mapping.metadata.FieldType.SUB_ENTITY;
 
-public class LiteColumnEntityConverter implements ColumnEntityConverter {
+public class LiteColumnEntityConverter  {
 
     private final EntitiesMetadata mappings;
 
@@ -49,7 +48,6 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
         this.converterFactory = new DocumentFieldConverterFactory();
     }
 
-    @Override
     public ColumnEntity toColumn(Object entityInstance) {
         requireNonNull(entityInstance, "Object is required");
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
@@ -64,30 +62,27 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
         return entity;
     }
 
-    @Override
     public <T> T toEntity(Class<T> entityClass, ColumnEntity entity) {
         requireNonNull(entityClass, "entityClass is required");
         requireNonNull(entity, "entity is required");
-        return toEntity(entityClass, entity.getColumns());
+        return toEntity(entityClass, entity.columns());
     }
 
-    @Override
     public <T> T toEntity(T entityInstance, ColumnEntity entity) {
         requireNonNull(entityInstance, "entityInstance is required");
         requireNonNull(entity, "entity is required");
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
-        return convertEntity(entity.getColumns(), mapping, entityInstance);
+        return convertEntity(entity.columns(), mapping, entityInstance);
     }
 
-    @Override
     public <T> T toEntity(ColumnEntity entity) {
         requireNonNull(entity, "entity is required");
-        EntityMetadata mapping = mappings.findByName(entity.getName());
+        EntityMetadata mapping = mappings.findByName(entity.name());
         if (mapping.isInheritance()) {
             return mapInheritanceEntity(entity, mapping.getClassInstance());
         }
         T instance = mapping.newInstance();
-        return convertEntity(entity.getColumns(), mapping, instance);
+        return convertEntity(entity.columns(), mapping, instance);
     }
 
     <T> T toEntity(Class<T> entityClass, List<Column> documents) {
@@ -101,7 +96,7 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
         if (group.isEmpty()) {
             throw new MappingException("There is no discriminator inheritance to the document collection "
-                    + entity.getName());
+                    + entity.name());
         }
         String column = group.values()
                 .stream()
@@ -120,11 +115,11 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
         EntityMetadata mapping = mappings.get(inheritance.getEntity());
         T instance = mapping.newInstance();
-        return convertEntity(entity.getColumns(), mapping, instance);
+        return convertEntity(entity.columns(), mapping, instance);
     }
     private <T> T convertEntity(List<Column> documents, EntityMetadata mapping, T instance) {
         final Map<String, FieldMetadata> fieldsGroupByName = mapping.getFieldsGroupByName();
-        final List<String> names = documents.stream().map(Column::getName).sorted().collect(Collectors.toList());
+        final List<String> names = documents.stream().map(Column::name).sorted().collect(Collectors.toList());
         final Predicate<String> existField = k -> Collections.binarySearch(names, k) >= 0;
         final Predicate<String> isElementType = k -> {
             FieldMetadata fieldMetadata = fieldsGroupByName.get(k);
@@ -141,7 +136,7 @@ public class LiteColumnEntityConverter implements ColumnEntityConverter {
 
     private <T> Consumer<String> feedObject(T instance, List<Column> columns, Map<String, FieldMetadata> fieldsGroupByName) {
         return k -> {
-            Optional<Column> column = columns.stream().filter(c -> c.getName().equals(k)).findFirst();
+            Optional<Column> column = columns.stream().filter(c -> c.name().equals(k)).findFirst();
 
             FieldMetadata field = fieldsGroupByName.get(k);
             FieldType type = FieldTypeUtil.of(field, mappings);

@@ -15,13 +15,12 @@
 package org.eclipse.jnosql.lite.mapping.column;
 
 
-import jakarta.nosql.column.Column;
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.column.ColumnEntityConverter;
+import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
+import org.eclipse.jnosql.mapping.AttributeConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,13 +91,13 @@ class ColumnFieldMetadata implements FieldMetadata {
         return this.read() != null;
     }
 
-    public <X, Y> List<Column> toColumn(ColumnEntityConverter converter, EntitiesMetadata mappings) {
+    public <X, Y> List<Column> toColumn(LiteColumnEntityConverter converter, EntitiesMetadata mappings) {
         FieldType fieldType = FieldTypeUtil.of(this, mappings);
 
         if (FieldType.EMBEDDED.equals(fieldType)) {
-            return converter.toColumn(read()).getColumns();
+            return converter.toColumn(read()).columns();
         } else if (FieldType.SUB_ENTITY.equals(fieldType)) {
-            return singletonList(Column.of(getName(), converter.toColumn(this.read()).getColumns()));
+            return singletonList(Column.of(getName(), converter.toColumn(this.read()).columns()));
         } else if (isEmbeddableCollection(fieldType, mappings)) {
             return singletonList(Column.of(getName(), getColumns(converter)));
         }
@@ -123,10 +122,10 @@ class ColumnFieldMetadata implements FieldMetadata {
         return false;
     }
 
-    private List<List<Column>> getColumns(ColumnEntityConverter converter) {
+    private List<List<Column>> getColumns(LiteColumnEntityConverter converter) {
         List<List<Column>> columns = new ArrayList<>();
         for (Object element : (Iterable) this.read()) {
-            columns.add(converter.toColumn(element).getColumns());
+            columns.add(converter.toColumn(element).columns());
         }
         return columns;
     }

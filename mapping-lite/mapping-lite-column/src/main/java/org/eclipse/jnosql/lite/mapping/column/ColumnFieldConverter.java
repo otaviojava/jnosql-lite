@@ -14,7 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.column.Column;
+import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 

@@ -15,17 +15,17 @@
 package org.eclipse.jnosql.lite.mapping.column;
 
 
-import jakarta.nosql.TypeReference;
-import jakarta.nosql.Value;
-import jakarta.nosql.column.Column;
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.MappingException;
+import jakarta.data.exceptions.MappingException;
+import org.eclipse.jnosql.communication.TypeReference;
+import org.eclipse.jnosql.communication.Value;
+import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.CollectionSupplier;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
+import org.eclipse.jnosql.mapping.AttributeConverter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -117,7 +117,7 @@ class ColumnFieldConverters {
         public <X, Y, T> void convert(T instance, List<Column> columns, Column column,
                                       FieldMetadata field, LiteColumnEntityConverter converter, EntitiesMetadata mappings) {
 
-            Value value = column.getValue();
+            Value value = column.value();
             Optional<AttributeConverter<X, Y>> optionalConverter = field.getConverter();
             if (optionalConverter.isPresent()) {
                 AttributeConverter<X, Y> attributeConverter = optionalConverter.get();
