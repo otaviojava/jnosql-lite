@@ -14,24 +14,20 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
-import jakarta.nosql.Settings;
-import jakarta.nosql.column.ColumnConfiguration;
-import jakarta.nosql.column.ColumnFamilyManager;
-import jakarta.nosql.column.ColumnFamilyManagerFactory;
+
+import org.eclipse.jnosql.communication.Settings;
+import org.eclipse.jnosql.communication.column.ColumnConfiguration;
+import org.eclipse.jnosql.communication.column.ColumnManager;
+import org.eclipse.jnosql.communication.column.ColumnManagerFactory;
 
 public class MockConfiguration implements ColumnConfiguration {
 
     @Override
-    public ColumnFamilyManagerFactory get() {
-        return new MockFactory(Settings.of());
-    }
-
-    @Override
-    public ColumnFamilyManagerFactory get(Settings settings) {
+    public ColumnManagerFactory apply(Settings settings) {
         return new MockFactory(settings);
     }
 
-    public static class MockFactory implements ColumnFamilyManagerFactory {
+    public static class MockFactory implements ColumnManagerFactory {
 
         private final Settings settings;
 
@@ -39,14 +35,16 @@ public class MockConfiguration implements ColumnConfiguration {
             this.settings = settings;
         }
 
-        @Override
-        public <T extends ColumnFamilyManager> T get(String database) {
-            return null;
-        }
+
 
         @Override
         public void close() {
 
+        }
+
+        @Override
+        public ColumnManager apply(String s) {
+            return null;
         }
     }
 }
