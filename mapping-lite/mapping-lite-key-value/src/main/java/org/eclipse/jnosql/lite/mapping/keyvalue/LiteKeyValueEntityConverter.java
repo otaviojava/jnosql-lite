@@ -14,22 +14,21 @@
  */
 package org.eclipse.jnosql.lite.mapping.keyvalue;
 
-import jakarta.nosql.Value;
-import jakarta.nosql.keyvalue.KeyValueEntity;
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.IdNotFoundException;
-import jakarta.nosql.mapping.MappingException;
-import jakarta.nosql.mapping.keyvalue.KeyValueEntityConverter;
+import jakarta.data.exceptions.MappingException;
+import org.eclipse.jnosql.communication.Value;
+import org.eclipse.jnosql.communication.keyvalue.KeyValueEntity;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.AttributeConverter;
+import org.eclipse.jnosql.mapping.IdNotFoundException;
 
 import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-public class LiteKeyValueEntityConverter implements KeyValueEntityConverter {
+public class LiteKeyValueEntityConverter  {
 
     private final EntitiesMetadata mappings;
 
@@ -38,7 +37,6 @@ public class LiteKeyValueEntityConverter implements KeyValueEntityConverter {
         this.mappings = new DefaultEntitiesMetadata();
     }
 
-    @Override
     public KeyValueEntity toKeyValue(Object entity) {
         requireNonNull(entity, "entity is required");
         EntityMetadata metadata = this.mappings.get(entity.getClass());
@@ -50,16 +48,15 @@ public class LiteKeyValueEntityConverter implements KeyValueEntityConverter {
         return KeyValueEntity.of(getKey(key, entity.getClass(), false), entity);
     }
 
-    @Override
     public <T> T toEntity(Class<T> type, KeyValueEntity entity) {
         requireNonNull(type, "entity is required");
         requireNonNull(entity, "entity is required");
-        T bean = entity.getValue(type);
+        T bean = entity.value(type);
         if (Objects.isNull(bean)) {
             return null;
         }
 
-        Object key = getKey(entity.getKey(), type, true);
+        Object key = getKey(entity.key(), type, true);
         FieldMetadata id = getId(type);
         id.write(bean, key);
         return bean;

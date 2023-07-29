@@ -14,16 +14,16 @@
  */
 package org.eclipse.jnosql.lite.mapping.keyvalue;
 
-import jakarta.nosql.NonUniqueResultException;
-import jakarta.nosql.Value;
-import jakarta.nosql.keyvalue.BucketManager;
-import jakarta.nosql.keyvalue.KeyValueEntity;
-import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.keyvalue.KeyValueEntityConverter;
-import jakarta.nosql.mapping.keyvalue.KeyValueTemplate;
+import jakarta.data.exceptions.NonUniqueResultException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.nosql.PreparedStatement;
+import jakarta.nosql.QueryMapper;
+import jakarta.nosql.keyvalue.KeyValueTemplate;
+import org.eclipse.jnosql.communication.Value;
+import org.eclipse.jnosql.communication.keyvalue.BucketManager;
+import org.eclipse.jnosql.communication.keyvalue.KeyValueEntity;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;
@@ -39,7 +39,7 @@ public class LiteKeyValueTemplate implements KeyValueTemplate {
 
     private final BucketManager manager;
 
-    private final KeyValueEntityConverter converter;
+    private final LiteKeyValueEntityConverter converter;
 
     @Inject
     public LiteKeyValueTemplate(BucketManager manager) {
@@ -171,6 +171,17 @@ public class LiteKeyValueTemplate implements KeyValueTemplate {
     @Override
     public <T, K> void delete(Class<T> entityClass, K id) {
         this.delete(id);
+    }
+
+    @Override
+    public <T> QueryMapper.MapperFrom select(Class<T> type) {
+       throw new UnsupportedOperationException("The select method is not supported at the key-value databases");
+    }
+
+    @Override
+    public <T> QueryMapper.MapperDeleteFrom delete(Class<T> type) {
+        throw new UnsupportedOperationException("The delete method is not supported at the key-value databases");
+
     }
 
     private BucketManager getManager() {

@@ -12,20 +12,22 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.keyvalue;
 
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Param;
-import jakarta.nosql.mapping.Query;
-import jakarta.nosql.mapping.Repository;
+
+import jakarta.data.repository.PageableRepository;
+import jakarta.data.repository.Param;
+import jakarta.data.repository.Query;
+import jakarta.data.repository.Repository;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 
-public interface Person10RepositoryB extends Repository<Person10, Long> {
+@Repository
+public interface Person10RepositoryB extends PageableRepository<Person10, Long> {
 
     Stream<Person10> findByName(String name);
 
