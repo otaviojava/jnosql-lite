@@ -14,24 +14,21 @@
  */
 package org.eclipse.jnosql.lite.mapping.document;
 
-import jakarta.nosql.Settings;
-import jakarta.nosql.document.DocumentCollectionManager;
-import jakarta.nosql.document.DocumentCollectionManagerFactory;
-import jakarta.nosql.document.DocumentConfiguration;
+
+import org.eclipse.jnosql.communication.Settings;
+import org.eclipse.jnosql.communication.document.DocumentConfiguration;
+import org.eclipse.jnosql.communication.document.DocumentManager;
+import org.eclipse.jnosql.communication.document.DocumentManagerFactory;
 
 public class MockConfiguration implements DocumentConfiguration {
 
-    @Override
-    public DocumentCollectionManagerFactory get() {
-        return new MockFactory(Settings.of());
-    }
 
     @Override
-    public DocumentCollectionManagerFactory get(Settings settings) {
+    public DocumentManagerFactory apply(Settings settings) {
         return new MockFactory(settings);
     }
 
-    public static class MockFactory implements DocumentCollectionManagerFactory {
+    public static class MockFactory implements DocumentManagerFactory {
 
         private final Settings settings;
 
@@ -40,13 +37,13 @@ public class MockConfiguration implements DocumentConfiguration {
         }
 
         @Override
-        public <T extends DocumentCollectionManager> T get(String database) {
-            return null;
+        public void close() {
+
         }
 
         @Override
-        public void close() {
-
+        public DocumentManager apply(String s) {
+            return null;
         }
     }
 }
