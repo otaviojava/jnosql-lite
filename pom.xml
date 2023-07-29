@@ -51,7 +51,10 @@
    </properties>
 
     <modules>
-        <module>mapping-lite</module>
+        <module>mapping-lite-core</module>
+        <module>mapping-lite-key-value</module>
+        <module>mapping-lite-document</module>
+        <module>mapping-lite-column</module>
         <module>test</module>
     </modules>
 
