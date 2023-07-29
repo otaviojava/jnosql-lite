@@ -34,7 +34,6 @@
             <groupId>org.eclipse.jnosql.communication</groupId>
             <artifactId>jnosql-communication-document</artifactId>
             <version>${project.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>jakarta.nosql</groupId>

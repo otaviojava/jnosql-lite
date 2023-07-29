@@ -14,18 +14,15 @@
  */
 package org.eclipse.jnosql.lite.mapping.document;
 
-import jakarta.nosql.Settings;
-import jakarta.nosql.document.DocumentCollectionManagerFactory;
-import jakarta.nosql.document.DocumentConfiguration;
+
+import org.eclipse.jnosql.communication.Settings;
+import org.eclipse.jnosql.communication.document.DocumentConfiguration;
+import org.eclipse.jnosql.communication.document.DocumentManagerFactory;
 
 public class MockConfiguration implements DocumentConfiguration {
-    @Override
-    public <T extends DocumentCollectionManagerFactory> T get() {
-        return null;
-    }
 
     @Override
-    public <T extends DocumentCollectionManagerFactory> T get(Settings settings) {
+    public DocumentManagerFactory apply(Settings settings) {
         return null;
     }
 }

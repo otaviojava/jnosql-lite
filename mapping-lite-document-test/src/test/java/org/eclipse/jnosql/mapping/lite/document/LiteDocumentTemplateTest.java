@@ -14,16 +14,13 @@
  */
 package org.eclipse.jnosql.mapping.lite.document;
 
-import jakarta.nosql.NonUniqueResultException;
-import jakarta.nosql.document.Document;
-import jakarta.nosql.document.DocumentCollectionManager;
-import jakarta.nosql.document.DocumentCondition;
-import jakarta.nosql.document.DocumentDeleteQuery;
-import jakarta.nosql.document.DocumentEntity;
-import jakarta.nosql.document.DocumentQuery;
-import jakarta.nosql.mapping.IdNotFoundException;
-import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.document.DocumentTemplate;
+import jakarta.data.exceptions.NonUniqueResultException;
+import jakarta.enterprise.inject.Instance;
+import org.eclipse.jnosql.communication.document.Document;
+import org.eclipse.jnosql.communication.document.DocumentDeleteQuery;
+import org.eclipse.jnosql.communication.document.DocumentEntity;
+import org.eclipse.jnosql.communication.document.DocumentManager;
+import org.eclipse.jnosql.communication.document.DocumentQuery;
 import org.eclipse.jnosql.lite.mapping.document.LiteDocumentTemplate;
 import org.eclipse.jnosql.lite.mapping.entities.Job;
 import org.eclipse.jnosql.lite.mapping.entities.Movie;
@@ -34,15 +31,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 
-import javax.enterprise.inject.Instance;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static jakarta.nosql.document.DocumentDeleteQuery.delete;
-import static jakarta.nosql.document.DocumentQuery.select;
+import static org.eclipse.jnosql.communication.document.DocumentDeleteQuery.delete;
+import static org.eclipse.jnosql.communication.document.DocumentQuery.select;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -68,17 +64,17 @@ class LiteDocumentTemplateTest {
             Document.of("id", 19L),
     };
 
-    private DocumentCollectionManager managerMock;
+    private DocumentManager managerMock;
 
-    private DocumentTemplate subject;
+    private LiteDocumentTemplate subject;
 
     private ArgumentCaptor<DocumentEntity> captor;
 
     @BeforeEach
     public void setUp() {
-        managerMock = Mockito.mock(DocumentCollectionManager.class);
+        managerMock = Mockito.mock(DocumentManager.class);
         captor = ArgumentCaptor.forClass(DocumentEntity.class);
-        Instance<DocumentCollectionManager> instance = Mockito.mock(Instance.class);
+        Instance<DocumentManager> instance = Mockito.mock(Instance.class);
         when(instance.get()).thenReturn(managerMock);
         this.subject = new LiteDocumentTemplate(managerMock);
     }
@@ -95,8 +91,8 @@ class LiteDocumentTemplateTest {
         subject.insert(this.person);
         verify(managerMock).insert(captor.capture());
         DocumentEntity value = captor.getValue();
-        assertEquals("Person", value.getName());
-        assertEquals(4, value.getDocuments().size());
+        assertEquals("Person", value.name());
+        assertEquals(4, value.documents().size());
     }
 
     @Test
@@ -132,8 +128,8 @@ class LiteDocumentTemplateTest {
         subject.insert(this.person, twoHours);
         verify(managerMock).insert(captor.capture(), Mockito.eq(twoHours));
         DocumentEntity value = captor.getValue();
-        assertEquals("Person", value.getName());
-        assertEquals(4, value.getDocuments().size());
+        assertEquals("Person", value.name());
+        assertEquals(4, value.documents().size());
     }
 
 
@@ -149,8 +145,8 @@ class LiteDocumentTemplateTest {
         subject.update(this.person);
         verify(managerMock).update(captor.capture());
         DocumentEntity value = captor.getValue();
-        assertEquals("Person", value.getName());
-        assertEquals(4, value.getDocuments().size());
+        assertEquals("Person", value.name());
+        assertEquals(4, value.documents().size());
     }
 
     @Test

@@ -27,7 +27,6 @@ import org.eclipse.jnosql.communication.document.DocumentManager;
 import org.eclipse.jnosql.communication.document.DocumentObserverParser;
 import org.eclipse.jnosql.communication.document.DocumentQuery;
 import org.eclipse.jnosql.communication.document.DocumentQueryParser;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
@@ -62,7 +61,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     public LiteDocumentTemplate(DocumentManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteDocumentEntityConverter();
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = EntitiesMetadata.get();
         this.observerParser = new LiteDocumentMapperObserver(this.mappings);
     }
 

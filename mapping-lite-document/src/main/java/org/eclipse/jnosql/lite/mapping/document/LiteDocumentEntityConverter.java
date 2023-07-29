@@ -18,7 +18,6 @@ import jakarta.data.exceptions.MappingException;
 import org.eclipse.jnosql.communication.document.Document;
 import org.eclipse.jnosql.communication.document.DocumentEntity;
 import org.eclipse.jnosql.lite.mapping.document.DocumentFieldConverters.DocumentFieldConverterFactory;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
@@ -43,7 +42,7 @@ public class LiteDocumentEntityConverter  {
     private final DocumentFieldConverterFactory converterFactory;
 
     public LiteDocumentEntityConverter() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = EntitiesMetadata.get();
         this.converterFactory = new DocumentFieldConverterFactory();
     }
 
