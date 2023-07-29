@@ -15,7 +15,7 @@
 package org.eclipse.jnosql.mapping.lite.inheritance;
 
 import jakarta.nosql.Column;
-import jakarta.nosql.mapping.DiscriminatorValue;
+import org.eclipse.jnosql.mapping.DiscriminatorValue;
 import jakarta.nosql.Entity;
 
 import java.math.BigDecimal;
