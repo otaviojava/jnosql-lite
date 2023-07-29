@@ -14,15 +14,24 @@
  */
 package org.eclipse.jnosql.lite.mapping.column;
 
+import jakarta.data.exceptions.NonUniqueResultException;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.nosql.PreparedStatement;
 import jakarta.nosql.column.ColumnTemplate;
+import org.eclipse.jnosql.communication.Value;
+import org.eclipse.jnosql.communication.column.ColumnDeleteQuery;
+import org.eclipse.jnosql.communication.column.ColumnEntity;
+import org.eclipse.jnosql.communication.column.ColumnManager;
 import org.eclipse.jnosql.communication.column.ColumnObserverParser;
+import org.eclipse.jnosql.communication.column.ColumnQuery;
 import org.eclipse.jnosql.communication.column.ColumnQueryParser;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.AttributeConverter;
+import org.eclipse.jnosql.mapping.IdNotFoundException;
 
 import java.time.Duration;
 import java.util.Iterator;
@@ -38,18 +47,18 @@ import static java.util.Objects.requireNonNull;
 @ApplicationScoped
 public class LiteColumnTemplate implements ColumnTemplate {
 
-    private static final ColumnQueryParser PARSER = new DefaultColumnQueryParser();
+    private static final ColumnQueryParser PARSER = new ColumnQueryParser();
 
-    private final ColumnEntityConverter converter;
+    private final LiteColumnEntityConverter converter;
 
-    private final ColumnFamilyManager manager;
+    private final ColumnManager manager;
 
     private final EntitiesMetadata mappings;
 
     private final ColumnObserverParser observerParser;
 
     @Inject
-    public LiteColumnTemplate(ColumnFamilyManager manager) {
+    public LiteColumnTemplate(ColumnManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteColumnEntityConverter();
         this.mappings = new DefaultEntitiesMetadata();
