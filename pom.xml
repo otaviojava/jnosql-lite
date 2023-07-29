@@ -55,7 +55,9 @@
         <module>mapping-lite-key-value</module>
         <module>mapping-lite-document</module>
         <module>mapping-lite-column</module>
-        <module>test</module>
+        <module>mapping-lite-core-test</module>
+        <module>mapping-lite-document-test</module>
+        <module>mapping-lite-column-test</module>
     </modules>
 
     <repositories>
