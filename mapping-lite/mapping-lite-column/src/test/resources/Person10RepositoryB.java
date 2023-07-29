@@ -12,10 +12,9 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite;
+package org.eclipse.jnosql.lite.mapping.column;
 
 
-import jakarta.nosql.mapping.DatabaseType;
 import jakarta.nosql.mapping.Param;
 import jakarta.nosql.mapping.Query;
 import jakarta.nosql.mapping.Repository;
