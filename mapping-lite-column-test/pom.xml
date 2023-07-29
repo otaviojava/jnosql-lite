@@ -18,10 +18,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.eclipse.jnosql.lite.test</groupId>
-        <artifactId>mapping-lite-test-parent</artifactId>
+        <groupId>org.eclipse.jnosql.lite</groupId>
+        <artifactId>jnosql-lite-parent</artifactId>
         <version>1.0.1-SNAPSHOT</version>
     </parent>
+
     <artifactId>mapping-lite-column-test</artifactId>
     <packaging>jar</packaging>
 
