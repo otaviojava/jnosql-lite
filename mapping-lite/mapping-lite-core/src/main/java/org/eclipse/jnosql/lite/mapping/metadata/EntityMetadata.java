@@ -22,12 +22,12 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * This instance is the meta-info of a loaded class that has the  {@link jakarta.nosql.mapping.Entity} annotation.
+ * This instance is the meta-info of a loaded class that has the  {@link jakarta.nosql.Entity} annotation.
  */
 public interface EntityMetadata {
 
     /**
-     * @return the {@link jakarta.nosql.mapping.Entity#value()}  value
+     * @return the {@link jakarta.nosql.Entity#value()}  value
      */
     String getName();
 
@@ -90,35 +90,35 @@ public interface EntityMetadata {
     Map<String, FieldMetadata> getFieldsGroupByName();
 
     /**
-     * Returns the field that has {@link jakarta.nosql.mapping.Id} annotation
+     * Returns the field that has {@link jakarta.nosql.Id} annotation
      * @return the field with ID annotation
      */
     Optional<FieldMetadata> getId();
 
     /**
-     * Returns true if the class has the {@link jakarta.nosql.mapping.Embeddable} annotation
-     * @return true if has {@link jakarta.nosql.mapping.Embeddable} annotation
+     * Returns true if the class has the {@link org.eclipse.jnosql.mapping.Embeddable} annotation
+     * @return true if has {@link org.eclipse.jnosql.mapping.Embeddable} annotation
      */
     boolean isEmbedded();
 
     /**
      * Return the parent class of this class mapping.
-     * It will check the parent class has the {@link jakarta.nosql.mapping.Inheritance} annotation.
+     * It will check the parent class has the {@link org.eclipse.jnosql.mapping.Inheritance} annotation.
      *
      * @return the parent annotation otherwise {@link  Optional#empty()}
      */
     Optional<InheritanceMetadata> getInheritance();
 
     /**
-     * A class that has a parent with {@link jakarta.nosql.mapping.Inheritance} annotation
+     * A class that has a parent with {@link org.eclipse.jnosql.mapping.Inheritance} annotation
      * won't use the name. It will use the parent name instead.
      *
-     * @return true if has not parent class with {@link jakarta.nosql.mapping.Inheritance}
+     * @return true if has not parent class with {@link org.eclipse.jnosql.mapping.Inheritance}
      */
     boolean hasEntityName();
 
     /**
-     * @return true if the entity class has the {@link jakarta.nosql.mapping.Inheritance} annotation
+     * @return true if the entity class has the {@link org.eclipse.jnosql.mapping.Inheritance} annotation
      */
     boolean isInheritance();
 

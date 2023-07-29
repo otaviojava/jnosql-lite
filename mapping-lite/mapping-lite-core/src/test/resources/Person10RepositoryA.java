@@ -15,10 +15,10 @@
 package org.eclipse.jnosql.mapping.lite;
 
 
-import jakarta.nosql.mapping.DatabaseType;
-import jakarta.nosql.mapping.Param;
-import jakarta.nosql.mapping.Query;
-import jakarta.nosql.mapping.Repository;
+import jakarta.nosql.DatabaseType;
+import jakarta.nosql.Param;
+import jakarta.nosql.Query;
+import jakarta.nosql.Repository;
 
 import java.util.List;
 import java.util.Optional;

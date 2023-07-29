@@ -26,8 +26,14 @@ import java.util.function.Supplier;
  */
 public interface CollectionSupplier<T extends Collection<?>> extends Supplier<T>, Predicate<Class<?>> {
 
-    static CollectionSupplier<?> find(Class<?> collectionType) {
-        Objects.requireNonNull(collectionType, "collectionType is required");
-        return CollectionSupplierProvider.find(collectionType);
+
+    /**
+     * Create a Collection supplier
+     * @param type the type
+     * @return an instance
+     */
+    static CollectionSupplier<?> find(Class<?> type) {
+        Objects.requireNonNull(type, "type is required");
+        return CollectionSupplierProvider.find(type);
     }
 }

@@ -15,7 +15,7 @@
 package {{package}};
 
 import jakarta.nosql.column.SelectQueryConverter;
-import jakarta.nosql.mapping.column.ColumnTemplate;
+import jakarta.nosql.column.ColumnTemplate;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static jakarta.nosql.mapping.IdNotFoundException.KEY_NOT_FOUND_EXCEPTION_SUPPLIER;
+import static jakarta.nosql.IdNotFoundException.KEY_NOT_FOUND_EXCEPTION_SUPPLIER;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
