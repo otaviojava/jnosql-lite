@@ -14,7 +14,7 @@
  */
 package org.eclipse.jnosql.lite.mapping.document;
 
-import jakarta.nosql.document.DocumentObserverParser;
+import org.eclipse.jnosql.communication.document.DocumentObserverParser;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 

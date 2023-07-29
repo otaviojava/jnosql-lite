@@ -14,29 +14,26 @@
  */
 package org.eclipse.jnosql.lite.mapping.document;
 
-import jakarta.nosql.NonUniqueResultException;
-import jakarta.nosql.Value;
-import jakarta.nosql.document.DocumentCollectionManager;
-import jakarta.nosql.document.DocumentDeleteQuery;
-import jakarta.nosql.document.DocumentEntity;
-import jakarta.nosql.document.DocumentObserverParser;
-import jakarta.nosql.document.DocumentQuery;
-import jakarta.nosql.document.DocumentQueryParser;
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.IdNotFoundException;
-import jakarta.nosql.mapping.Page;
-import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
-import jakarta.nosql.mapping.document.DocumentQueryPagination;
-import jakarta.nosql.mapping.document.DocumentTemplate;
-import org.eclipse.jnosql.communication.document.query.DefaultDocumentQueryParser;
+import jakarta.data.exceptions.NonUniqueResultException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.nosql.PreparedStatement;
+import jakarta.nosql.QueryMapper;
+import jakarta.nosql.document.DocumentTemplate;
+import org.eclipse.jnosql.communication.Value;
+import org.eclipse.jnosql.communication.document.DocumentDeleteQuery;
+import org.eclipse.jnosql.communication.document.DocumentEntity;
+import org.eclipse.jnosql.communication.document.DocumentManager;
+import org.eclipse.jnosql.communication.document.DocumentObserverParser;
+import org.eclipse.jnosql.communication.document.DocumentQuery;
+import org.eclipse.jnosql.communication.document.DocumentQueryParser;
 import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.AttributeConverter;
+import org.eclipse.jnosql.mapping.IdNotFoundException;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.time.Duration;
 import java.util.Iterator;
 import java.util.Objects;
@@ -51,18 +48,18 @@ import static java.util.Objects.requireNonNull;
 @ApplicationScoped
 public class LiteDocumentTemplate implements DocumentTemplate {
 
-    private static final DocumentQueryParser PARSER = new DefaultDocumentQueryParser();
+    private static final DocumentQueryParser PARSER = new DocumentQueryParser();
 
-    private final DocumentEntityConverter converter;
+    private final LiteDocumentEntityConverter converter;
 
-    private final DocumentCollectionManager manager;
+    private final DocumentManager manager;
 
     private final EntitiesMetadata mappings;
 
     private final DocumentObserverParser observerParser;
 
     @Inject
-    public LiteDocumentTemplate(DocumentCollectionManager manager) {
+    public LiteDocumentTemplate(DocumentManager manager) {
         this.manager = Objects.requireNonNull(manager, "manager is required");
         this.converter = new LiteDocumentEntityConverter();
         this.mappings = new DefaultEntitiesMetadata();
@@ -114,26 +111,17 @@ public class LiteDocumentTemplate implements DocumentTemplate {
                 .map(this::update).collect(Collectors.toList());
     }
 
-    @Override
     public void delete(DocumentDeleteQuery query) {
         requireNonNull(query, "query is required");
         this.manager.delete(query);
     }
 
-    @Override
     public <T> Stream<T> select(DocumentQuery query) {
         Objects.requireNonNull(query, "query is required");
         return executeQuery(query);
     }
 
-    @Override
-    public <T> Page<T> select(DocumentQueryPagination query) {
-        Objects.requireNonNull(query, "query is required");
-        Stream<T> entities = executeQuery(query);
-        return new DocumentPage<>(this, entities, query);
-    }
 
-    @Override
     public <T> Optional<T> singleResult(DocumentQuery query) {
         Objects.requireNonNull(query, "query is required");
         final Stream<T> entities = select(query);
@@ -179,6 +167,16 @@ public class LiteDocumentTemplate implements DocumentTemplate {
     }
 
     @Override
+    public <T> QueryMapper.MapperFrom select(Class<T> type) {
+        return null;
+    }
+
+    @Override
+    public <T> QueryMapper.MapperDeleteFrom delete(Class<T> type) {
+        return null;
+    }
+
+    @Override
     public <T> Stream<T> query(String query) {
         requireNonNull(query, "query is required");
         return PARSER.query(query, this.manager, this.observerParser).map(this.converter::toEntity);
@@ -199,8 +197,7 @@ public class LiteDocumentTemplate implements DocumentTemplate {
         throw new NonUniqueResultException("No unique result found to the query: " + query);
     }
 
-    @Override
-    public PreparedStatement prepare(String query) {
+      public PreparedStatement prepare(String query) {
         return new DocumentPreparedStatement(PARSER.prepare(query, this.manager, this.observerParser),
                 this.converter);
     }

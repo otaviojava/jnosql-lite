@@ -14,21 +14,21 @@
  */
 package org.eclipse.jnosql.lite.mapping.document;
 
-import jakarta.nosql.document.DocumentEntity;
-import jakarta.nosql.mapping.PreparedStatement;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
+
+import jakarta.nosql.PreparedStatement;
+import org.eclipse.jnosql.communication.document.DocumentEntity;
 
 import java.util.Optional;
 import java.util.stream.Stream;
 
 final class DocumentPreparedStatement implements PreparedStatement {
 
-    private final jakarta.nosql.document.DocumentPreparedStatement preparedStatement;
+    private final org.eclipse.jnosql.communication.document.DocumentPreparedStatement preparedStatement;
 
-    private final DocumentEntityConverter converter;
+    private final LiteDocumentEntityConverter converter;
 
-    DocumentPreparedStatement(jakarta.nosql.document.DocumentPreparedStatement preparedStatement,
-                              DocumentEntityConverter converter) {
+    DocumentPreparedStatement(org.eclipse.jnosql.communication.document.DocumentPreparedStatement preparedStatement,
+                              LiteDocumentEntityConverter converter) {
         this.preparedStatement = preparedStatement;
         this.converter = converter;
     }
@@ -40,13 +40,13 @@ final class DocumentPreparedStatement implements PreparedStatement {
     }
 
     @Override
-    public <T> Stream<T> getResult() {
-        return preparedStatement.getResult().map(converter::toEntity);
+    public <T> Stream<T> result() {
+        return preparedStatement.result().map(converter::toEntity);
     }
 
     @Override
-    public <T> Optional<T> getSingleResult() {
-        Optional<DocumentEntity> singleResult = preparedStatement.getSingleResult();
+    public <T> Optional<T> singleResult() {
+        Optional<DocumentEntity> singleResult = preparedStatement.singleResult();
         return singleResult.map(converter::toEntity);
     }
 }

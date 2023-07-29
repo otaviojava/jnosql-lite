@@ -15,13 +15,12 @@
 package org.eclipse.jnosql.lite.mapping.document;
 
 
-import jakarta.nosql.document.Document;
-import jakarta.nosql.mapping.AttributeConverter;
-import jakarta.nosql.mapping.document.DocumentEntityConverter;
+import org.eclipse.jnosql.communication.document.Document;
 import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldType;
 import org.eclipse.jnosql.lite.mapping.metadata.FieldTypeUtil;
+import org.eclipse.jnosql.mapping.AttributeConverter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,13 +91,13 @@ class DocumentFieldMetadata implements FieldMetadata {
         return this.read() != null;
     }
 
-    public <X, Y> List<Document> toDocument(DocumentEntityConverter converter, EntitiesMetadata mappings) {
+    public <X, Y> List<Document> toDocument(LiteDocumentEntityConverter converter, EntitiesMetadata mappings) {
         FieldType fieldType = FieldTypeUtil.of(this, mappings);
 
         if (FieldType.EMBEDDED.equals(fieldType)) {
-            return converter.toDocument(read()).getDocuments();
+            return converter.toDocument(read()).documents();
         } else if (FieldType.SUB_ENTITY.equals(fieldType)) {
-            return singletonList(Document.of(getName(), converter.toDocument(this.read()).getDocuments()));
+            return singletonList(Document.of(getName(), converter.toDocument(this.read()).documents()));
         } else if (isEmbeddableCollection(fieldType, mappings)) {
             return singletonList(Document.of(getName(), getDocuments(converter)));
         }
@@ -123,10 +122,10 @@ class DocumentFieldMetadata implements FieldMetadata {
         return false;
     }
 
-    private List<List<Document>> getDocuments(DocumentEntityConverter converter) {
+    private List<List<Document>> getDocuments(LiteDocumentEntityConverter converter) {
         List<List<Document>> documents = new ArrayList<>();
         for (Object element : (Iterable) this.read()) {
-            documents.add(converter.toDocument(element).getDocuments());
+            documents.add(converter.toDocument(element).documents());
         }
         return documents;
     }
