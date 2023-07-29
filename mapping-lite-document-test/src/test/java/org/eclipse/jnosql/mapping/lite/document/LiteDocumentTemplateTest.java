@@ -16,7 +16,9 @@ package org.eclipse.jnosql.mapping.lite.document;
 
 import jakarta.data.exceptions.NonUniqueResultException;
 import jakarta.enterprise.inject.Instance;
+import jakarta.nosql.PreparedStatement;
 import org.eclipse.jnosql.communication.document.Document;
+import org.eclipse.jnosql.communication.document.DocumentCondition;
 import org.eclipse.jnosql.communication.document.DocumentDeleteQuery;
 import org.eclipse.jnosql.communication.document.DocumentEntity;
 import org.eclipse.jnosql.communication.document.DocumentManager;
@@ -25,6 +27,7 @@ import org.eclipse.jnosql.lite.mapping.document.LiteDocumentTemplate;
 import org.eclipse.jnosql.lite.mapping.entities.Job;
 import org.eclipse.jnosql.lite.mapping.entities.Movie;
 import org.eclipse.jnosql.lite.mapping.entities.Person;
+import org.eclipse.jnosql.mapping.IdNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -287,9 +290,9 @@ class LiteDocumentTemplateTest {
         ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         DocumentQuery query = queryCaptor.getValue();
-        DocumentCondition condition = query.getCondition().get();
+        DocumentCondition condition = query.condition().get();
 
-        assertEquals("Person", query.getDocumentCollection());
+        assertEquals("Person", query.name());
         assertEquals(DocumentCondition.eq(Document.of("_id", 10L)), condition);
 
     }
@@ -300,9 +303,9 @@ class LiteDocumentTemplateTest {
         ArgumentCaptor<DocumentDeleteQuery> queryCaptor = ArgumentCaptor.forClass(DocumentDeleteQuery.class);
         verify(managerMock).delete(queryCaptor.capture());
         DocumentDeleteQuery query = queryCaptor.getValue();
-        DocumentCondition condition = query.getCondition().get();
+        DocumentCondition condition = query.condition().get();
 
-        assertEquals("Person", query.getDocumentCollection());
+        assertEquals("Person", query.name());
         assertEquals(DocumentCondition.eq(Document.of("_id", 10L)), condition);
 
     }
@@ -313,7 +316,7 @@ class LiteDocumentTemplateTest {
         ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         DocumentQuery query = queryCaptor.getValue();
-        assertEquals("Person", query.getDocumentCollection());
+        assertEquals("Person", query.name());
     }
 
     @Test
@@ -322,18 +325,18 @@ class LiteDocumentTemplateTest {
         ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         DocumentQuery query = queryCaptor.getValue();
-        assertEquals("movie", query.getDocumentCollection());
+        assertEquals("movie", query.name());
     }
 
     @Test
     public void shouldPreparedStatement() {
         PreparedStatement preparedStatement = subject.prepare("select * from Person where name = @name");
         preparedStatement.bind("name", "Ada");
-        preparedStatement.getResult();
+        preparedStatement.result();
         ArgumentCaptor<DocumentQuery> queryCaptor = ArgumentCaptor.forClass(DocumentQuery.class);
         verify(managerMock).select(queryCaptor.capture());
         DocumentQuery query = queryCaptor.getValue();
-        assertEquals("Person", query.getDocumentCollection());
+        assertEquals("Person", query.name());
     }
 
     @Test
