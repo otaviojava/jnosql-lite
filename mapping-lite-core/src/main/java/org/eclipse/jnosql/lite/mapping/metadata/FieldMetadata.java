@@ -24,7 +24,7 @@ import java.util.Optional;
 /**
  * This class represents the information from
  * {@link jakarta.nosql.Column} or {@link jakarta.nosql.Id}.
- * The strategy is do cache in all fields in a class to either read and writer faster from Field
+ * The strategy is done cache in all fields in a class to either read and writer faster from Field
  */
 public interface FieldMetadata {
 
