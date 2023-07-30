@@ -43,17 +43,17 @@ public final class {{className}} implements FieldMetadata {
   }
 
   @Override
-  public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> getConverter() {
+  public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> converter() {
     return (Optional<X>) Optional.ofNullable(converter);
   }
 
   @Override
-  public String getName() {
+  public String name() {
     return "{{name}}";
   }
 
   @Override
-  public String getFieldName() {
+  public String fieldName() {
     return "{{fieldName}}";
   }
 
@@ -68,12 +68,12 @@ public final class {{className}} implements FieldMetadata {
    }
 
    @Override
-   public Class<?> getType()  {
+   public Class<?> type()  {
     return {{type}}.class;
    }
 
    @Override
-   public List<Class<?>> getArguments() {
+   public List<Class<?>> arguments() {
     return Collections.unmodifiableList(arguments);
    }
 }

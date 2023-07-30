@@ -52,17 +52,17 @@ private final InheritanceMetadata inheritance;
     }
 
     @Override
-    public String getName() {
+    public String name() {
         return "{{name}}";
     }
 
     @Override
-    public String getClassName() {
+    public String className() {
          return "{{entityQualified}}";
     }
 
     @Override
-    public String getSimpleName() {
+    public String simpleName() {
         return "{{entity}}";
     }
 
@@ -79,33 +79,33 @@ private final InheritanceMetadata inheritance;
     }
 
     @Override
-    public Class<?> getClassInstance() {
+    public Class<?> type() {
         return {{entity}}.class;
     }
 
     @Override
-    public List<FieldMetadata> getFields() {
+    public List<FieldMetadata> fields() {
         return Collections.unmodifiableList(fields);
     }
 
     @Override
-    public List<String> getFieldsName() {
+    public List<String> fieldsName() {
         return getFields().stream()
         .map(FieldMetadata::getFieldName)
         .collect(collectingAndThen(toList(), Collections::unmodifiableList));
 }
 
     @Override
-    public String getColumnField(String javaField) {
+    public String columnField(String javaField) {
     Objects.requireNonNull(javaField, "javaField is required");
-    return getFields().stream()
+    return fields().stream()
         .filter(f -> javaField.equals(f.getFieldName()))
         .map(FieldMetadata::getName)
         .findFirst().orElse(javaField);
     }
 
     @Override
-    public Optional<FieldMetadata> getFieldMapping(String javaField) {
+    public Optional<FieldMetadata> fieldMapping(String javaField) {
     Objects.requireNonNull(javaField, "javaField is required");
     return getFields().stream()
         .filter(f -> javaField.equals(f.getFieldName()))
@@ -113,13 +113,13 @@ private final InheritanceMetadata inheritance;
     }
 
     @Override
-    public Map<String, FieldMetadata> getFieldsGroupByName() {
+    public Map<String, FieldMetadata> fieldsGroupByName() {
     return getFields().stream()
     .collect(toMap(FieldMetadata::getName, identity()));
     }
 
     @Override
-    public Optional<FieldMetadata> getId() {
+    public Optional<FieldMetadata> id() {
     return getFields().stream()
     .filter(FieldMetadata::isId)
     .findFirst();
