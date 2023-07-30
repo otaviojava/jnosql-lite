@@ -50,7 +50,7 @@ public class LiteDocumentEntityConverter  {
         requireNonNull(entityInstance, "Object is required");
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
         DocumentEntity entity = DocumentEntity.of(mapping.name());
-        mapping.getFields().stream()
+        mapping.fields().stream()
                 .map(f -> DocumentFieldMetadata.of(f, entityInstance))
                 .filter(DocumentFieldMetadata::isNotEmpty)
                 .map(f -> f.toDocument(this, this.mappings))

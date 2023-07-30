@@ -90,8 +90,8 @@ private final InheritanceMetadata inheritance;
 
     @Override
     public List<String> fieldsName() {
-        return getFields().stream()
-        .map(FieldMetadata::getFieldName)
+        return fields().stream()
+        .map(FieldMetadata::fieldName)
         .collect(collectingAndThen(toList(), Collections::unmodifiableList));
 }
 
@@ -99,28 +99,28 @@ private final InheritanceMetadata inheritance;
     public String columnField(String javaField) {
     Objects.requireNonNull(javaField, "javaField is required");
     return fields().stream()
-        .filter(f -> javaField.equals(f.getFieldName()))
-        .map(FieldMetadata::getName)
+        .filter(f -> javaField.equals(f.fieldName()))
+        .map(FieldMetadata::name)
         .findFirst().orElse(javaField);
     }
 
     @Override
     public Optional<FieldMetadata> fieldMapping(String javaField) {
     Objects.requireNonNull(javaField, "javaField is required");
-    return getFields().stream()
-        .filter(f -> javaField.equals(f.getFieldName()))
+    return fields().stream()
+        .filter(f -> javaField.equals(f.fieldName()))
         .findFirst();
     }
 
     @Override
     public Map<String, FieldMetadata> fieldsGroupByName() {
-    return getFields().stream()
-    .collect(toMap(FieldMetadata::getName, identity()));
+    return fields().stream()
+    .collect(toMap(FieldMetadata::name, identity()));
     }
 
     @Override
     public Optional<FieldMetadata> id() {
-    return getFields().stream()
+    return fields().stream()
     .filter(FieldMetadata::isId)
     .findFirst();
     }
@@ -146,7 +146,7 @@ private final InheritanceMetadata inheritance;
     }
 
     @Override
-    public Optional<InheritanceMetadata> getInheritance() {
+    public Optional<InheritanceMetadata> inheritance() {
       return Optional.ofNullable(inheritance);
     }
 

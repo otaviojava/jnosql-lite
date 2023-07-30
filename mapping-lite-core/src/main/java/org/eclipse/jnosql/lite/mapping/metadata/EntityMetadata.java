@@ -54,7 +54,7 @@ public interface EntityMetadata {
     /**
      * @return The fields from this class
      */
-    List<FieldMetadata> getFields();
+    List<FieldMetadata> fields();
 
     /**
      * Creates a new instance

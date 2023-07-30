@@ -102,7 +102,7 @@ class DocumentFieldConverters {
 
             Object subEntity = converter.toEntity(field.type(), documents);
             EntityMetadata mapping = mappings.get(field.type());
-            boolean areAllFieldsNull = mapping.getFields()
+            boolean areAllFieldsNull = mapping.fields()
                     .stream()
                     .map(f -> f.read(subEntity))
                     .allMatch(Objects::isNull);

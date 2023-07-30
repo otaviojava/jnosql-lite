@@ -51,7 +51,7 @@ public class LiteColumnEntityConverter  {
         requireNonNull(entityInstance, "Object is required");
         EntityMetadata mapping = mappings.get(entityInstance.getClass());
         ColumnEntity entity = ColumnEntity.of(mapping.name());
-        mapping.getFields().stream()
+        mapping.fields().stream()
                 .map(f -> ColumnFieldMetadata.of(f, entityInstance))
                 .filter(ColumnFieldMetadata::isNotEmpty)
                 .map(f -> f.toColumn(this, this.mappings))
