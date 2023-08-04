@@ -23,16 +23,21 @@ import org.eclipse.jnosql.mapping.Convert;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -110,6 +115,12 @@ public class FieldAnalyzer implements Supplier<String> {
 
         Column column = field.getAnnotation(Column.class);
         Id id = field.getAnnotation(Id.class);
+        for (AnnotationMirror annotationMirror : field.getAnnotationMirrors()) {
+            DeclaredType annotationType = annotationMirror.getAnnotationType();
+            Map<? extends ExecutableElement, ? extends AnnotationValue> elementValues = annotationMirror.getElementValues();
+            System.out.println(annotationType);
+            System.out.println(elementValues);
+        }
         Convert convert = field.getAnnotation(Convert.class);
         final boolean isId = id != null;
         final String packageName = ProcessorUtil.getPackageName(entity);
