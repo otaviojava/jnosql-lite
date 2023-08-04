@@ -14,6 +14,12 @@
 */
 package org.eclipse.jnosql.lite.mapping.metadata;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.jnosql.mapping.metadata.ClassInformationNotFoundException;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.InheritanceMetadata;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,14 +32,27 @@ import java.util.stream.Collectors;
 import javax.annotation.processing.Generated;
 
 @Generated(value= "JNoSQL Lite EntitiesMetadata Generator", date = "{{now}}")
+@ApplicationScoped
 public final class DefaultEntitiesMetadata implements EntitiesMetadata {
 
-    private static final Predicate<EntityMetadata> HAS_NAME= EntityMetadata::hasEntityName;
+    private static final Predicate<EntityMetadata> HAS_NAME = EntityMetadata::hasEntityName;
 
     private final List<EntityMetadata> entities;
 
+    private final Map<String, EntityMetadata> findByClassName;
+
+    private final Map<String, EntityMetadata> findBySimpleName;
+
+    private final Map<Class<?>, EntityMetadata> classes;
+
+    private final Map<String, EntityMetadata> mappings;
+
 
     public DefaultEntitiesMetadata() {
+        this.findByClassName = new HashMap<>();
+        this.findBySimpleName = new HashMap<>();
+        this.classes = new HashMap<>();
+        this.mappings = new HashMap<>();
         this.entities = new ArrayList<>();
     {{#entities}}
         this.entities.add(new {{.}}());
