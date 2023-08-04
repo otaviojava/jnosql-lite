@@ -14,6 +14,8 @@
  */
 package org.eclipse.jnosql.lite.mapping.metadata;
 
+import org.eclipse.jnosql.mapping.metadata.CollectionSupplier;
+
 import java.util.HashSet;
 import java.util.Set;
 

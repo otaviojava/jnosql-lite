@@ -15,6 +15,7 @@
 package org.eclipse.jnosql.lite.mapping.metadata;
 
 import jakarta.data.exceptions.MappingException;
+import org.eclipse.jnosql.mapping.metadata.CollectionSupplier;
 
 import java.util.ArrayList;
 import java.util.List;
