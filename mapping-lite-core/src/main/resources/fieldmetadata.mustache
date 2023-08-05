@@ -39,23 +39,13 @@ public final class {{className}} implements FieldMetadata {
     private final Map<Class<? extends Annotation>, String> valueByAnnotation;
 
     public {{className}}() {
-        {{^arguments.length}}
-        this.arguments = java.util.Collections.emptyList();
-        {{/arguments.length}}
-        {{#arguments.length}}
-         this.arguments = new java.util.ArrayList<>();
-        {{/arguments.length}}
+        this.arguments = new java.util.ArrayList<>();
         {{#arguments}}
         this.arguments.add({{.}}.class);
         {{/arguments}}
         this.converter = {{converter}};
         this.typeConverter = {{typeConverter}};
-        {{^valueByAnnotation.length}}
-        this.valueByAnnotation = java.util.Collections.emptyMap();
-        {{/valueByAnnotation.length}}
-        {{#valueByAnnotation.length}}
         this.valueByAnnotation = new java.util.HashMap<>();
-        {{/valueByAnnotation.length}}
         {{#valueByAnnotation}}
         this.valueByAnnotation.put({{key}},"{{value}}");
         {{/valueByAnnotation}}
