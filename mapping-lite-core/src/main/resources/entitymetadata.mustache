@@ -46,10 +46,10 @@ public final class {{className}} implements EntityMetadata {
     public {{className}}() {
         this.fields = new ArrayList<>();
         {{#fields}}
-            this.fields.add(new {{.}}());
+        this.fields.add(new {{.}}());
         {{/fields}}
         {{#inheritanceParameter}}
-            this.inheritance= new InheritanceMetadata({{{inheritanceParameter}}});
+         this.inheritance= new InheritanceMetadata({{{inheritanceParameter}}});
         {{/inheritanceParameter}}
         this.inheritance = null;
         this.constructor = null;
