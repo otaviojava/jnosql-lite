@@ -26,18 +26,25 @@ import java.util.function.Function;
 enum CollectionUtil implements Function<Class<?>, String> {
     INSTANCE;
 
+    static final String NEW_LIST = "new java.util.ArrayList<>()";
+    static final String NEW_SET = "new java.util.HashSet<>()";
+    static final String NEW_DEQUE = "new java.util.LinkedList<>()";
+    static final String NEW_TREE_SET = "new java.util.TreeSet<>()";
+
+    static final String DEFAULT = "null";
+
     @Override
     public String apply(Class<?> type) {
         if (isCollection(type)) {
-            return "new java.util.ArrayList<>()";
+            return NEW_LIST;
         } else if (isSet(type)) {
-            return "new java.util.HashSet<>()";
+            return NEW_SET;
         } else if (isDeque(type)) {
-            return "new java.util.LinkedList<>()";
+            return NEW_DEQUE;
         } else if (isTreeSet(type)) {
-            return "new java.util.TreeSet<>()";
+            return NEW_TREE_SET;
         }
-        return "null";
+        return DEFAULT;
     }
 
     private boolean isCollection(Class<?> type) {
