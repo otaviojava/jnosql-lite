@@ -20,6 +20,7 @@ import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.Column;
 import jakarta.nosql.Id;
 import org.eclipse.jnosql.mapping.Convert;
+import org.eclipse.jnosql.mapping.metadata.MappingType;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -29,8 +30,13 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
@@ -100,6 +106,7 @@ public class FieldAnalyzer implements Supplier<String> {
 
         final TypeMirror typeMirror = field.asType();
         String className;
+        MappingType mappingType = MappingType.of(convertTypeMirrorToClass(typeMirror));
         final List<String> arguments;
         if (typeMirror instanceof DeclaredType) {
             DeclaredType declaredType = (DeclaredType) typeMirror;
@@ -112,10 +119,9 @@ public class FieldAnalyzer implements Supplier<String> {
             className = typeMirror.toString();
             arguments = Collections.emptyList();
         }
-
         Column column = field.getAnnotation(Column.class);
         Id id = field.getAnnotation(Id.class);
-
+        Convert convert = field.getAnnotation(Convert.class);
         List<ValueAnnotationModel> valueAnnotationModels = new ArrayList<>();
         for (AnnotationMirror annotationMirror : field.getAnnotationMirrors()) {
             DeclaredType annotationType = annotationMirror.getAnnotationType();
@@ -130,7 +136,7 @@ public class FieldAnalyzer implements Supplier<String> {
                 valueAnnotationModels.add(valueAnnotationModel);
             });
         }
-        Convert convert = field.getAnnotation(Convert.class);
+
         final boolean isId = id != null;
         final String packageName = ProcessorUtil.getPackageName(entity);
         final String entityName = ProcessorUtil.getSimpleNameAsString(this.entity);
@@ -159,6 +165,7 @@ public class FieldAnalyzer implements Supplier<String> {
                 .withId(isId)
                 .withArguments(arguments)
                 .withConverter(convert)
+                .withMappingType("MappingType." + mappingType.name())
                 .withValueByAnnotation(valueAnnotationModels)
                 .build();
     }
@@ -178,6 +185,43 @@ public class FieldAnalyzer implements Supplier<String> {
     private Mustache createTemplate() {
         MustacheFactory factory = new DefaultMustacheFactory();
         return factory.compile(TEMPLATE);
+    }
+
+    private Class<?> convertTypeMirrorToClass(TypeMirror typeMirror) {
+        TypeKind kind = typeMirror.getKind();
+        Types types = processingEnv.getTypeUtils();
+
+        if (kind == TypeKind.DECLARED) {
+            DeclaredType declaredType = (DeclaredType) typeMirror;
+            TypeElement typeElement = (TypeElement) declaredType.asElement();
+            String qualifiedName = typeElement.getQualifiedName().toString();
+            try {
+                return Class.forName(qualifiedName);
+            } catch (ClassNotFoundException e) {
+              throw new ValidationException("An error to convert the type mirror to class: " + qualifiedName, e);
+            }
+        } else if (kind == TypeKind.ARRAY) {
+            ArrayType arrayType = (ArrayType) typeMirror;
+            TypeMirror componentType = arrayType.getComponentType();
+            Class<?> componentClass = convertTypeMirrorToClass(componentType);
+            if (componentClass != null) {
+                return java.lang.reflect.Array.newInstance(componentClass, 0).getClass();
+            }
+        } else if (kind.isPrimitive()) {
+            PrimitiveType primitiveType = (PrimitiveType) typeMirror;
+            TypeElement boxedTypeElement = types.boxedClass(primitiveType);
+            if (boxedTypeElement != null) {
+                try {
+                    return Class.forName(boxedTypeElement.getQualifiedName().toString());
+                } catch (ClassNotFoundException e) {
+                 throw new ValidationException("An error to convert the type mirror to class: " +
+                         boxedTypeElement.getQualifiedName().toString()
+                         , e);
+                }
+            }
+        }
+        // For other cases, return null or handle the conversion as needed.
+        return null;
     }
 
 }
