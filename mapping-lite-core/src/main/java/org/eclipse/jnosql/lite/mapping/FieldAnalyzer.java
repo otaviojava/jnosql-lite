@@ -51,11 +51,14 @@ import java.util.stream.Collectors;
 
 public class FieldAnalyzer implements Supplier<String> {
 
-    private static final String TEMPLATE = "fieldmetadata.mustache";
+    private static final String DEFAULT_TEMPLATE = "fieldmetadata.mustache";
+    private static final String GENERIC_TEMPLATE = "fieldmetadata.mustache";
     private static final Predicate<Element> IS_METHOD = el -> el.getKind() == ElementKind.METHOD;
     public static final Function<Element, String> ELEMENT_TO_STRING = el -> el.getSimpleName().toString();
     private final Element field;
     private final Mustache template;
+
+    private final Mustache genericTemplate;
     private final ProcessingEnvironment processingEnv;
     private final TypeElement entity;
 
@@ -64,7 +67,8 @@ public class FieldAnalyzer implements Supplier<String> {
         this.field = field;
         this.processingEnv = processingEnv;
         this.entity = entity;
-        this.template = createTemplate();
+        this.template = createTemplate(DEFAULT_TEMPLATE);
+        this.genericTemplate = createTemplate(GENERIC_TEMPLATE);
     }
 
     @Override
@@ -73,7 +77,11 @@ public class FieldAnalyzer implements Supplier<String> {
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = getFileObject(metadata, filer);
         try (Writer writer = fileObject.openWriter()) {
-            template.execute(writer, metadata);
+            if(metadata.getElementType()== null){
+                template.execute(writer, metadata);
+            } else {
+                genericTemplate.execute(writer, metadata);
+            }
         } catch (IOException exception) {
             throw new ValidationException("An error to compile the class: " +
                     metadata.getQualified(), exception);
@@ -108,7 +116,7 @@ public class FieldAnalyzer implements Supplier<String> {
         String className;
         Class<?> typeElement = convertTypeMirrorToClass(typeMirror);
         MappingType mappingType = MappingType.of(typeElement);
-        String elementType = "null";
+        String elementType = null;
 
         boolean embeddable = typeElement.getAnnotation(Embeddable.class) != null ||
                 typeElement.getAnnotation(Entity.class) != null;
@@ -189,9 +197,9 @@ public class FieldAnalyzer implements Supplier<String> {
         return () -> new ValidationException(s + fieldName + " in the class: " + packageName + "." + entity);
     }
 
-    private Mustache createTemplate() {
+    private Mustache createTemplate(String template) {
         MustacheFactory factory = new DefaultMustacheFactory();
-        return factory.compile(TEMPLATE);
+        return factory.compile(template);
     }
 
     private Class<?> convertTypeMirrorToClass(TypeMirror typeMirror) {
