@@ -15,8 +15,6 @@
 package {{packageName}};
 
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.jnosql.communication.Value;
@@ -41,20 +39,24 @@ public final class {{className}} implements FieldMetadata {
     private final Map<Class<? extends Annotation>, String> valueByAnnotation;
 
     public {{className}}() {
-        {{^arguments}}
+        {{^arguments.length}}
         this.arguments = java.util.Collections.emptyList();
-        {{/arguments}}
+        {{/arguments.length}}
+        {{#arguments.length}}
+         this.arguments = new java.util.ArrayList<>();
+        {{/arguments.length}}
         {{#arguments}}
-        this.arguments = new ArrayList<>();
         this.arguments.add({{.}}.class);
         {{/arguments}}
         this.converter = {{converter}};
         this.typeConverter = {{typeConverter}};
-        {{^valueByAnnotation}}
+        {{^valueByAnnotation.length}}
         this.valueByAnnotation = java.util.Collections.emptyMap();
-        {{/valueByAnnotation}}
+        {{/valueByAnnotation.length}}
+        {{#valueByAnnotation.length}}
+        this.valueByAnnotation = new java.util.HashMap<>();
+        {{/valueByAnnotation.length}}
         {{#valueByAnnotation}}
-        this.valueByAnnotation = new HashMap<>();
         this.valueByAnnotation.put({{key}},"{{value}}");
         {{/valueByAnnotation}}
     }

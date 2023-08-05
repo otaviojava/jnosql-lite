@@ -45,11 +45,8 @@ public final class {{className}} implements EntityMetadata {
     private final ConstructorMetadata constructor;
 
     public {{className}}() {
-        {{^fields}}
-        this.fields = java.util.Collections.emptyList();
-        {{/fields}}
-        {{#fields}}
         this.fields = new ArrayList<>();
+        {{#fields}}
         this.fields.add(new {{.}}());
         {{/fields}}
         {{#inheritanceParameter}}
