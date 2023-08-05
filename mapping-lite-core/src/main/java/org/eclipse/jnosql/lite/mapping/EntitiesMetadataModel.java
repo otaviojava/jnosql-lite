@@ -29,6 +29,6 @@ public class EntitiesMetadataModel extends BaseMappingModel {
     }
 
     public String getQualified() {
-        return "org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata";
+        return "org.eclipse.jnosql.lite.mapping.metadata.LiteEntitiesMetadata";
     }
 }
