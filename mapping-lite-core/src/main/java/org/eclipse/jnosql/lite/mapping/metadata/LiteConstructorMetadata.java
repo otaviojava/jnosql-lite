@@ -31,7 +31,7 @@ public class LiteConstructorMetadata implements ConstructorMetadata {
     /**
      * The empty instance
      */
-    public static final ConstructorMetadata EMPTY = new LiteConstructorMetadata(false, emptyList());
+    public static final ConstructorMetadata EMPTY = new LiteConstructorMetadata(true, emptyList());
 
     private final boolean defaultConstructor;
     private final List<ParameterMetaData> parameters;
