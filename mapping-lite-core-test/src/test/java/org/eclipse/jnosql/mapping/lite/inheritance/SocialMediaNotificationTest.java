@@ -14,10 +14,10 @@
  */
 package org.eclipse.jnosql.mapping.lite.inheritance;
 
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
 import org.eclipse.jnosql.mapping.DiscriminatorColumn;
 import org.junit.jupiter.api.Assertions;
@@ -37,33 +37,33 @@ public class SocialMediaNotificationTest {
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = new LiteEntitiesMetadata();
         this.entityMetadata = this.mappings.get(SocialMediaNotification.class);
     }
 
     @Test
     public void shouldGetName() {
-        Assertions.assertEquals("Notification", entityMetadata.getName());
+        Assertions.assertEquals("Notification", entityMetadata.name());
     }
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(SocialMediaNotification.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(SocialMediaNotification.class.getSimpleName(), entityMetadata.simpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(SocialMediaNotification.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(SocialMediaNotification.class.getName(), entityMetadata.className());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(SocialMediaNotification.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(SocialMediaNotification.class, entityMetadata.type());
     }
 
     @Test
     public void shouldGetId() {
-        Optional<FieldMetadata> id = this.entityMetadata.getId();
+        Optional<FieldMetadata> id = this.entityMetadata.id();
         Assertions.assertTrue(id.isPresent());
     }
 
@@ -76,7 +76,7 @@ public class SocialMediaNotificationTest {
 
     @Test
     public void shouldGetFieldsName() {
-        List<String> fields = entityMetadata.getFieldsName();
+        List<String> fields = entityMetadata.fieldsName();
         Assertions.assertEquals(4, fields.size());
         Assertions.assertTrue(fields.contains("id"));
         Assertions.assertTrue(fields.contains("name"));
@@ -85,7 +85,7 @@ public class SocialMediaNotificationTest {
 
     @Test
     public void shouldGetFieldsGroupByName() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("_id"));
         Assertions.assertNotNull(groupByName.get("name"));

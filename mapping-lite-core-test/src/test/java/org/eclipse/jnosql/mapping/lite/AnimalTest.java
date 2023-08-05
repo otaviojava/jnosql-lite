@@ -14,10 +14,13 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
+
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,33 +38,33 @@ public class AnimalTest {
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = new LiteEntitiesMetadata();
         this.entityMetadata = this.mappings.get(Animal.class);
     }
 
     @Test
     public void shouldGetName() {
-        Assertions.assertEquals("kind", entityMetadata.getName());
+        Assertions.assertEquals("kind", entityMetadata.name());
     }
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(Animal.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(Animal.class.getSimpleName(), entityMetadata.simpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(Animal.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(Animal.class.getName(), entityMetadata.className());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(Animal.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(Animal.class, entityMetadata.type());
     }
 
     @Test
     public void shouldGetId() {
-        Optional<FieldMetadata> id = this.entityMetadata.getId();
+        Optional<FieldMetadata> id = this.entityMetadata.id();
         Assertions.assertTrue(id.isPresent());
     }
 
@@ -74,7 +77,7 @@ public class AnimalTest {
 
     @Test
     public void shouldGetFieldsName() {
-        List<String> fields = entityMetadata.getFieldsName();
+        List<String> fields = entityMetadata.fieldsName();
         Assertions.assertEquals(2, fields.size());
         Assertions.assertTrue(fields.contains("name"));
         Assertions.assertTrue(fields.contains("color"));
@@ -82,7 +85,7 @@ public class AnimalTest {
 
     @Test
     public void shouldGetFieldsGroupByName() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("_id"));
         Assertions.assertNotNull(groupByName.get("color"));
@@ -90,13 +93,13 @@ public class AnimalTest {
 
     @Test
     public void shouldGetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Animal animal = new Animal();
         animal.setColor("blue");
         animal.setName("dog");
 
-        String name = this.entityMetadata.getColumnField("name");
-        String color = this.entityMetadata.getColumnField("color");
+        String name = this.entityMetadata.columnField("name");
+        String color = this.entityMetadata.columnField("color");
         FieldMetadata fieldName = groupByName.get(name);
         FieldMetadata fieldColor = groupByName.get(color);
 
@@ -106,11 +109,11 @@ public class AnimalTest {
 
     @Test
     public void shouldSetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Animal animal = new Animal();
 
-        String name = this.entityMetadata.getColumnField("name");
-        String color = this.entityMetadata.getColumnField("color");
+        String name = this.entityMetadata.columnField("name");
+        String color = this.entityMetadata.columnField("color");
         FieldMetadata fieldName = groupByName.get(name);
         FieldMetadata fieldColor = groupByName.get(color);
 

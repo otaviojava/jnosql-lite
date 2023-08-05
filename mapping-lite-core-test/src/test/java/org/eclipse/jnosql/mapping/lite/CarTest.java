@@ -14,10 +14,10 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,33 +35,33 @@ public class CarTest {
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = new LiteEntitiesMetadata();
         this.entityMetadata = this.mappings.get(Car.class);
     }
 
     @Test
     public void shouldGetName() {
-        Assertions.assertEquals("car", entityMetadata.getName());
+        Assertions.assertEquals("car", entityMetadata.name());
     }
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(Car.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(Car.class.getSimpleName(), entityMetadata.simpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(Car.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(Car.class.getName(), entityMetadata.className());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(Car.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(Car.class, entityMetadata.type());
     }
 
     @Test
     public void shouldGetId() {
-        Optional<FieldMetadata> id = this.entityMetadata.getId();
+        Optional<FieldMetadata> id = this.entityMetadata.id();
         Assertions.assertTrue(id.isPresent());
     }
 
@@ -74,7 +74,7 @@ public class CarTest {
 
     @Test
     public void shouldGetFieldsName() {
-        List<String> fields = entityMetadata.getFieldsName();
+        List<String> fields = entityMetadata.fieldsName();
         Assertions.assertEquals(2, fields.size());
         Assertions.assertTrue(fields.contains("name"));
         Assertions.assertTrue(fields.contains("model"));
@@ -82,7 +82,7 @@ public class CarTest {
 
     @Test
     public void shouldGetFieldsGroupByName() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("_id"));
         Assertions.assertNotNull(groupByName.get("model"));
@@ -90,13 +90,13 @@ public class CarTest {
 
     @Test
     public void shouldGetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Car car = new Car();
         car.setModel("sport");
         car.setName("ferrari");
 
-        String name = this.entityMetadata.getColumnField("name");
-        String model = this.entityMetadata.getColumnField("model");
+        String name = this.entityMetadata.columnField("name");
+        String model = this.entityMetadata.columnField("model");
         FieldMetadata fieldName = groupByName.get(name);
         FieldMetadata fieldModel = groupByName.get(model);
 
@@ -106,11 +106,11 @@ public class CarTest {
 
     @Test
     public void shouldSetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Car car = new Car();
 
-        String name = this.entityMetadata.getColumnField("name");
-        String model = this.entityMetadata.getColumnField("model");
+        String name = this.entityMetadata.columnField("name");
+        String model = this.entityMetadata.columnField("model");
         FieldMetadata fieldName = groupByName.get(name);
         FieldMetadata fieldModel = groupByName.get(model);
 

@@ -14,10 +14,10 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,33 +34,33 @@ public class MovieTest {
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = new LiteEntitiesMetadata();
         this.entityMetadata = this.mappings.get(Movie.class);
     }
 
     @Test
     public void shouldGetName() {
-        Assertions.assertEquals("Movie", entityMetadata.getName());
+        Assertions.assertEquals("Movie", entityMetadata.name());
     }
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(Movie.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(Movie.class.getSimpleName(), entityMetadata.simpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(Movie.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(Movie.class.getName(), entityMetadata.className());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(Movie.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(Movie.class, entityMetadata.type());
     }
 
     @Test
     public void shouldGetId() {
-        Optional<FieldMetadata> id = this.entityMetadata.getId();
+        Optional<FieldMetadata> id = this.entityMetadata.id();
         Assertions.assertFalse(id.isPresent());
     }
 
@@ -73,7 +73,7 @@ public class MovieTest {
 
     @Test
     public void shouldGetFieldsName() {
-        List<String> fields = entityMetadata.getFieldsName();
+        List<String> fields = entityMetadata.fieldsName();
         Assertions.assertEquals(2, fields.size());
         Assertions.assertTrue(fields.contains("title"));
         Assertions.assertTrue(fields.contains("director"));
@@ -81,7 +81,7 @@ public class MovieTest {
 
     @Test
     public void shouldGetFieldsGroupByName() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("title"));
         Assertions.assertNotNull(groupByName.get("director"));
@@ -89,7 +89,7 @@ public class MovieTest {
 
     @Test
     public void shouldGetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Movie movie = new Movie();
         movie.setTitle("Movie");
 
@@ -97,8 +97,8 @@ public class MovieTest {
         sample.setName("Director name");
         movie.setDirector(sample);
 
-        String title = this.entityMetadata.getColumnField("title");
-        String director = this.entityMetadata.getColumnField("director");
+        String title = this.entityMetadata.columnField("title");
+        String director = this.entityMetadata.columnField("director");
         FieldMetadata fieldTitle = groupByName.get(title);
         FieldMetadata fieldDirector = groupByName.get(director);
 
@@ -108,14 +108,14 @@ public class MovieTest {
 
     @Test
     public void shouldSetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Movie movie = new Movie();
 
         Director sample = new Director();
         movie.setDirector(sample);
 
-        String title = this.entityMetadata.getColumnField("title");
-        String director = this.entityMetadata.getColumnField("director");
+        String title = this.entityMetadata.columnField("title");
+        String director = this.entityMetadata.columnField("director");
         FieldMetadata fieldTitle = groupByName.get(title);
         FieldMetadata fieldDirector = groupByName.get(director);
 
@@ -128,8 +128,8 @@ public class MovieTest {
 
     @Test
     public void shouldReturnEmbeddedAsTrue() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
-        String director = this.entityMetadata.getColumnField("director");
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
+        String director = this.entityMetadata.columnField("director");
         FieldMetadata fieldDirector = groupByName.get(director);
         Class<?> type = fieldDirector.getType();
         EntityMetadata entityMetadata = mappings.findByClass(type).get();

@@ -14,9 +14,9 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class EntitiesMetadataTest {
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = new LiteEntitiesMetadata();
     }
 
     @Test
@@ -39,7 +39,7 @@ public class EntitiesMetadataTest {
     public void shouldReturnFromClass() {
         EntityMetadata entityMetadata = this.mappings.get(Animal.class);
         Assertions.assertNotNull(entityMetadata);
-        Assertions.assertEquals(Animal.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(Animal.class, entityMetadata.type());
         Assertions.assertEquals(Car.class, mappings.get(Car.class).getClassInstance());
         Assertions.assertEquals(Person.class, mappings.get(Person.class).getClassInstance());
     }

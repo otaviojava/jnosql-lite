@@ -14,10 +14,10 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.mapping.AttributeConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,33 +38,33 @@ public class OrdersTest {
 
     @BeforeEach
     public void setUp() {
-        this.mappings = new DefaultEntitiesMetadata();
+        this.mappings = new LiteEntitiesMetadata();
         this.entityMetadata = this.mappings.get(Orders.class);
     }
 
     @Test
     public void shouldGetName() {
-        Assertions.assertEquals("Orders", entityMetadata.getName());
+        Assertions.assertEquals("Orders", entityMetadata.name());
     }
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(Orders.class.getSimpleName(), entityMetadata.getSimpleName());
+        Assertions.assertEquals(Orders.class.getSimpleName(), entityMetadata.simpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(Orders.class.getName(), entityMetadata.getClassName());
+        Assertions.assertEquals(Orders.class.getName(), entityMetadata.className());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(Orders.class, entityMetadata.getClassInstance());
+        Assertions.assertEquals(Orders.class, entityMetadata.type());
     }
 
     @Test
     public void shouldGetId() {
-        Optional<FieldMetadata> id = this.entityMetadata.getId();
+        Optional<FieldMetadata> id = this.entityMetadata.id();
         Assertions.assertFalse(id.isPresent());
     }
 
@@ -77,7 +77,7 @@ public class OrdersTest {
 
     @Test
     public void shouldGetFieldsName() {
-        List<String> fields = entityMetadata.getFieldsName();
+        List<String> fields = entityMetadata.fieldsName();
         Assertions.assertEquals(2, fields.size());
         Assertions.assertTrue(fields.contains("user"));
         Assertions.assertTrue(fields.contains("items"));
@@ -85,7 +85,7 @@ public class OrdersTest {
 
     @Test
     public void shouldGetFieldsGroupByName() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Assertions.assertNotNull(groupByName);
         Assertions.assertNotNull(groupByName.get("user"));
         Assertions.assertNotNull(groupByName.get("items"));
@@ -93,7 +93,7 @@ public class OrdersTest {
 
     @Test
     public void shouldGetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Orders orders = new Orders();
         orders.setUser("Poliana");
 
@@ -113,7 +113,7 @@ public class OrdersTest {
 
     @Test
     public void shouldSetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         Orders orders = new Orders();
 
         Money money = new Money("USD", BigDecimal.TEN);
@@ -133,7 +133,7 @@ public class OrdersTest {
 
     @Test
     public void shouldReturnGenerics() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         FieldMetadata items = groupByName.get("items");
         List<Class<?>> arguments = items.getArguments();
         Assertions.assertArrayEquals(new Class<?>[]{Product.class}, arguments.toArray());
@@ -141,7 +141,7 @@ public class OrdersTest {
 
     @Test
     public void shouldReturnConverter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.getFieldsGroupByName();
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         FieldMetadata items = groupByName.get("items");
         List<Class<?>> arguments = items.getArguments();
         Class<?> argument = arguments.stream().findFirst().get();
