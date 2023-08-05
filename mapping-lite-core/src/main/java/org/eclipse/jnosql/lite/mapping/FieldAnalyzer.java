@@ -147,6 +147,7 @@ public class FieldAnalyzer implements Supplier<String> {
         final String packageName = ProcessorUtil.getPackageName(entity);
         final String entityName = ProcessorUtil.getSimpleNameAsString(this.entity);
         final String name = getName(fieldName, column, id);
+        final String collectionInstance = "null";
 
 
         final String getMethod = accessors.stream()
@@ -174,6 +175,7 @@ public class FieldAnalyzer implements Supplier<String> {
                 .withEmbeddable(embeddable)
                 .withMappingType("MappingType." + mappingType.name())
                 .withValueByAnnotation(valueAnnotationModels)
+                .withCollectionInstance(collectionInstance)
                 .build();
     }
 
