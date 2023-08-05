@@ -112,6 +112,18 @@ public class FieldModel extends BaseMappingModel {
         return converter;
     }
 
+    public String getMappingType() {
+        return mappingType;
+    }
+
+    public String getTypeConverter() {
+        return typeConverter;
+    }
+
+    public List<ValueAnnotationModel> getValueByAnnotation() {
+        return valueByAnnotation;
+    }
+
     @Override
     public String toString() {
         return "FieldModel{" +
@@ -205,9 +217,11 @@ public class FieldModel extends BaseMappingModel {
             if (Objects.nonNull(converter)) {
                 try {
                     this.converter = String.format("new %s();", converter.value().getName());
+                    this.typeConverter = converter.value().getName().concat(".class");
                 } catch (MirroredTypeException exception) {
                     TypeMirror typeMirror = exception.getTypeMirror();
                     this.converter = String.format("new %s()", typeMirror);
+                    this.typeConverter = typeMirror.toString().concat(".class");
                 }
 
             }
@@ -216,11 +230,6 @@ public class FieldModel extends BaseMappingModel {
 
         public FieldMetaDataBuilder withMappingType(String mappingType) {
             this.mappingType = mappingType;
-            return this;
-        }
-
-        public FieldMetaDataBuilder withTypeConverter(String typeConverter) {
-            this.typeConverter = typeConverter;
             return this;
         }
 

@@ -34,6 +34,7 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -114,11 +115,20 @@ public class FieldAnalyzer implements Supplier<String> {
 
         Column column = field.getAnnotation(Column.class);
         Id id = field.getAnnotation(Id.class);
+
+        List<ValueAnnotationModel> valueAnnotationModels = new ArrayList<>();
         for (AnnotationMirror annotationMirror : field.getAnnotationMirrors()) {
             DeclaredType annotationType = annotationMirror.getAnnotationType();
             Map<? extends ExecutableElement, ? extends AnnotationValue> elementValues = annotationMirror.getElementValues();
-            System.out.println(annotationType);
-            System.out.println(elementValues);
+            Predicate<Map.Entry<? extends ExecutableElement, ? extends AnnotationValue>> isValueMethod =
+                    e -> e.getKey().toString().equals("value()");
+
+            elementValues.entrySet().stream().filter(isValueMethod).findFirst().ifPresent(e -> {
+                String key = annotationType.toString()+".class";
+                String value = e.getValue().getValue().toString();
+                ValueAnnotationModel valueAnnotationModel = new ValueAnnotationModel(key, value);
+                valueAnnotationModels.add(valueAnnotationModel);
+            });
         }
         Convert convert = field.getAnnotation(Convert.class);
         final boolean isId = id != null;
@@ -149,6 +159,7 @@ public class FieldAnalyzer implements Supplier<String> {
                 .withId(isId)
                 .withArguments(arguments)
                 .withConverter(convert)
+                .withValueByAnnotation(valueAnnotationModels)
                 .build();
     }
 
