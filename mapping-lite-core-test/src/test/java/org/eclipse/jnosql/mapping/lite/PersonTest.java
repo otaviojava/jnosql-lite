@@ -51,7 +51,7 @@ public class PersonTest {
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(Person.class.getName(), entityMetadata.name());
+        Assertions.assertEquals(Person.class.getSimpleName(), entityMetadata.simpleName());
     }
 
     @Test
