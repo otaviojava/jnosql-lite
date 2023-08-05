@@ -19,6 +19,7 @@ import org.eclipse.jnosql.mapping.Convert;
 import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class FieldModel extends BaseMappingModel {
@@ -34,12 +35,20 @@ public class FieldModel extends BaseMappingModel {
     private final List<String> arguments;
     private final String converter;
 
+    private final String mappingType;
+
+    private final String typeConverter;
+
+    private final List<ValueAnnotationModel> valueByAnnotation;
+
     FieldModel(String packageName, String name,
                String type, String entity,
                String reader, String writer, String fieldName,
                boolean id,
                List<String> arguments,
-               String converter) {
+               String converter, String mappingType,
+               String typeConverter,
+               List<ValueAnnotationModel> valueByAnnotation) {
         this.packageName = packageName;
         this.name = name;
         this.type = type;
@@ -50,6 +59,9 @@ public class FieldModel extends BaseMappingModel {
         this.id = id;
         this.arguments = arguments;
         this.converter = converter;
+        this.mappingType = mappingType;
+        this.typeConverter = typeConverter;
+        this.valueByAnnotation = valueByAnnotation;
     }
 
     public String getPackageName() {
@@ -134,6 +146,11 @@ public class FieldModel extends BaseMappingModel {
         private boolean embedded;
         private String converter = "null";
 
+        private String mappingType= "null";
+
+        private String typeConverter=  "null";
+        private List<ValueAnnotationModel> valueByAnnotation;
+
 
         private FieldMetaDataBuilder() {
         }
@@ -197,8 +214,24 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
+        public FieldMetaDataBuilder withMappingType(String mappingType) {
+            this.mappingType = mappingType;
+            return this;
+        }
+
+        public FieldMetaDataBuilder withTypeConverter(String typeConverter) {
+            this.typeConverter = typeConverter;
+            return this;
+        }
+
+        public FieldMetaDataBuilder withValueByAnnotation(List<ValueAnnotationModel> valueByAnnotation) {
+            this.valueByAnnotation = valueByAnnotation;
+            return this;
+        }
+
         public FieldModel build() {
-            return new FieldModel(packageName, name, type, entity, reader, writer, fieldName, id, arguments, converter);
+            return new FieldModel(packageName, name, type, entity, reader, writer, fieldName,
+                    id, arguments, converter, mappingType, typeConverter, valueByAnnotation);
         }
     }
 }
