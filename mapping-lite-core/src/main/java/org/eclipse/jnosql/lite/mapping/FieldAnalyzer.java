@@ -77,7 +77,7 @@ public class FieldAnalyzer implements Supplier<String> {
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = getFileObject(metadata, filer);
         try (Writer writer = fileObject.openWriter()) {
-            if(metadata.getElementType()== null){
+            if(metadata.getElementType()== null|| "null".equals(metadata.getElementType())){
                 template.execute(writer, metadata);
             } else {
                 genericTemplate.execute(writer, metadata);
