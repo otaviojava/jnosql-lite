@@ -1,79 +1,114 @@
 /*
-*  Copyright (c) 2020 Otávio Santana and others
-*   All rights reserved. This program and the accompanying materials
-*   are made available under the terms of the Eclipse Public License v1.0
-*   and Apache License v2.0 which accompanies this distribution.
-*   The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
-*   and the Apache License v2.0 is available at http://www.opensource.org/licenses/apache2.0.php.
-*
-*   You may elect to redistribute this code under either of these licenses.
-*
-*   Contributors:
-*
-*   Otavio Santana
-*/
-package {{packageName}};
+ *  Copyright (c) 2023 Otávio Santana and others
+ *   All rights reserved. This program and the accompanying materials
+ *   are made available under the terms of the Eclipse Public License v1.0
+ *   and Apache License v2.0 which accompanies this distribution.
+ *   The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+ *   and the Apache License v2.0 is available at http://www.opensource.org/licenses/apache2.0.php.
+ *
+ *   You may elect to redistribute this code under either of these licenses.
+ *
+ *   Contributors:
+ *
+ *   Otavio Santana
+ */
+package org.eclipse.jnosql.mapping.lite;
 
+import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Collections;
+
+import org.eclipse.jnosql.communication.Value;
 import org.eclipse.jnosql.mapping.AttributeConverter;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
+import org.eclipse.jnosql.mapping.metadata.MappingType;
+
 import javax.annotation.processing.Generated;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
 
 @Generated(value= "JNoSQL Lite FieldMetadata Generator", date = "{{now}}")
 public final class {{className}} implements FieldMetadata {
 
-  private final List<Class<?>> arguments;
+    private final List<Class<?>> arguments;
 
-  private final AttributeConverter<?, ?> converter;
+    private final AttributeConverter<?, ?> converter;
 
-  public {{className}}() {
-    this.arguments = new ArrayList<>();
-    {{#arguments}}
-    this.arguments.add({{.}}.class);
-    {{/arguments}}
-    this.converter = {{converter}};
-  }
+    private final Class<AttributeConverter<?, ?>> typeConverter;
 
-  @Override
-   public boolean isId() {
-    return {{id}};
-  }
+    private final Map<Class<? extends Annotation>, String> valueByAnnotation;
 
-  @Override
-  public <X, Y, T extends AttributeConverter<X, Y>> Optional<X> converter() {
-    return (Optional<X>) Optional.ofNullable(converter);
-  }
+    public {{className}}() {
+        this.arguments = new ArrayList<>();
+        {{#arguments}}
+        this.arguments.add({{.}}.class);
+        {{/arguments}}
+        this.converter = {{converter}};
+        this.typeConverter = {{typeConverter}};
+        this.valueByAnnotation = new HashMap<>();
+        {{#valueByAnnotation}}
+        this.valueByAnnotation.put({{key}},{{value}});
+        {{/valueByAnnotation}}
+    }
 
-  @Override
-  public String name() {
-    return "{{name}}";
-  }
+    @Override
+    public boolean isId() {
+        return {{id}};
+    }
 
-  @Override
-  public String fieldName() {
-    return "{{fieldName}}";
-  }
+    @Override
+    public <T extends Annotation> Optional<String> value(Class<T> type) {
+        Objects.requireNonNull(type, "type is required");
+        return Optional.ofNullable(this.valueByAnnotation.get(type));
+    }
 
-   @Override
-   public void write(Object bean, Object value) {
-    (({{entity}}) bean).{{writer}}(({{type}})value);
-   }
+    @Override
+    public <X, Y, T extends AttributeConverter<X, Y>> Optional<Class<T>> converter() {
+        return Optional.ofNullable((Class<T>) typeConverter);
+    }
 
-   @Override
-   public Object read(Object bean) {
-    return (({{entity}}) bean).{{reader}}();
-   }
+    @Override
+    public <X, Y, T extends AttributeConverter<X, Y>> Optional<T> newConverter() {
+        return (Optional<T>) Optional.ofNullable(converter);
+    }
 
-   @Override
-   public Class<?> type()  {
-    return {{type}}.class;
-   }
+    @Override
+    public MappingType mappingType() {
+        return {{mappingType}};
+    }
 
-   @Override
-   public List<Class<?>> arguments() {
-    return Collections.unmodifiableList(arguments);
-   }
+    @Override
+    public String name() {
+        return "{{name}}";
+    }
+
+    @Override
+    public String fieldName() {
+        return "{{fieldName}}";
+    }
+
+    @Override
+    public Object value(Value value) {
+        Objects.requireNonNull(value, "value is required");
+        return value.get(java.lang.String.class);
+    }
+
+    @Override
+    public void write(Object bean, Object value) {
+        (({{entity}}) bean).{{writer}}(({{type}})value);
+    }
+
+    @Override
+    public Object read(Object bean) {
+        return (({{entity}}) bean).{{reader}}();
+    }
+
+    @Override
+    public Class<?> type() {
+        return {{type}}.class;
+    }
+
 }
