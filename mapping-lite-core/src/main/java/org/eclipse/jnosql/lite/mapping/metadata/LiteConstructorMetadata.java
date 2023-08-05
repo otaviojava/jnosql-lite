@@ -21,10 +21,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Collections.emptyList;
+
 /**
  * The lite implementation of {@link ConstructorMetadata}
  */
 public class LiteConstructorMetadata implements ConstructorMetadata {
+
+    /**
+     * The empty instance
+     */
+    public static final ConstructorMetadata EMPTY = new LiteConstructorMetadata(false, emptyList());
 
     private final boolean defaultConstructor;
     private final List<ParameterMetaData> parameters;
