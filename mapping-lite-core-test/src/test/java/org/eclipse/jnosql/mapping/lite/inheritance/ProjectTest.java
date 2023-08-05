@@ -18,7 +18,7 @@ import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
+import org.eclipse.jnosql.mapping.metadata.InheritanceMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,12 +89,12 @@ public class ProjectTest {
 
     @Test
     public void shouldGetInheritanceMetadata() {
-        InheritanceMetadata inheritance = this.entityMetadata.getInheritance()
+        InheritanceMetadata inheritance = this.entityMetadata.inheritance()
                 .orElseThrow();
-        Assertions.assertEquals("Project", inheritance.getDiscriminatorValue());
-        Assertions.assertEquals("size", inheritance.getDiscriminatorColumn());
-        Assertions.assertEquals(Project.class, inheritance.getEntity());
-        Assertions.assertEquals(Project.class, inheritance.getParent());
+        Assertions.assertEquals("Project", inheritance.discriminatorValue());
+        Assertions.assertEquals("size", inheritance.discriminatorColumn());
+        Assertions.assertEquals(Project.class, inheritance.entity());
+        Assertions.assertEquals(Project.class, inheritance.parent());
     }
 
 }

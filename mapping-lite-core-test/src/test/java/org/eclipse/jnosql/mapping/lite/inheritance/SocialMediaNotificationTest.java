@@ -18,7 +18,7 @@ import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.InheritanceMetadata;
+import org.eclipse.jnosql.mapping.metadata.InheritanceMetadata;
 import org.eclipse.jnosql.mapping.DiscriminatorColumn;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -93,12 +93,12 @@ public class SocialMediaNotificationTest {
 
     @Test
     public void shouldGetInheritanceMetadata() {
-        InheritanceMetadata inheritance = this.entityMetadata.getInheritance()
+        InheritanceMetadata inheritance = this.entityMetadata.inheritance()
                 .orElseThrow();
-        Assertions.assertEquals("SocialMediaNotification", inheritance.getDiscriminatorValue());
-        Assertions.assertEquals(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN, inheritance.getDiscriminatorColumn());
-        Assertions.assertEquals(SocialMediaNotification.class, inheritance.getEntity());
-        Assertions.assertEquals(Notification.class, inheritance.getParent());
+        Assertions.assertEquals("SocialMediaNotification", inheritance.discriminatorValue());
+        Assertions.assertEquals(DiscriminatorColumn.DEFAULT_DISCRIMINATOR_COLUMN, inheritance.discriminatorColumn());
+        Assertions.assertEquals(SocialMediaNotification.class, inheritance.entity());
+        Assertions.assertEquals(Notification.class, inheritance.parent());
     }
 
 }

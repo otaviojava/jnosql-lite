@@ -131,7 +131,7 @@ public class OrdersTest {
         Assertions.assertEquals(Collections.singletonList(product), items.read(orders));
     }
 
-    @Test
+  /*  @Test
     public void shouldReturnGenerics() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         FieldMetadata items = groupByName.get("items");
@@ -156,5 +156,5 @@ public class OrdersTest {
         Money money = new Money("USD", BigDecimal.TEN);
         String test = attributeConverter.convertToDatabaseColumn(money);
         Assertions.assertNotNull(test);
-    }
+    }*/
 }

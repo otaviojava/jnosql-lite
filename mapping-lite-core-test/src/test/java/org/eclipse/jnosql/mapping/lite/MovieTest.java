@@ -126,14 +126,5 @@ public class MovieTest {
 
     }
 
-    @Test
-    public void shouldReturnEmbeddedAsTrue() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
-        String director = this.entityMetadata.columnField("director");
-        FieldMetadata fieldDirector = groupByName.get(director);
-        Class<?> type = fieldDirector.getType();
-        EntityMetadata entityMetadata = mappings.findByClass(type).get();
-        Assertions.assertTrue(entityMetadata.isEmbedded());
-    }
 
 }

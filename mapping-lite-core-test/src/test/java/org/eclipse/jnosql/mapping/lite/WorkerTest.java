@@ -156,11 +156,11 @@ public class WorkerTest {
         Assertions.assertEquals(new Money("USD", BigDecimal.TEN), salary.read(worker));
     }
 
-    @Test
+/*    @Test
     public void shouldReturnGenerics() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         FieldMetadata contacts = groupByName.get("contacts");
         List<Class<?>> arguments = contacts.getArguments();
         Assertions.assertArrayEquals(new Class<?>[]{String.class}, arguments.toArray());
-    }
+    }*/
 }

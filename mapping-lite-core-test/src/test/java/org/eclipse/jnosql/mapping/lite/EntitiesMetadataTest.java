@@ -40,14 +40,14 @@ public class EntitiesMetadataTest {
         EntityMetadata entityMetadata = this.mappings.get(Animal.class);
         Assertions.assertNotNull(entityMetadata);
         Assertions.assertEquals(Animal.class, entityMetadata.type());
-        Assertions.assertEquals(Car.class, mappings.get(Car.class).getClassInstance());
-        Assertions.assertEquals(Person.class, mappings.get(Person.class).getClassInstance());
+        Assertions.assertEquals(Car.class, mappings.get(Car.class).type());
+        Assertions.assertEquals(Person.class, mappings.get(Person.class).type());
     }
 
     @Test
     public void shouldReturnFromName() {
-        Assertions.assertEquals(Animal.class, mappings.findByName("kind").getClassInstance());
-        Assertions.assertEquals(Car.class, mappings.findByName("car").getClassInstance());
-        Assertions.assertEquals(Person.class, mappings.findByName("Person").getClassInstance());
+        Assertions.assertEquals(Animal.class, mappings.findByName("kind").type());
+        Assertions.assertEquals(Car.class, mappings.findByName("car").type());
+        Assertions.assertEquals(Person.class, mappings.findByName("Person").type());
     }
 }
