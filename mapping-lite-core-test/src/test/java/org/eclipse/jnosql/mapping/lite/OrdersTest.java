@@ -14,11 +14,13 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
+import org.assertj.core.api.SoftAssertions;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.mapping.AttributeConverter;
+import org.eclipse.jnosql.mapping.metadata.GenericFieldMetadata;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -131,23 +133,28 @@ public class OrdersTest {
         Assertions.assertEquals(Collections.singletonList(product), items.read(orders));
     }
 
-  /*  @Test
+   @Test
     public void shouldReturnGenerics() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         FieldMetadata items = groupByName.get("items");
-        List<Class<?>> arguments = items.getArguments();
-        Assertions.assertArrayEquals(new Class<?>[]{Product.class}, arguments.toArray());
+       GenericFieldMetadata genericFieldMetadata = (GenericFieldMetadata) items;
+
+       SoftAssertions.assertSoftly(soft -> {
+           soft.assertThat(genericFieldMetadata.elementType()).isEqualTo(Product.class);
+           soft.assertThat(genericFieldMetadata.collectionInstance()).isInstanceOf(List.class);
+       });
     }
 
     @Test
     public void shouldReturnConverter() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         FieldMetadata items = groupByName.get("items");
-        List<Class<?>> arguments = items.getArguments();
-        Class<?> argument = arguments.stream().findFirst().get();
+        GenericFieldMetadata genericFieldMetadata = (GenericFieldMetadata) items;
+
+        Class<?> argument = genericFieldMetadata.elementType();
         EntityMetadata product = this.mappings.get(argument);
-        FieldMetadata value = product.getFieldMapping("value").get();
-        Optional<AttributeConverter<Money, String>> converter = value.getConverter();
+        FieldMetadata value = product.fieldMapping("value").get();
+        Optional<AttributeConverter<Money, String>> converter = value.newConverter();
         Assertions.assertNotNull(converter);
         Assertions.assertTrue(converter.isPresent());
 
@@ -156,5 +163,5 @@ public class OrdersTest {
         Money money = new Money("USD", BigDecimal.TEN);
         String test = attributeConverter.convertToDatabaseColumn(money);
         Assertions.assertNotNull(test);
-    }*/
+    }
 }
