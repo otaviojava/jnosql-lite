@@ -51,7 +51,9 @@ public final class {{className}} implements EntityMetadata {
         {{#inheritanceParameter}}
          this.inheritance= new InheritanceMetadata({{{inheritanceParameter}}});
         {{/inheritanceParameter}}
+        {{^inheritanceParameter}}
         this.inheritance = null;
+        {{/inheritanceParameter}}
         this.constructor = null;
     }
 

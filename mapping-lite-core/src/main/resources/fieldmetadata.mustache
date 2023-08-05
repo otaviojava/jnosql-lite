@@ -37,7 +37,7 @@ public final class {{className}} implements FieldMetadata {
 
     private final AttributeConverter<?, ?> converter;
 
-    private final Class<AttributeConverter<?, ?>> typeConverter;
+    private final Class<? extends AttributeConverter<?, ?>> typeConverter;
 
     private final Map<Class<? extends Annotation>, String> valueByAnnotation;
 
