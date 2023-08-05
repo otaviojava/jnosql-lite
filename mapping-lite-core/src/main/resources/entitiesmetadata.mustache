@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2020 Otávio Santana and others
+*  Copyright (c) 2023 Otávio Santana and others
 *   All rights reserved. This program and the accompanying materials
 *   are made available under the terms of the Eclipse Public License v1.0
 *   and Apache License v2.0 which accompanies this distribution.
@@ -12,7 +12,8 @@
 *
 *   Otavio Santana
 */
-package org.eclipse.jnosql.lite.mapping.metadata;
+package org.eclipse.jnosql.lite.mapping;
+
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.jnosql.mapping.metadata.ClassInformationNotFoundException;
@@ -21,7 +22,9 @@ import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.InheritanceMetadata;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,14 +36,12 @@ import javax.annotation.processing.Generated;
 
 @Generated(value= "JNoSQL Lite EntitiesMetadata Generator", date = "{{now}}")
 @ApplicationScoped
-public final class DefaultEntitiesMetadata implements EntitiesMetadata {
+public final class LiteEntitiesMetadata implements EntitiesMetadata {
 
     private static final Predicate<EntityMetadata> HAS_NAME = EntityMetadata::hasEntityName;
 
     private final List<EntityMetadata> entities;
-
     private final Map<String, EntityMetadata> findByClassName;
-
     private final Map<String, EntityMetadata> findBySimpleName;
 
     private final Map<Class<?>, EntityMetadata> classes;
@@ -54,59 +55,67 @@ public final class DefaultEntitiesMetadata implements EntitiesMetadata {
         this.classes = new HashMap<>();
         this.mappings = new HashMap<>();
         this.entities = new ArrayList<>();
-    {{#entities}}
-        this.entities.add(new {{.}}());
-    {{/entities}}
+
+        {{#entities}}
+         this.entities.add(new {{.}}());
+        {{/entities}}
+
+        for (EntityMetadata entity : entities) {
+            this.mappings.put(entity.name().toUpperCase(Locale.US), entity);
+            this.classes.put(entity.getClass(), entity);
+            this.findBySimpleName.put(entity.simpleName(), entity);
+            this.findByClassName.put(entity.className(), entity);
+        }
     }
+
 
     @Override
     public EntityMetadata get(Class<?> entity) {
         Objects.requireNonNull(entity, "entity is required");
-        return entities.stream()
-                .filter(e -> entity.equals(e.type()))
-                .findFirst()
-                .orElseThrow(() -> new ClassInformationNotFoundException("Entity class not found: " + entity));
+        EntityMetadata metadata = classes.get(entity);
+        if (metadata == null) {
+            throw new ClassInformationNotFoundException("The entity " + entity + " was not found");
+        }
+        return metadata;
+    }
+
+    @Override
+    public Map<String, InheritanceMetadata> findByParentGroupByDiscriminatorValue(Class<?> parent) {
+        Objects.requireNonNull(parent, "parent is required");
+        return this.entities.stream()
+                .flatMap(c -> c.inheritance().stream())
+                .filter(p -> p.isParent(parent))
+                .collect(Collectors.toMap(InheritanceMetadata::discriminatorValue, Function.identity()));
     }
 
     @Override
     public EntityMetadata findByName(String name) {
         Objects.requireNonNull(name, "name is required");
-        return entities.stream()
-                .filter(HAS_NAME.and(e -> name.equals(e.name())))
-                .findFirst()
-                .orElseThrow(() -> new ClassInformationNotFoundException("classEntity not found"));
+        return Optional.ofNullable(mappings.get(name.toUpperCase(Locale.US)))
+                .orElseThrow(() -> new ClassInformationNotFoundException("There is not entity found with the name: " + name));
+
     }
 
     @Override
-    public Optional<EntityMetadata> findBySimpleName(String simpleName) {
-        Objects.requireNonNull(simpleName, "simpleName is required");
-        return entities.stream()
-                .filter(e -> simpleName.equals(e.simpleName()))
-                .findFirst();
+    public Optional<EntityMetadata> findBySimpleName(String name) {
+        Objects.requireNonNull(name, "name is required");
+        return Optional.ofNullable(findBySimpleName.get(name));
     }
 
     @Override
-    public Optional<EntityMetadata> findByClassName(String className) {
-        Objects.requireNonNull(className, "className is required");
-        return entities.stream()
-                .filter(e -> className.equals(e.className()))
-                .findFirst();
+    public Optional<EntityMetadata> findByClassName(String name) {
+        Objects.requireNonNull(name, "name is required");
+        return Optional.ofNullable(findByClassName.get(name));
     }
 
-   @Override
-   public Optional<EntityMetadata> findByClass(Class<?> entity) {
-       Objects.requireNonNull(entity, "entity is required");
-       return entities.stream()
-               .filter(e -> entity.equals(e.type()))
-               .findFirst();
-   }
-
-   @Override
-   public Map<String, InheritanceMetadata> findByParentGroupByDiscriminatorValue(Class<?> parent) {
-       Objects.requireNonNull(parent, "parent is required");
-       return this.entities.stream()
-                .flatMap(c -> c.inheritance().stream())
-                .filter(p -> p.isParent(parent))
-                .collect(Collectors.toMap(i -> i.discriminatorValue(), Function.identity()));
-   }
+    @Override
+    public String toString() {
+        return "DefaultEntitiesMetadata{" +
+                "entities=" + entities +
+                ", findByClassName=" + findByClassName +
+                ", findBySimpleName=" + findBySimpleName +
+                ", classes=" + classes +
+                ", mappings=" + mappings +
+                '}';
+    }
 }
