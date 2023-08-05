@@ -32,30 +32,30 @@ class CollectionUtilTest {
     private CollectionUtil collectionUtil= CollectionUtil.INSTANCE;
     @Test
     public void shouldReturnList(){
-        assertThat(collectionUtil.apply(List.class)).isEqualTo(CollectionUtil.NEW_LIST);
-        assertThat(collectionUtil.apply(Iterable.class)).isEqualTo(CollectionUtil.NEW_LIST);
-        assertThat(collectionUtil.apply(Collection.class)).isEqualTo(CollectionUtil.NEW_LIST);
+        assertThat(collectionUtil.apply(List.class.getName())).isEqualTo(CollectionUtil.NEW_LIST);
+        assertThat(collectionUtil.apply(Iterable.class.getName())).isEqualTo(CollectionUtil.NEW_LIST);
+        assertThat(collectionUtil.apply(Collection.class.getName())).isEqualTo(CollectionUtil.NEW_LIST);
     }
 
     @Test
     public void shouldReturnSet(){
-        assertThat(collectionUtil.apply(Set.class)).isEqualTo(CollectionUtil.NEW_SET);
+        assertThat(collectionUtil.apply(Set.class.getName())).isEqualTo(CollectionUtil.NEW_SET);
     }
 
     @Test
     public void shouldReturnDeque(){
-        assertThat(collectionUtil.apply(Deque.class)).isEqualTo(CollectionUtil.NEW_DEQUE);
-        assertThat(collectionUtil.apply(Queue.class)).isEqualTo(CollectionUtil.NEW_DEQUE);
+        assertThat(collectionUtil.apply(Deque.class.getName())).isEqualTo(CollectionUtil.NEW_DEQUE);
+        assertThat(collectionUtil.apply(Queue.class.getName())).isEqualTo(CollectionUtil.NEW_DEQUE);
     }
 
     @Test
     public void shouldReturnTreeSet(){
-        assertThat(collectionUtil.apply(NavigableSet.class)).isEqualTo(CollectionUtil.NEW_TREE_SET);
-        assertThat(collectionUtil.apply(SortedSet.class)).isEqualTo(CollectionUtil.NEW_TREE_SET);
+        assertThat(collectionUtil.apply(NavigableSet.class.getName())).isEqualTo(CollectionUtil.NEW_TREE_SET);
+        assertThat(collectionUtil.apply(SortedSet.class.getName())).isEqualTo(CollectionUtil.NEW_TREE_SET);
     }
 
     @Test
     public void shouldReturnDefault(){
-        assertThat(collectionUtil.apply(String.class)).isEqualTo(CollectionUtil.DEFAULT);
+        assertThat(collectionUtil.apply(String.class.getName())).isEqualTo(CollectionUtil.DEFAULT);
     }
 }

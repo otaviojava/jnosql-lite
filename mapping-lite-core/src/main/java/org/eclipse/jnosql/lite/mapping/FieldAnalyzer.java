@@ -32,18 +32,15 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.ArrayType;
 import javax.lang.model.type.DeclaredType;
-import javax.lang.model.type.PrimitiveType;
-import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -77,7 +74,7 @@ public class FieldAnalyzer implements Supplier<String> {
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = getFileObject(metadata, filer);
         try (Writer writer = fileObject.openWriter()) {
-            if(metadata.getElementType()== null|| "null".equals(metadata.getElementType())){
+            if(metadata.getElementType() == null|| "null".equals(metadata.getElementType())){
                 template.execute(writer, metadata);
             } else {
                 genericTemplate.execute(writer, metadata);
@@ -114,26 +111,30 @@ public class FieldAnalyzer implements Supplier<String> {
 
         final TypeMirror typeMirror = field.asType();
         String className;
-        Class<?> typeElement = convertTypeMirrorToClass(typeMirror);
-        MappingType mappingType = MappingType.of(typeElement);
+        MappingType mappingType = MappingType.DEFAULT;
         String elementType = null;
+        boolean embeddable = false;
+        String collectionInstance = CollectionUtil.DEFAULT;
 
-        boolean embeddable = typeElement.getAnnotation(Embeddable.class) != null ||
-                typeElement.getAnnotation(Entity.class) != null;
-
-        if (typeMirror instanceof DeclaredType) {
-            DeclaredType declaredType = (DeclaredType) typeMirror;
-            elementType = declaredType.getTypeArguments().stream()
-                    .map(TypeMirror::toString)
-                    .findFirst().map(t -> t.concat(".class"))
-                    .orElse("null");
+        if (typeMirror instanceof DeclaredType declaredType) {
+            Optional<? extends TypeMirror> genericMirrorOptional = declaredType.getTypeArguments().stream().findFirst();
             className = declaredType.asElement().toString();
+            if(genericMirrorOptional.isPresent()){
+                TypeMirror genericMirror = genericMirrorOptional.get();
+                elementType = genericMirror + ".class";
+                collectionInstance = CollectionUtil.INSTANCE.apply(className);
+                mappingType = of(genericMirror, collectionInstance, className);
+            } else {
+                elementType = "null";
+            }
+
         } else {
             className = typeMirror.toString();
         }
         Column column = field.getAnnotation(Column.class);
         Id id = field.getAnnotation(Id.class);
         Convert convert = field.getAnnotation(Convert.class);
+
         List<ValueAnnotationModel> valueAnnotationModels = new ArrayList<>();
         for (AnnotationMirror annotationMirror : field.getAnnotationMirrors()) {
             DeclaredType annotationType = annotationMirror.getAnnotationType();
@@ -153,8 +154,6 @@ public class FieldAnalyzer implements Supplier<String> {
         final String packageName = ProcessorUtil.getPackageName(entity);
         final String entityName = ProcessorUtil.getSimpleNameAsString(this.entity);
         final String name = getName(fieldName, column, id);
-        final String collectionInstance = CollectionUtil.INSTANCE.apply(typeElement);
-
 
         final String getMethod = accessors.stream()
                 .map(ELEMENT_TO_STRING)
@@ -202,41 +201,21 @@ public class FieldAnalyzer implements Supplier<String> {
         return factory.compile(template);
     }
 
-    private Class<?> convertTypeMirrorToClass(TypeMirror typeMirror) {
-        TypeKind kind = typeMirror.getKind();
-        Types types = processingEnv.getTypeUtils();
 
-        if (kind == TypeKind.DECLARED) {
-            DeclaredType declaredType = (DeclaredType) typeMirror;
-            TypeElement typeElement = (TypeElement) declaredType.asElement();
-            String qualifiedName = typeElement.getQualifiedName().toString();
-            try {
-                return Class.forName(qualifiedName);
-            } catch (ClassNotFoundException e) {
-              throw new ValidationException("An error to convert the type mirror to class: " + qualifiedName, e);
-            }
-        } else if (kind == TypeKind.ARRAY) {
-            ArrayType arrayType = (ArrayType) typeMirror;
-            TypeMirror componentType = arrayType.getComponentType();
-            Class<?> componentClass = convertTypeMirrorToClass(componentType);
-            if (componentClass != null) {
-                return java.lang.reflect.Array.newInstance(componentClass, 0).getClass();
-            }
-        } else if (kind.isPrimitive()) {
-            PrimitiveType primitiveType = (PrimitiveType) typeMirror;
-            TypeElement boxedTypeElement = types.boxedClass(primitiveType);
-            if (boxedTypeElement != null) {
-                try {
-                    return Class.forName(boxedTypeElement.getQualifiedName().toString());
-                } catch (ClassNotFoundException e) {
-                 throw new ValidationException("An error to convert the type mirror to class: " +
-                         boxedTypeElement.getQualifiedName().toString()
-                         , e);
-                }
-            }
+    private static MappingType of(TypeMirror type, String collection, String fieldtype) {
+        if (!collection.equals(CollectionUtil.DEFAULT)) {
+            return MappingType.COLLECTION;
         }
-        // For other cases, return null or handle the conversion as needed.
-        return null;
+        if (fieldtype.equals("java.util.Map")) {
+            return MappingType.MAP;
+        }
+        if (type.getAnnotation(Embeddable.class) != null) {
+            return MappingType.EMBEDDED;
+        }
+        if (type.getAnnotation(Entity.class) != null) {
+            return MappingType.ENTITY;
+        }
+        return MappingType.DEFAULT;
     }
 
 }

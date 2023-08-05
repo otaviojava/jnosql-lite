@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.function.Function;
 
-enum CollectionUtil implements Function<Class<?>, String> {
+enum CollectionUtil implements Function<String, String> {
     INSTANCE;
 
     static final String NEW_LIST = "new java.util.ArrayList<>()";
@@ -34,7 +34,7 @@ enum CollectionUtil implements Function<Class<?>, String> {
     static final String DEFAULT = "null";
 
     @Override
-    public String apply(Class<?> type) {
+    public String apply(String type) {
         if (isCollection(type)) {
             return NEW_LIST;
         } else if (isSet(type)) {
@@ -47,22 +47,26 @@ enum CollectionUtil implements Function<Class<?>, String> {
         return DEFAULT;
     }
 
-    private boolean isCollection(Class<?> type) {
-        return List.class.equals(type) ||
-                Iterable.class.equals(type)
-                || Collection.class.equals(type);
+    private boolean isCollection(String type) {
+        return toString(List.class).equals(type) ||
+                toString(Iterable.class).equals(type)
+                || toString(Collection.class).equals(type);
     }
 
-    private boolean isSet(Class<?> type) {
-        return Set.class.equals(type);
+    private boolean isSet(String type) {
+        return toString(Set.class).equals(type);
     }
 
-    private boolean isDeque(Class<?> type) {
-        return Deque.class.equals(type) || Queue.class.equals(type);
+    private boolean isDeque(String type) {
+        return toString(Deque.class).equals(type) || toString(Queue.class).equals(type);
     }
 
-    private boolean isTreeSet(Class<?> type) {
-        return NavigableSet.class.equals(type)
-                || SortedSet.class.equals(type);
+    private boolean isTreeSet(String type) {
+        return toString(NavigableSet.class).equals(type)
+                || toString(SortedSet.class).equals(type);
+    }
+
+    private String toString(Class<?> type){
+        return type.getName();
     }
 }

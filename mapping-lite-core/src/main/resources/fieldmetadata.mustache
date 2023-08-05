@@ -83,7 +83,7 @@ public final class {{className}} implements FieldMetadata {
     @Override
     public Object value(Value value) {
         Objects.requireNonNull(value, "value is required");
-        return value.get(java.lang.String.class);
+        return value.get({{type}}.class);
     }
 
     @Override
