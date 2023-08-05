@@ -37,13 +37,11 @@ import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.Elements;
 import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -147,7 +145,7 @@ public class FieldAnalyzer implements Supplier<String> {
         final String packageName = ProcessorUtil.getPackageName(entity);
         final String entityName = ProcessorUtil.getSimpleNameAsString(this.entity);
         final String name = getName(fieldName, column, id);
-        final String collectionInstance = "null";
+        final String collectionInstance = CollectionUtil.INSTANCE.apply(typeElement);
 
 
         final String getMethod = accessors.stream()
