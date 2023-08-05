@@ -31,7 +31,6 @@ public class FieldModel extends BaseMappingModel {
     private final String writer;
     private final String fieldName;
     private final boolean id;
-    private final List<String> arguments;
     private final String converter;
 
     private final String mappingType;
@@ -40,14 +39,22 @@ public class FieldModel extends BaseMappingModel {
 
     private final List<ValueAnnotationModel> valueByAnnotation;
 
+    private final String elementType;
+
+    private final boolean embeddable;
+
+    private final String collectionInstance;
+
     FieldModel(String packageName, String name,
                String type, String entity,
                String reader, String writer, String fieldName,
                boolean id,
-               List<String> arguments,
                String converter, String mappingType,
                String typeConverter,
-               List<ValueAnnotationModel> valueByAnnotation) {
+               List<ValueAnnotationModel> valueByAnnotation,
+               String elementType,
+               boolean embeddable,
+               String collectionInstance) {
         this.packageName = packageName;
         this.name = name;
         this.type = type;
@@ -56,11 +63,13 @@ public class FieldModel extends BaseMappingModel {
         this.writer = writer;
         this.fieldName = fieldName;
         this.id = id;
-        this.arguments = arguments;
         this.converter = converter;
         this.mappingType = mappingType;
         this.typeConverter = typeConverter;
         this.valueByAnnotation = valueByAnnotation;
+        this.elementType = elementType;
+        this.embeddable = embeddable;
+        this.collectionInstance = collectionInstance;
     }
 
     public String getPackageName() {
@@ -103,9 +112,6 @@ public class FieldModel extends BaseMappingModel {
         return id;
     }
 
-    public List<String> getArguments() {
-        return arguments;
-    }
 
     public String getConverter() {
         return converter;
@@ -123,6 +129,18 @@ public class FieldModel extends BaseMappingModel {
         return valueByAnnotation;
     }
 
+    public String getElementType() {
+        return elementType;
+    }
+
+    public boolean isEmbeddable() {
+        return embeddable;
+    }
+
+    public String getCollectionInstance() {
+        return collectionInstance;
+    }
+
     @Override
     public String toString() {
         return "FieldModel{" +
@@ -134,8 +152,13 @@ public class FieldModel extends BaseMappingModel {
                 ", writer='" + writer + '\'' +
                 ", fieldName='" + fieldName + '\'' +
                 ", id=" + id +
-                ", arguments=" + arguments +
                 ", converter='" + converter + '\'' +
+                ", mappingType='" + mappingType + '\'' +
+                ", typeConverter='" + typeConverter + '\'' +
+                ", valueByAnnotation=" + valueByAnnotation +
+                ", elementType='" + elementType + '\'' +
+                ", embeddable=" + embeddable +
+                ", collectionInstance='" + collectionInstance + '\'' +
                 '}';
     }
 
@@ -153,14 +176,18 @@ public class FieldModel extends BaseMappingModel {
         private String writer;
         private String fieldName;
         private boolean id;
-        private List<String> arguments;
-        private boolean embedded;
         private String converter = "null";
 
         private String mappingType= "null";
 
         private String typeConverter=  "null";
         private List<ValueAnnotationModel> valueByAnnotation;
+
+        private String elementType;
+
+        private boolean embeddable;
+
+        private String collectionInstance;
 
 
         private FieldMetaDataBuilder() {
@@ -206,12 +233,6 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
-        public FieldMetaDataBuilder withArguments(List<String> arguments) {
-            this.arguments = arguments;
-            return this;
-        }
-
-
         public FieldMetaDataBuilder withConverter(Convert converter) {
             if (Objects.nonNull(converter)) {
                 try {
@@ -237,9 +258,25 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
+        public FieldMetaDataBuilder withElementType(String elementType) {
+            this.elementType = elementType;
+            return this;
+        }
+
+        public FieldMetaDataBuilder withEmbeddable(boolean embeddable) {
+            this.embeddable = embeddable;
+            return this;
+        }
+
+        public FieldMetaDataBuilder withCollectionInstance(String collectionInstance) {
+            this.collectionInstance = collectionInstance;
+            return this;
+        }
+
         public FieldModel build() {
             return new FieldModel(packageName, name, type, entity, reader, writer, fieldName,
-                    id, arguments, converter, mappingType, typeConverter, valueByAnnotation);
+                    id, converter, mappingType, typeConverter, valueByAnnotation, elementType,
+                    embeddable, collectionInstance);
         }
     }
 }

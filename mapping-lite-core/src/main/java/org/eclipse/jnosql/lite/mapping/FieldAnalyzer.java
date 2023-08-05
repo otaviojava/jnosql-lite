@@ -18,8 +18,10 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.Column;
+import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
 import org.eclipse.jnosql.mapping.Convert;
+import org.eclipse.jnosql.mapping.Embeddable;
 import org.eclipse.jnosql.mapping.metadata.MappingType;
 
 import javax.annotation.processing.Filer;
@@ -106,18 +108,22 @@ public class FieldAnalyzer implements Supplier<String> {
 
         final TypeMirror typeMirror = field.asType();
         String className;
-        MappingType mappingType = MappingType.of(convertTypeMirrorToClass(typeMirror));
-        final List<String> arguments;
+        Class<?> typeElement = convertTypeMirrorToClass(typeMirror);
+        MappingType mappingType = MappingType.of(typeElement);
+        String elementType = "null";
+
+        boolean embeddable = typeElement.getAnnotation(Embeddable.class) != null ||
+                typeElement.getAnnotation(Entity.class) != null;
+
         if (typeMirror instanceof DeclaredType) {
             DeclaredType declaredType = (DeclaredType) typeMirror;
-            arguments = declaredType.getTypeArguments().stream()
+            elementType = declaredType.getTypeArguments().stream()
                     .map(TypeMirror::toString)
-                    .collect(Collectors.toList());
+                    .findFirst().map(t -> t.concat(".class"))
+                    .orElse("null");
             className = declaredType.asElement().toString();
-
         } else {
             className = typeMirror.toString();
-            arguments = Collections.emptyList();
         }
         Column column = field.getAnnotation(Column.class);
         Id id = field.getAnnotation(Id.class);
@@ -163,8 +169,9 @@ public class FieldAnalyzer implements Supplier<String> {
                 .withWriter(setMethod)
                 .withFieldName(fieldName)
                 .withId(isId)
-                .withArguments(arguments)
+                .withElementType(elementType)
                 .withConverter(convert)
+                .withEmbeddable(embeddable)
                 .withMappingType("MappingType." + mappingType.name())
                 .withValueByAnnotation(valueAnnotationModels)
                 .build();
