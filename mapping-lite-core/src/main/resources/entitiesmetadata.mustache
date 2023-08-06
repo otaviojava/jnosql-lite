@@ -20,6 +20,7 @@ import org.eclipse.jnosql.mapping.metadata.ClassInformationNotFoundException;
 import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.InheritanceMetadata;
+import org.eclipse.jnosql.lite.mapping.metadata.LiteEntityMetadata;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public final class LiteEntitiesMetadata implements EntitiesMetadata {
 
     private static final Predicate<EntityMetadata> HAS_NAME = EntityMetadata::hasEntityName;
 
-    private final List<EntityMetadata> entities;
+    private final List<LiteEntityMetadata> entities;
     private final Map<String, EntityMetadata> findByClassName;
     private final Map<String, EntityMetadata> findBySimpleName;
     private final Map<Class<?>, EntityMetadata> classes;
@@ -58,12 +59,13 @@ public final class LiteEntitiesMetadata implements EntitiesMetadata {
          this.entities.add(new {{.}}());
         {{/entities}}
 
-        for (EntityMetadata entity : entities) {
-
+        for (LiteEntityMetadata entity : entities) {
             this.classes.put(entity.type(), entity);
-            this.mappings.put(entity.name().toUpperCase(Locale.US), entity);
-            this.findBySimpleName.put(entity.simpleName(), entity);
-            this.findByClassName.put(entity.className(), entity);
+            if (entity.isEntity()) {
+                this.mappings.put(entity.name().toUpperCase(Locale.US), entity);
+                this.findBySimpleName.put(entity.simpleName(), entity);
+                this.findByClassName.put(entity.className(), entity);
+            }
         }
     }
 
