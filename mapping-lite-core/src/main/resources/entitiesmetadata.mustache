@@ -59,8 +59,9 @@ public final class LiteEntitiesMetadata implements EntitiesMetadata {
         {{/entities}}
 
         for (EntityMetadata entity : entities) {
-            this.mappings.put(entity.name().toUpperCase(Locale.US), entity);
+
             this.classes.put(entity.type(), entity);
+            this.mappings.put(entity.name().toUpperCase(Locale.US), entity);
             this.findBySimpleName.put(entity.simpleName(), entity);
             this.findByClassName.put(entity.className(), entity);
         }
