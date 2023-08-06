@@ -19,6 +19,7 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.Column;
 import jakarta.nosql.Id;
+import org.eclipse.jnosql.mapping.Embeddable;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -43,7 +44,9 @@ import java.util.logging.Logger;
 import static javax.lang.model.element.Modifier.PROTECTED;
 import static javax.lang.model.element.Modifier.PUBLIC;
 
-@SupportedAnnotationTypes("jakarta.nosql.Entity")
+@SupportedAnnotationTypes({"jakarta.nosql.Entity",
+        "org.eclipse.jnosql.mapping.Embeddable",
+        "org.eclipse.jnosql.mapping.MappedSuperclass"})
 public class EntityProcessor extends AbstractProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(EntityProcessor.class.getName());
@@ -69,7 +72,6 @@ public class EntityProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations,
                            RoundEnvironment roundEnv) {
-
 
         final List<String> entities = new ArrayList<>();
         for (TypeElement annotation : annotations) {
