@@ -111,14 +111,19 @@ public class FieldAnalyzer implements Supplier<String> {
 
         final TypeMirror typeMirror = field.asType();
         String className;
-        MappingType mappingType = MappingType.DEFAULT;
         String elementType = null;
         boolean embeddable = false;
         String collectionInstance = CollectionUtil.DEFAULT;
+        MappingType mappingType = MappingType.DEFAULT;
+
 
         if (typeMirror instanceof DeclaredType declaredType) {
+            Element element = declaredType.asElement();
+            mappingType = of(element, collectionInstance, collectionInstance);
             Optional<? extends TypeMirror> genericMirrorOptional = declaredType.getTypeArguments().stream().findFirst();
-            className = declaredType.asElement().toString();
+            className = element.toString();
+            embeddable = element.getAnnotation(Embeddable.class) != null ||
+                    element.getAnnotation(Entity.class) != null;
             if(genericMirrorOptional.isPresent()){
                 TypeMirror genericMirror = genericMirrorOptional.get();
                 elementType = genericMirror + ".class";
@@ -202,17 +207,33 @@ public class FieldAnalyzer implements Supplier<String> {
     }
 
 
-    private static MappingType of(TypeMirror type, String collection, String fieldtype) {
+    private static MappingType of(TypeMirror type, String collection, String fieldType) {
         if (!collection.equals(CollectionUtil.DEFAULT)) {
             return MappingType.COLLECTION;
         }
-        if (fieldtype.equals("java.util.Map")) {
+        if (fieldType.equals("java.util.Map")) {
             return MappingType.MAP;
         }
         if (type.getAnnotation(Embeddable.class) != null) {
             return MappingType.EMBEDDED;
         }
         if (type.getAnnotation(Entity.class) != null) {
+            return MappingType.ENTITY;
+        }
+        return MappingType.DEFAULT;
+    }
+
+    private static MappingType of(Element element, String collection, String fieldType) {
+        if (!collection.equals(CollectionUtil.DEFAULT)) {
+            return MappingType.COLLECTION;
+        }
+        if (fieldType.equals("java.util.Map")) {
+            return MappingType.MAP;
+        }
+        if (element.getAnnotation(Embeddable.class) != null) {
+            return MappingType.EMBEDDED;
+        }
+        if (element.getAnnotation(Entity.class) != null) {
             return MappingType.ENTITY;
         }
         return MappingType.DEFAULT;
