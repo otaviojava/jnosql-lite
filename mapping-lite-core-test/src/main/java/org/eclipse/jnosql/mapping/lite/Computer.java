@@ -18,6 +18,8 @@ import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
 
+import java.util.List;
+
 @Entity
 public class Computer {
 
@@ -27,6 +29,9 @@ public class Computer {
 
     @Column
     private ComputerAddress address;
+
+    @Column
+    private List<Person> users;
 
 
     public String getId() {
@@ -43,5 +48,13 @@ public class Computer {
 
     public void setAddress(ComputerAddress address) {
         this.address = address;
+    }
+
+    public List<Person> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Person> users) {
+        this.users = users;
     }
 }
