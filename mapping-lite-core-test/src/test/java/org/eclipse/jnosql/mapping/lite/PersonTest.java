@@ -20,6 +20,7 @@ import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.mapping.metadata.GenericFieldMetadata;
+import org.eclipse.jnosql.mapping.metadata.MappingType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +28,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PersonTest {
 
@@ -158,5 +161,13 @@ public class PersonTest {
             soft.assertThat(genericFieldMetadata.elementType()).isEqualTo(String.class);
             soft.assertThat(genericFieldMetadata.collectionInstance()).isInstanceOf(List.class);
         });
+    }
+
+    @Test
+    public void shouldReadEntityField(){
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
+        FieldMetadata pet = groupByName.get("pet");
+        assertThat(pet.isId()).isFalse();
+        assertThat(pet.mappingType()).isEqualTo(MappingType.ENTITY);
     }
 }
