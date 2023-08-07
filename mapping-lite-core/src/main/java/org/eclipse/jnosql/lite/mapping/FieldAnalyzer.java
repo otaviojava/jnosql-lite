@@ -74,7 +74,7 @@ public class FieldAnalyzer implements Supplier<String> {
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = getFileObject(metadata, filer);
         try (Writer writer = fileObject.openWriter()) {
-            if(metadata.getElementType() == null|| "null".equals(metadata.getElementType())){
+            if("null".equals(metadata.getElementType())){
                 template.execute(writer, metadata);
             } else {
                 genericTemplate.execute(writer, metadata);
@@ -124,15 +124,8 @@ public class FieldAnalyzer implements Supplier<String> {
             className = element.toString();
             embeddable = element.getAnnotation(Embeddable.class) != null ||
                     element.getAnnotation(Entity.class) != null;
-            if(genericMirrorOptional.isPresent()){
+            if (genericMirrorOptional.isPresent()) {
                 TypeMirror genericMirror = genericMirrorOptional.get();
-                if(genericMirror instanceof DeclaredType declaredGenericMirror){
-                    mappingType = of(declaredGenericMirror.asElement(), collectionInstance, collectionInstance);
-                    embeddable = declaredGenericMirror.getAnnotation(Embeddable.class) != null ||
-                            declaredGenericMirror.getAnnotation(Entity.class) != null;
-                } else {
-                    mappingType = of(genericMirror, collectionInstance, className);
-                }
                 elementType = genericMirror + ".class";
                 collectionInstance = CollectionUtil.INSTANCE.apply(className);
 

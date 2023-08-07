@@ -15,7 +15,6 @@
 package {{packageName}};
 
 import org.eclipse.jnosql.mapping.metadata.ConstructorMetadata;
-import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.eclipse.jnosql.mapping.metadata.InheritanceMetadata;
 import org.eclipse.jnosql.lite.mapping.metadata.LiteConstructorMetadata;
@@ -36,7 +35,7 @@ import static java.util.stream.Collectors.toMap;
 import javax.annotation.processing.Generated;
 
 @Generated(value = "Lite implementation of EntityMetadata with {{className}}", date = "2023-08-05T06:15:00.004923")
-public final class {{className}} implements EntityMetadata {
+public final class {{className}} implements LiteEntityMetadata {
 
     private final List<FieldMetadata> fields;
 
@@ -152,6 +151,10 @@ public final class {{className}} implements EntityMetadata {
         return {{inheritance}};
     }
 
+    @Override
+    public boolean isEntity() {
+        return {{entityAnnotation}};
+    }
     @Override
     public Optional<InheritanceMetadata> inheritance() {
         return Optional.ofNullable(inheritance);
