@@ -61,10 +61,11 @@ class ComputerTest {
         SoftAssertions.assertSoftly(soft -> {
             soft.assertThat(users.name()).isEqualTo("users");
             soft.assertThat(users.isId()).isFalse();
-            soft.assertThat(users.mappingType()).isEqualTo(MappingType.ENTITY);
+            soft.assertThat(users.isEmbeddable()).isFalse();
+            soft.assertThat(users.mappingType()).isEqualTo(MappingType.COLLECTION);
             soft.assertThat(users.elementType()).isEqualTo(Person.class);
             soft.assertThat(users.collectionInstance()).isInstanceOf(List.class);
-            soft.assertThat(users.isEmbeddable()).isTrue();
+            soft.assertThat(users.isEmbeddable()).isFalse();
         });
 
     }
