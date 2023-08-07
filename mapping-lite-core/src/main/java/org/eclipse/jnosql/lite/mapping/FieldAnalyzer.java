@@ -119,19 +119,12 @@ public class FieldAnalyzer implements Supplier<String> {
 
         if (typeMirror instanceof DeclaredType declaredType) {
             Element element = declaredType.asElement();
-            mappingType = of(element, collectionInstance, collectionInstance);
-            Optional<? extends TypeMirror> genericMirrorOptional = declaredType.getTypeArguments().stream().findFirst();
             className = element.toString();
             embeddable = element.getAnnotation(Embeddable.class) != null ||
                     element.getAnnotation(Entity.class) != null;
-            if (genericMirrorOptional.isPresent()) {
-                TypeMirror genericMirror = genericMirrorOptional.get();
-                elementType = genericMirror + ".class";
-                collectionInstance = CollectionUtil.INSTANCE.apply(className);
-
-            } else {
-                elementType = "null";
-            }
+           collectionInstance = CollectionUtil.INSTANCE.apply(className);
+           elementType = elementType(declaredType);
+           mappingType = of(element, collectionInstance, collectionInstance);
 
         } else {
             className = typeMirror.toString();
@@ -238,6 +231,16 @@ public class FieldAnalyzer implements Supplier<String> {
             return MappingType.MAP;
         }
         return MappingType.DEFAULT;
+    }
+
+    private String elementType(DeclaredType declaredType) {
+        Optional<? extends TypeMirror> genericMirrorOptional = declaredType.getTypeArguments().stream().findFirst();
+        if (genericMirrorOptional.isPresent()) {
+            TypeMirror genericMirror = genericMirrorOptional.get();
+            return genericMirror + ".class";
+        } else {
+            return "null";
+        }
     }
 
 }

@@ -127,9 +127,10 @@ public class ClassAnalyzer implements Supplier<String> {
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
 
-        String entityName = Optional.ofNullable(annotation).map(Entity::value)
+        String entityName = Optional.ofNullable(annotation)
+                .map(Entity::value)
                 .filter(v -> !v.isBlank())
-                .orElse(sourceClassName);;
+                .orElse(sourceClassName);
         String inheritanceParameter = null;
         boolean notConcrete = element.getModifiers().contains(Modifier.ABSTRACT);
         if (superclass.getAnnotation(Inheritance.class) != null) {

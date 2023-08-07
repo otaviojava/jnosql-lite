@@ -19,7 +19,6 @@ import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 import jakarta.nosql.Column;
 import jakarta.nosql.Id;
-import org.eclipse.jnosql.mapping.Embeddable;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.Filer;
@@ -74,9 +73,13 @@ public class EntityProcessor extends AbstractProcessor {
                            RoundEnvironment roundEnv) {
 
         final List<String> entities = new ArrayList<>();
+        final List<String> references = new ArrayList<>();
         for (TypeElement annotation : annotations) {
             roundEnv.getElementsAnnotatedWith(annotation)
-                    .stream().map(e -> new ClassAnalyzer(e, processingEnv))
+                    .stream()
+                    .filter(e -> !references.contains(e.toString()))
+                    .peek(e -> references.add(e.toString()))
+                    .map(e -> new ClassAnalyzer(e, processingEnv))
                     .map(ClassAnalyzer::get)
                     .filter(IS_NOT_BLANK).forEach(entities::add);
         }
