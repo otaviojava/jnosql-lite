@@ -24,7 +24,7 @@
     </parent>
 
     <artifactId>mapping-lite-key-value</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <properties>
     </properties>
