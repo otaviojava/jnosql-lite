@@ -17,6 +17,9 @@ package org.eclipse.jnosql.lite.mapping;
 import org.eclipse.jnosql.mapping.metadata.ClassConverter;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 
+/**
+ * The lite implementation of {@link ClassConverter}
+ */
 public final class LiteClassConverter implements ClassConverter {
 
     @Override
