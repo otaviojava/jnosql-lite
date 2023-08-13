@@ -28,9 +28,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.eclipse.jnosql.lite</groupId>
-            <artifactId>mapping-lite-key-value</artifactId>
+            <groupId>org.eclipse.jnosql.mapping</groupId>
+            <artifactId>jnosql-mapping-key-value</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.jnosql.mapping</groupId>
+                    <artifactId>jnosql-mapping-reflection</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jnosql.lite</groupId>
