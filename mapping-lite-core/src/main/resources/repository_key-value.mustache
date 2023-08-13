@@ -16,8 +16,12 @@ package {{package}};
 
 import jakarta.data.repository.Page;
 import jakarta.data.repository.Pageable;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 import jakarta.nosql.keyvalue.KeyValueTemplate;
+import org.eclipse.jnosql.mapping.Database;
+import org.eclipse.jnosql.mapping.DatabaseType;
 
 import javax.annotation.processing.Generated;
 import java.util.Objects;
@@ -27,8 +31,11 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Objects.requireNonNull;
 
+
+@ApplicationScoped
+@Default
+@Database(value = DatabaseType.KEY_VALUE)
 @Generated(value = "JNoSQL Lite KeyValue Repository Generator", date = "{{now}}")
-@jakarta.enterprise.context.ApplicationScoped
 public class {{className}} implements {{repository}} {
 
     private final KeyValueTemplate template;
