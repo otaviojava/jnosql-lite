@@ -14,19 +14,27 @@
  */
 package org.eclipse.jnosql.lite.mapping.keyvalue.entities;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import jakarta.nosql.keyvalue.KeyValueTemplate;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.awt.print.Pageable;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class UserRepositoryLiteKeyValueTest {
 
     @Mock
@@ -35,10 +43,6 @@ public class UserRepositoryLiteKeyValueTest {
     @InjectMocks
     private UserRepositoryLiteKeyValue userRepository;
 
-    @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     public void shouldSaveEntity() {
@@ -85,11 +89,46 @@ public class UserRepositoryLiteKeyValueTest {
         when(template.get(eq(id1), eq(User.class))).thenReturn(Optional.of(new User()));
         when(template.get(eq(id2), eq(User.class))).thenReturn(Optional.of(new User()));
 
-        userRepository.findAllById(ids);
+        List<User> users = userRepository.findAllById(ids).toList();
 
         verify(template, times(2)).get(anyString(), eq(User.class));
+
+        Assertions.assertThat(users).isNotNull().isNotEmpty().hasSize(2);
     }
 
-    // Add more tests for the remaining methods
+    @Test
+    public void shouldCheckIfEntityExistsById() {
+        String id = "123";
+        when(template.get(eq(id), eq(User.class))).thenReturn(Optional.of(new User()));
+
+        boolean exists = userRepository.existsById(id);
+
+        assertTrue(exists);
+    }
+
+    @Test
+    public void shouldReturnFalseIfEntityDoesNotExistById() {
+        String id = "123";
+        when(template.get(eq(id), eq(User.class))).thenReturn(Optional.empty());
+
+        boolean exists = userRepository.existsById(id);
+
+        assertFalse(exists);
+    }
+
+    @Test
+    public void shouldThrowUnsupportedOperationExceptionOnCount() {
+        assertThrows(UnsupportedOperationException.class, () -> userRepository.count());
+    }
+
+    @Test
+    public void shouldThrowUnsupportedOperationExceptionOnFindAllWithPageable() {
+        assertThrows(UnsupportedOperationException.class, () -> userRepository.findAll(null));
+    }
+
+    @Test
+    public void shouldThrowUnsupportedOperationExceptionOnFindAll() {
+        assertThrows(UnsupportedOperationException.class, () -> userRepository.findAll());
+    }
 
 }
