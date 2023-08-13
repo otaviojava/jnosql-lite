@@ -131,4 +131,9 @@ public class UserRepositoryLiteKeyValueTest {
         assertThrows(UnsupportedOperationException.class, () -> userRepository.findAll());
     }
 
+    @Test
+    public void shouldThrowExceptionOnFindByName() {
+        String name = "John";
+        assertThrows(UnsupportedOperationException.class, () -> userRepository.findByName(name));
+    }
 }
