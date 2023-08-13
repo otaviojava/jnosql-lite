@@ -38,7 +38,12 @@ public final class {{className}} implements FieldMetadata {
     public {{className}}() {
         this.converter = {{converter}};
         this.typeConverter = {{typeConverter}};
+        {{#valueByAnnotation.isEmpty}}
+         this.valueByAnnotation = java.util.Collections.emptyMap();
+        {{/valueByAnnotation.isEmpty}}
+        {{^valueByAnnotation.isEmpty}}
         this.valueByAnnotation = new java.util.HashMap<>();
+        {{/valueByAnnotation.isEmpty}}
         {{#valueByAnnotation}}
         this.valueByAnnotation.put({{key}},"{{value}}");
         {{/valueByAnnotation}}
