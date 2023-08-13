@@ -12,7 +12,7 @@
  *
  *    Otavio Santana
  */
-package org.eclipse.jnosql.mapping.test.entities;
+package org.eclipse.jnosql.lite.mapping.entities;
 
 
 import jakarta.nosql.Column;
@@ -64,6 +64,26 @@ public class Person {
 
     public boolean isAdult() {
         return age > 21;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setPhones(List<String> phones) {
+        this.phones = phones;
+    }
+
+    public void setIgnore(String ignore) {
+        this.ignore = ignore;
     }
 
     Person() {
