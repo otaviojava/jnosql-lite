@@ -14,8 +14,9 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.DefaultFieldValue;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 import org.junit.jupiter.api.Assertions;
@@ -26,7 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class MovieTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class UserTest {
 
     private EntitiesMetadata mappings;
 
@@ -35,96 +38,62 @@ public class MovieTest {
     @BeforeEach
     public void setUp() {
         this.mappings = new LiteEntitiesMetadata();
-        this.entityMetadata = this.mappings.get(Movie.class);
+        this.entityMetadata = this.mappings.get(User.class);
     }
 
     @Test
     public void shouldGetName() {
-        Assertions.assertEquals("Movie", entityMetadata.name());
+        Assertions.assertEquals("User", entityMetadata.name());
     }
 
     @Test
     public void shouldGetSimpleName() {
-        Assertions.assertEquals(Movie.class.getSimpleName(), entityMetadata.simpleName());
+        Assertions.assertEquals(User.class.getSimpleName(), entityMetadata.simpleName());
     }
 
     @Test
     public void shouldGetClassName() {
-        Assertions.assertEquals(Movie.class.getName(), entityMetadata.className());
+        Assertions.assertEquals(User.class.getName(), entityMetadata.className());
     }
 
     @Test
     public void shouldGetClassInstance() {
-        Assertions.assertEquals(Movie.class, entityMetadata.type());
+        Assertions.assertEquals(User.class, entityMetadata.type());
     }
 
     @Test
     public void shouldGetId() {
         Optional<FieldMetadata> id = this.entityMetadata.id();
-        Assertions.assertFalse(id.isPresent());
+        Assertions.assertTrue(id.isPresent());
+        FieldMetadata fieldMetadata = id.orElseThrow();
+        assertThat(fieldMetadata)
+                .isInstanceOf(FieldMetadata.class);
+
     }
 
     @Test
     public void shouldCreateNewInstance() {
-        Movie movie = entityMetadata.newInstance();
-        Assertions.assertNotNull(movie);
-        Assertions.assertTrue(movie instanceof Movie);
+        User user = entityMetadata.newInstance();
+        assertThat(user)
+                .isNotNull().isInstanceOf(User.class);
     }
 
     @Test
     public void shouldGetFieldsName() {
         List<String> fields = entityMetadata.fieldsName();
-        Assertions.assertEquals(2, fields.size());
-        Assertions.assertTrue(fields.contains("title"));
-        Assertions.assertTrue(fields.contains("director"));
+        Assertions.assertEquals(4, fields.size());
+        Assertions.assertTrue(fields.contains("id"));
+        Assertions.assertTrue(fields.contains("name"));
     }
 
     @Test
     public void shouldGetFieldsGroupByName() {
         Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
-        Assertions.assertNotNull(groupByName);
-        Assertions.assertNotNull(groupByName.get("title"));
-        Assertions.assertNotNull(groupByName.get("director"));
+        assertThat(groupByName).hasSize(4)
+                .containsKeys("_id", "name", "age", "phones");
     }
 
-    @Test
-    public void shouldGetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
-        Movie movie = new Movie();
-        movie.setTitle("Movie");
 
-        Director sample = new Director();
-        sample.setName("Director name");
-        movie.setDirector(sample);
-
-        String title = this.entityMetadata.columnField("title");
-        String director = this.entityMetadata.columnField("director");
-        FieldMetadata fieldTitle = groupByName.get(title);
-        FieldMetadata fieldDirector = groupByName.get(director);
-
-        Assertions.assertEquals(sample, fieldDirector.read(movie));
-        Assertions.assertEquals("Movie", fieldTitle.read(movie));
-    }
-
-    @Test
-    public void shouldSetter() {
-        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
-        Movie movie = new Movie();
-
-        Director sample = new Director();
-        movie.setDirector(sample);
-
-        String title = this.entityMetadata.columnField("title");
-        String director = this.entityMetadata.columnField("director");
-        FieldMetadata fieldTitle = groupByName.get(title);
-        FieldMetadata fieldDirector = groupByName.get(director);
-
-        fieldTitle.write(movie, "Movie");
-        fieldDirector.write(movie, sample);
-        Assertions.assertEquals(sample, fieldDirector.read(movie));
-        Assertions.assertEquals("Movie", fieldTitle.read(movie));
-
-    }
 
 
 }
