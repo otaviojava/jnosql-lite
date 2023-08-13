@@ -51,7 +51,8 @@ public class FieldAnalyzer implements Supplier<String> {
     private static final String DEFAULT_TEMPLATE = "fieldmetadata.mustache";
     private static final String GENERIC_TEMPLATE = "fieldgenericmetadata.mustache";
     private static final Predicate<Element> IS_METHOD = el -> el.getKind() == ElementKind.METHOD;
-    public static final Function<Element, String> ELEMENT_TO_STRING = el -> el.getSimpleName().toString();
+    private static final Function<Element, String> ELEMENT_TO_STRING = el -> el.getSimpleName().toString();
+    private static final String NULL = "null";
     private final Element field;
     private final Mustache template;
 
@@ -74,7 +75,7 @@ public class FieldAnalyzer implements Supplier<String> {
         Filer filer = processingEnv.getFiler();
         JavaFileObject fileObject = getFileObject(metadata, filer);
         try (Writer writer = fileObject.openWriter()) {
-            if("null".equals(metadata.getElementType())){
+            if(NULL.equals(metadata.getElementType())){
                 template.execute(writer, metadata);
             } else {
                 genericTemplate.execute(writer, metadata);
@@ -111,7 +112,7 @@ public class FieldAnalyzer implements Supplier<String> {
 
         final TypeMirror typeMirror = field.asType();
         String className;
-        String elementType = "null";
+        String elementType = NULL;
         boolean embeddable = false;
         String collectionInstance = CollectionUtil.DEFAULT;
         MappingType mappingType = MappingType.DEFAULT;
@@ -239,7 +240,7 @@ public class FieldAnalyzer implements Supplier<String> {
             TypeMirror genericMirror = genericMirrorOptional.get();
             return genericMirror + ".class";
         } else {
-            return "null";
+            return NULL;
         }
     }
 
