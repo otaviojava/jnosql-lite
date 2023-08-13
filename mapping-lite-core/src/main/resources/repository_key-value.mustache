@@ -14,25 +14,32 @@
 */
 package {{package}};
 
-import jakarta.nosql.Repository;
+import jakarta.data.repository.Page;
+import jakarta.data.repository.Pageable;
+import jakarta.inject.Inject;
 import jakarta.nosql.keyvalue.KeyValueTemplate;
 
 import javax.annotation.processing.Generated;
-import javax.inject.Inject;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import static java.util.Objects.requireNonNull;
 
 @Generated(value = "JNoSQL Lite KeyValue Repository Generator", date = "{{now}}")
-@javax.enterprise.context.ApplicationScoped
+@jakarta.enterprise.context.ApplicationScoped
 public class {{className}} implements {{repository}} {
 
-    private final KeyValueTemplate template;
+    private KeyValueTemplate template;
 
     @Inject
     public {{className}}(KeyValueTemplate template) {
        this.template = template;
+    }
+
+    public {{className}}() {
+        this.template = null;
     }
 
     @Override
@@ -43,22 +50,21 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public <S extends {{entityType}}> Iterable<S> save(Iterable<S> entities) {
+    public <S extends {{entityType}}> Iterable<S> saveAll(Iterable<S> entities) {
         requireNonNull(entities, "entities is required");
-        entities.forEach(this::save);
-        return entities;
+        return this.template.insert(entities);
    }
 
     @Override
     public void deleteById({{keyType}} id) {
        requireNonNull(id, "id is required");
-       this.template.delete(id);
+       this.template.deleteByKey(id);
     }
 
     @Override
-    public void deleteById(Iterable<{{keyType}}> ids) {
+    public void deleteAllById(Iterable<{{keyType}}> ids) {
        requireNonNull(ids, "ids is required");
-       ids.forEach(this::deleteById);
+       this.template.deleteByKey(ids);
     }
 
     @Override
@@ -68,9 +74,14 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public Iterable<{{entityType}}> findById(Iterable<{{keyType}}> ids) {
+    public Stream<{{entityType}}> findAllById(Iterable<{{keyType}}> ids) {
        requireNonNull(ids, "ids is required");
-       return this.template.get(ids, {{entityType}}.class);
+       return StreamSupport.stream(ids.spliterator(), false)
+               .map(id -> this.template.get(id, {{entityType}}.class))
+               .filter(Optional::isPresent)
+               .flatMap(Optional::stream)
+               .map(org.eclipse.jnosql.lite.mapping.entities.User.class::cast)
+               .filter(Objects::nonNull);
     }
 
     @Override
@@ -81,7 +92,34 @@ public class {{className}} implements {{repository}} {
 
     @Override
     public long count() {
-        throw new UnsupportedOperationException("Key-Value does not support count method");
+        throw new UnsupportedOperationException("Key-Value repository does not support count method");
+    }
+
+    @Override
+    public Page<{{entityType}}> findAll(Pageable pageable) {
+        throw new UnsupportedOperationException("Key-Value repository does not support findAll method");
+    }
+
+    @Override
+    public Stream<{{entityType}}> findAll() {
+         throw new UnsupportedOperationException("Key-Value repository does not support findAll method");
+    }
+
+    @Override
+    public void deleteAll() {
+         throw new UnsupportedOperationException("Key-Value repository does not support deleteAll method");
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends {{entityType}}> entities) {
+        Objects.requireNonNull(entities, "entities is required");
+        this.template.delete(entities);
+    }
+
+    @Override
+    public void delete({{entityType}} entity) {
+        Objects.requireNonNull(entity, "entity is required");
+        this.template.delete(entity);
     }
 
     {{#methods}}
