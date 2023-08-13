@@ -80,7 +80,7 @@ public class {{className}} implements {{repository}} {
                .map(id -> this.template.get(id, {{entityType}}.class))
                .filter(Optional::isPresent)
                .flatMap(Optional::stream)
-               .map(org.eclipse.jnosql.lite.mapping.entities.User.class::cast)
+               .map({{entityType}}.class::cast)
                .filter(Objects::nonNull);
     }
 
