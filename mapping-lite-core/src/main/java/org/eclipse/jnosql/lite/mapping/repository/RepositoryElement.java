@@ -110,11 +110,7 @@ class RepositoryElement {
                 List<String> parameters = RepositoryUtil.findParameters(typeMirror);
                 String entityType = parameters.get(0);
                 String keyType = parameters.get(1);
-                Repository annotation = typeElement.getAnnotation(Repository.class);
-                DatabaseType type = Optional.ofNullable(annotation)
-                        .map(Repository::dataStore)
-                        .map(DatabaseType::valueOf)
-                        .orElse(DatabaseType.DOCUMENT);
+                DatabaseType type = type();
                 String repositoryInterface = typeElement.getQualifiedName().toString();
                 List<MethodMetadata> methods = typeElement.getEnclosedElements()
                         .stream()
@@ -128,5 +124,24 @@ class RepositoryElement {
         throw new ValidationException("The interface " + element.toString() + "must extends " + Repository.class.getName());
     }
 
+    private static DatabaseType type() {
+        if (checkLibrary("org.eclipse.jnosql.mapping.document.JNoSQLDocumentTemplate")) {
+            return DatabaseType.DOCUMENT;
+        } else if (checkLibrary("org.eclipse.jnosql.mapping.column.JNoSQLColumnTemplate")) {
+            return DatabaseType.COLUMN;
+        } else if (checkLibrary("jakarta.nosql.keyvalue.KeyValueTemplate")) {
+            return DatabaseType.KEY_VALUE;
+        }
+        throw new ValidationException("There is not database provider type in the classpath");
+    }
+
+    private static boolean checkLibrary(String type) {
+        try {
+            Class.forName(type);
+            return true;
+        } catch(ClassNotFoundException e) {
+            return false;
+        }
+    }
 
 }
