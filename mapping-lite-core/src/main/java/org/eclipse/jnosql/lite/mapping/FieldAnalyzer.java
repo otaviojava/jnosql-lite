@@ -146,7 +146,7 @@ public class FieldAnalyzer implements Supplier<String> {
                     Convert.class.getName());
             Predicate<Map.Entry<? extends ExecutableElement, ? extends AnnotationValue>> isNotDefaultAnnotation = e -> !
                     defaultJNoSQL.contains(annotationType.toString());
-            elementValues.entrySet().stream().filter(isValueMethod.and(isNotDefaultAnnotation)).findFirst().ifPresent(e -> {
+            elementValues.entrySet().stream().filter(isNotDefaultAnnotation.and(isValueMethod)).findFirst().ifPresent(e -> {
                 String key = annotationType.toString()+".class";
                 String value = e.getValue().getValue().toString();
                 ValueAnnotationModel valueAnnotationModel = new ValueAnnotationModel(key, value);
