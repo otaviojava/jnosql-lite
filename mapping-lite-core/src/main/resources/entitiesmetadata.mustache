@@ -15,10 +15,7 @@
 package org.eclipse.jnosql.lite.mapping;
 
 
-import jakarta.annotation.Priority;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Alternative;
-import jakarta.interceptor.Interceptor;
 import org.eclipse.jnosql.mapping.metadata.ClassInformationNotFoundException;
 import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
@@ -40,8 +37,6 @@ import javax.annotation.processing.Generated;
 
 @Generated(value= "JNoSQL Lite EntitiesMetadata Generator", date = "{{now}}")
 @ApplicationScoped
-@Alternative
-@Priority(Interceptor.Priority.APPLICATION)
 public final class LiteEntitiesMetadata implements EntitiesMetadata {
 
     private static final Predicate<EntityMetadata> HAS_NAME = EntityMetadata::hasEntityName;
