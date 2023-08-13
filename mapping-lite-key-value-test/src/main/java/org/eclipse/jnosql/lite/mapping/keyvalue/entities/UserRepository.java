@@ -12,20 +12,11 @@
  *
  *    Otavio Santana
  */
-package org.eclipse.jnosql.lite.mapping.entities;
+package org.eclipse.jnosql.lite.mapping.keyvalue.entities;
 
+import jakarta.data.repository.PageableRepository;
+import jakarta.data.repository.Repository;
 
-import org.eclipse.jnosql.mapping.AttributeConverter;
-
-public class PlateConverter implements AttributeConverter<Plate, String> {
-
-    @Override
-    public String convertToDatabaseColumn(Plate attribute) {
-        return attribute.toString();
-    }
-
-    @Override
-    public Plate convertToEntityAttribute(String dbData) {
-        return Plate.of(dbData);
-    }
+@Repository
+public interface UserRepository extends PageableRepository<User, String> {
 }

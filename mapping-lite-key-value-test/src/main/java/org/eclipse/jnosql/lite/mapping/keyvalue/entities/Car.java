@@ -12,7 +12,7 @@
  *
  *    Otavio Santana
  */
-package org.eclipse.jnosql.lite.mapping.entities;
+package org.eclipse.jnosql.lite.mapping.keyvalue.entities;
 
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;

@@ -12,17 +12,17 @@
  *
  *   Otavio Santana
  */
-package org.eclipse.jnosql.mapping.lite.keyvalue;
+package org.eclipse.jnosql.lite.mapping.keyvalue.entities;
 
 import jakarta.inject.Inject;
 import org.eclipse.jnosql.communication.Value;
 import org.eclipse.jnosql.communication.keyvalue.KeyValueEntity;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.entities.Car;
-import org.eclipse.jnosql.lite.mapping.entities.Person;
-import org.eclipse.jnosql.lite.mapping.entities.Plate;
-import org.eclipse.jnosql.lite.mapping.entities.User;
-import org.eclipse.jnosql.lite.mapping.entities.Worker;
+import org.eclipse.jnosql.lite.mapping.keyvalue.entities.Car;
+import org.eclipse.jnosql.lite.mapping.keyvalue.entities.Person;
+import org.eclipse.jnosql.lite.mapping.keyvalue.entities.Plate;
+import org.eclipse.jnosql.lite.mapping.keyvalue.entities.User;
+import org.eclipse.jnosql.lite.mapping.keyvalue.entities.Worker;
 import org.eclipse.jnosql.mapping.Converters;
 import org.eclipse.jnosql.mapping.IdNotFoundException;
 import org.eclipse.jnosql.mapping.keyvalue.KeyValueEntityConverter;
