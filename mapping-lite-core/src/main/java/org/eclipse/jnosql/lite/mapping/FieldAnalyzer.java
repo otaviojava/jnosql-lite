@@ -111,7 +111,7 @@ public class FieldAnalyzer implements Supplier<String> {
 
         final TypeMirror typeMirror = field.asType();
         String className;
-        String elementType = null;
+        String elementType = "null";
         boolean embeddable = false;
         String collectionInstance = CollectionUtil.DEFAULT;
         MappingType mappingType = MappingType.DEFAULT;
