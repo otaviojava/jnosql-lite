@@ -32,6 +32,7 @@ public class Person {
     private String username;
 
     @Column
+    @CustomAnnotation("email")
     private String email;
 
     @Column

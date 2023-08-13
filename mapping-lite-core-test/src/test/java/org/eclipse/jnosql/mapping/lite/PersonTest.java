@@ -73,8 +73,8 @@ public class PersonTest {
     @Test
     public void shouldCreateNewInstance() {
         Person person = entityMetadata.newInstance();
-        Assertions.assertNotNull(person);
-        Assertions.assertTrue(person instanceof Person);
+        org.assertj.core.api.Assertions.assertThat(person)
+                .isNotNull().isInstanceOf(Person.class);
     }
 
     @Test
@@ -169,5 +169,13 @@ public class PersonTest {
         FieldMetadata pet = groupByName.get("pet");
         assertThat(pet.isId()).isFalse();
         assertThat(pet.mappingType()).isEqualTo(MappingType.ENTITY);
+    }
+
+    @Test
+    public void shouldGetCustomAnnotation() {
+        Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
+        FieldMetadata email = groupByName.get("email");
+        Optional<String> value = email.value(CustomAnnotation.class);
+        assertThat(value).isNotEmpty().get().isEqualTo("email");
     }
 }
