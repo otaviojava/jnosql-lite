@@ -14,8 +14,6 @@
  */
 package org.eclipse.jnosql.lite.mapping.keyvalue.entities;
 
-import org.eclipse.jnosql.lite.mapping.keyvalue.entities.User;
-import org.eclipse.jnosql.lite.mapping.keyvalue.entities.UserRepositoryLiteKeyValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import jakarta.nosql.keyvalue.KeyValueTemplate;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.*;

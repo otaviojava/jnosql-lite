@@ -31,7 +31,7 @@ import static java.util.Objects.requireNonNull;
 @jakarta.enterprise.context.ApplicationScoped
 public class {{className}} implements {{repository}} {
 
-    private KeyValueTemplate template;
+    private final KeyValueTemplate template;
 
     @Inject
     public {{className}}(KeyValueTemplate template) {
