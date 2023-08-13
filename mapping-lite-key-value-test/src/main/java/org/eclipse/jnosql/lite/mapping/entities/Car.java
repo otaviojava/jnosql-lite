@@ -14,23 +14,27 @@
  */
 package org.eclipse.jnosql.mapping.test.entities;
 
-
-import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
+import jakarta.nosql.Id;
 import org.eclipse.jnosql.mapping.Convert;
 
 @Entity
-public class Worker {
+public class Car {
 
-    @Column
+    @Id
+    @Convert(PlateConverter.class)
+    private Plate plate;
+
     private String name;
 
-    @Column
-    private Job job;
 
-    @Column("money")
-    @Convert(MoneyConverter.class)
-    private Money salary;
+    public Plate getPlate() {
+        return plate;
+    }
+
+    public void setPlate(Plate plate) {
+        this.plate = plate;
+    }
 
     public String getName() {
         return name;
@@ -40,21 +44,11 @@ public class Worker {
         this.name = name;
     }
 
-    public Job getJob() {
-        return job;
+    @Override
+    public String toString() {
+        return "Car{" +
+                "plate=" + plate +
+                ", name='" + name + '\'' +
+                '}';
     }
-
-    public void setJob(Job job) {
-        this.job = job;
-    }
-
-    public Money getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Money salary) {
-        this.salary = salary;
-    }
-
-
 }

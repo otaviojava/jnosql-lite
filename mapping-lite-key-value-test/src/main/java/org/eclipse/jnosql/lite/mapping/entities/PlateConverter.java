@@ -15,46 +15,17 @@
 package org.eclipse.jnosql.mapping.test.entities;
 
 
-import jakarta.nosql.Column;
-import jakarta.nosql.Entity;
-import org.eclipse.jnosql.mapping.Convert;
+import org.eclipse.jnosql.mapping.AttributeConverter;
 
-@Entity
-public class Worker {
+public class PlateConverter implements AttributeConverter<Plate, String> {
 
-    @Column
-    private String name;
-
-    @Column
-    private Job job;
-
-    @Column("money")
-    @Convert(MoneyConverter.class)
-    private Money salary;
-
-    public String getName() {
-        return name;
+    @Override
+    public String convertToDatabaseColumn(Plate attribute) {
+        return attribute.toString();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public Plate convertToEntityAttribute(String dbData) {
+        return Plate.of(dbData);
     }
-
-    public Job getJob() {
-        return job;
-    }
-
-    public void setJob(Job job) {
-        this.job = job;
-    }
-
-    public Money getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Money salary) {
-        this.salary = salary;
-    }
-
-
 }
