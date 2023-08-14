@@ -27,17 +27,13 @@ public class EntityModel extends BaseMappingModel {
     private final List<String> fields;
 
     private final boolean embedded;
-
-    private final boolean inheritance;
-
     private final String inheritanceParameter;
 
     private final boolean notConcrete;
 
     private final boolean entityAnnotation;
-    public EntityModel(String packageName, String entity, String name,
-                       List<String> fields, boolean embedded,
-                       boolean inheritance, boolean notConcrete,
+    EntityModel(String packageName, String entity, String name,
+                       List<String> fields, boolean embedded, boolean notConcrete,
                        String inheritanceParameter,
                        boolean entityAnnotation) {
         this.packageName = packageName;
@@ -45,7 +41,6 @@ public class EntityModel extends BaseMappingModel {
         this.name = name;
         this.fields = fields;
         this.embedded = embedded;
-        this.inheritance = inheritance;
         this.notConcrete = notConcrete;
         this.inheritanceParameter = inheritanceParameter;
         this.entityAnnotation = entityAnnotation;
@@ -83,11 +78,6 @@ public class EntityModel extends BaseMappingModel {
         return embedded;
     }
 
-
-    public boolean isInheritance() {
-        return inheritance;
-    }
-
     public String getInheritanceParameter() {
         return inheritanceParameter;
     }
@@ -108,7 +98,6 @@ public class EntityModel extends BaseMappingModel {
                 ", name='" + name + '\'' +
                 ", fields=" + fields +
                 ", embedded=" + embedded +
-                ", inheritance=" + inheritance +
                 ", inheritanceParameter='" + inheritanceParameter + '\'' +
                 ", notConcrete=" + notConcrete +
                 ", entityAnnotation=" + entityAnnotation +

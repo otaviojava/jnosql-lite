@@ -140,8 +140,7 @@ public class ClassAnalyzer implements Supplier<String> {
         } else if (element.getAnnotation(Inheritance.class) != null) {
             inheritanceParameter = getInheritanceParameter(element, element);
         }
-        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded,
-                element.getAnnotation(Inheritance.class) != null, notConcrete,
+        return new EntityModel(packageName, sourceClassName, entityName, fields, embedded, notConcrete,
                 inheritanceParameter, entityAnnotation);
     }
 
