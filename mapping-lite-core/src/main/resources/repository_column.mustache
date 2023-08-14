@@ -14,15 +14,22 @@
  */
 package {{package}};
 
+import jakarta.data.repository.Page;
+import jakarta.data.repository.Pageable;
 import jakarta.nosql.column.ColumnTemplate;
+import org.eclipse.jnosql.communication.column.ColumnQuery;
 import org.eclipse.jnosql.communication.column.SelectQueryParser;
 import org.eclipse.jnosql.communication.query.SelectQueryConverter;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.NoSQLPage;
+import org.eclipse.jnosql.mapping.column.JNoSQLColumnTemplate;
+import org.eclipse.jnosql.mapping.column.MappingColumnQuery;
 import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
 import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
 
 import javax.annotation.processing.Generated;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -44,12 +51,6 @@ public class {{className}} implements {{repository}} {
 
     private final EntityMetadata metadata;
 
-    private final FindByMethodQueryProvider selectProvider;
-
-    private final RepositoryColumnObserverParser parser;
-
-    private final SelectQueryConverter converter;
-
 
     @jakarta.inject.Inject
     public {{className}}(ColumnTemplate template) {
@@ -65,9 +66,6 @@ public class {{className}} implements {{repository}} {
     public {{className}}() {
         this.template = null;
         this.metadata = null;
-        this.selectProvider = null;
-        this.parser = null;
-        this.converter = null;
     }
 
     JNoSQLColumnTemplate getTemplate(){
@@ -150,9 +148,20 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public Stream<Person> findAll() {
+    public Stream<{{entityType}}> findAll() {
         ColumnQuery query = ColumnQuery.select().from(getEntityMetadata().name()).build();
         return getTemplate().select(query);
+    }
+
+    @Override
+    public Page<{{entityType}}> findAll(Pageable pageable) {
+        Objects.requireNonNull(pageable, "pageable is required");
+        EntityMetadata metadata = getEntityMetadata();
+        ColumnQuery query = new MappingColumnQuery(pageable.sorts(),
+        pageable.size(), NoSQLPage.skip(pageable), null ,metadata.name());
+
+        List<{{entityType}}> entities = getTemplate().<{{entityType}}>select(query).toList();
+            return NoSQLPage.of(entities, pageable);
     }
 
     {{#methods}}
