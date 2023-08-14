@@ -51,12 +51,17 @@ public class {{className}} implements {{repository}} {
     private final EntityMetadata metadata;
 
 
-    @javax.inject.Inject
-    public {{className}}(DocumentTemplate template) {
+    @jakarta.inject.Inject
+    public {{className}}(JNoSQLDocumentTemplate template) {
         this.template = Objects.requireNonNull(template, "template is required");
-        EntitiesMetadata entities = new DefaultEntitiesMetadata();
+        EntitiesMetadata entities = new LiteEntitiesMetadata();
         this.metadata = entities.get({{entityType}}.class);
     }
+
+    public {{className}}() {
+        this.template = null;
+        this.metadata = null;
+   }
 
     JNoSQLDocumentTemplate getTemplate(){
         return template;
