@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2022 Otávio Santana and others
+ *  Copyright (c) 2022 Contributors to the Eclipse Foundation
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the Eclipse Public License v1.0
  *   and Apache License v2.0 which accompanies this distribution.
@@ -15,33 +15,46 @@
 package org.eclipse.jnosql.mapping.lite.column;
 
 import jakarta.data.exceptions.MappingException;
+import jakarta.inject.Inject;
+import org.eclipse.jnosql.communication.TypeReference;
+import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.communication.column.ColumnEntity;
-import org.eclipse.jnosql.lite.mapping.column.LiteColumnEntityConverter;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.EmailNotification;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.LargeProject;
+import org.eclipse.jnosql.lite.mapping.entities.inheritance.Notification;
+import org.eclipse.jnosql.lite.mapping.entities.inheritance.NotificationReader;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.Project;
+import org.eclipse.jnosql.lite.mapping.entities.inheritance.ProjectManager;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.SmallProject;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.SmsNotification;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.SocialMediaNotification;
+import org.eclipse.jnosql.mapping.Converters;
+import org.eclipse.jnosql.mapping.column.ColumnEntityConverter;
+import org.eclipse.jnosql.mapping.column.spi.ColumnExtension;
+import org.eclipse.jnosql.mapping.spi.EntityMetadataExtension;
+import org.jboss.weld.junit5.auto.AddExtensions;
+import org.jboss.weld.junit5.auto.AddPackages;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class DefaultColumnEntityConverterInheritanceTest {
+@EnableAutoWeld
+@AddPackages(value = {Converters.class, ColumnEntityConverter.class})
+@AddExtensions({EntityMetadataExtension.class, ColumnExtension.class})
+class ColumnEntityConverterInheritanceTest {
 
-    private LiteColumnEntityConverter converter;
-
-    @BeforeEach
-    public void init() {
-        this.converter = new LiteColumnEntityConverter();
-    }
-
+    @Inject
+    private ColumnEntityConverter converter;
 
     @Test
     public void shouldConvertProjectToSmallProject() {
@@ -83,6 +96,19 @@ public class DefaultColumnEntityConverterInheritanceTest {
     }
 
     @Test
+    public void shouldConvertSmallProjectToCommunicationEntity() {
+        SmallProject project = new SmallProject();
+        project.setName("Small Project");
+        project.setInvestor("Otavio Santana");
+        ColumnEntity entity = this.converter.toColumn(project);
+        assertNotNull(entity);
+        assertEquals("Project", entity.name());
+        assertEquals(project.getName(), entity.find("_id", String.class).get());
+        assertEquals(project.getInvestor(), entity.find("investor", String.class).get());
+        assertEquals("Small", entity.find("size", String.class).get());
+    }
+
+    @Test
     public void shouldConvertProject() {
         ColumnEntity entity = ColumnEntity.of("Project");
         entity.add("_id", "Project");
@@ -100,19 +126,6 @@ public class DefaultColumnEntityConverterInheritanceTest {
         assertEquals("Project", entity.name());
         assertEquals(project.getName(), entity.find("_id", String.class).get());
         assertEquals("Project", entity.find("size", String.class).get());
-    }
-
-    @Test
-    public void shouldConvertSmallProjectToCommunicationEntity() {
-        SmallProject project = new SmallProject();
-        project.setName("Small Project");
-        project.setInvestor("Otavio Santana");
-        ColumnEntity entity = this.converter.toColumn(project);
-        assertNotNull(entity);
-        assertEquals("Project", entity.name());
-        assertEquals(project.getName(), entity.find("_id", String.class).get());
-        assertEquals(project.getInvestor(), entity.find("investor", String.class).get());
-        assertEquals("Small", entity.find("size", String.class).get());
     }
 
     @Test
@@ -230,7 +243,188 @@ public class DefaultColumnEntityConverterInheritanceTest {
         entity.add("name", "Email Notification");
         entity.add("email", "otavio@otavio.test");
         entity.add("createdOn", date);
-        entity.add("type", "Wrong");
+        entity.add("dtype", "Wrong");
         Assertions.assertThrows(MappingException.class, ()-> this.converter.toEntity(entity));
+    }
+
+
+
+    @Test
+    public void shouldConvertCommunicationNotificationReaderEmail() {
+        ColumnEntity entity = ColumnEntity.of("NotificationReader");
+        entity.add("_id", "poli");
+        entity.add("name", "Poliana Santana");
+        entity.add("notification", Arrays.asList(
+                Column.of("_id", 10L),
+                Column.of("name", "News"),
+                Column.of("email", "otavio@email.com"),
+                Column.of("_id", LocalDate.now()),
+                Column.of("dtype", "Email")
+        ));
+
+        NotificationReader notificationReader = converter.toEntity(entity);
+        assertNotNull(notificationReader);
+        Assertions.assertEquals("poli", notificationReader.getNickname());
+        Assertions.assertEquals("Poliana Santana", notificationReader.getName());
+        Notification notification = notificationReader.getNotification();
+        assertNotNull(notification);
+        Assertions.assertEquals(EmailNotification.class, notification.getClass());
+        EmailNotification email = (EmailNotification) notification;
+        Assertions.assertEquals(10L, email.getId());
+        Assertions.assertEquals("News", email.getName());
+        Assertions.assertEquals("otavio@email.com", email.getEmail());
+    }
+
+    @Test
+    public void shouldConvertCommunicationNotificationReaderSms() {
+        ColumnEntity entity = ColumnEntity.of("NotificationReader");
+        entity.add("_id", "poli");
+        entity.add("name", "Poliana Santana");
+        entity.add("notification", Arrays.asList(
+                Column.of("_id", 10L),
+                Column.of("name", "News"),
+                Column.of("phone", "123456789"),
+                Column.of("_id", LocalDate.now()),
+                Column.of("dtype", "SMS")
+        ));
+
+        NotificationReader notificationReader = converter.toEntity(entity);
+        assertNotNull(notificationReader);
+        Assertions.assertEquals("poli", notificationReader.getNickname());
+        Assertions.assertEquals("Poliana Santana", notificationReader.getName());
+        Notification notification = notificationReader.getNotification();
+        assertNotNull(notification);
+        Assertions.assertEquals(SmsNotification.class, notification.getClass());
+        SmsNotification sms = (SmsNotification) notification;
+        Assertions.assertEquals(10L, sms.getId());
+        Assertions.assertEquals("News", sms.getName());
+        Assertions.assertEquals("123456789", sms.getPhone());
+    }
+
+    @Test
+    public void shouldConvertCommunicationNotificationReaderSocial() {
+        ColumnEntity entity = ColumnEntity.of("NotificationReader");
+        entity.add("_id", "poli");
+        entity.add("name", "Poliana Santana");
+        entity.add("notification", Arrays.asList(
+                Column.of("_id", 10L),
+                Column.of("name", "News"),
+                Column.of("nickname", "123456789"),
+                Column.of("_id", LocalDate.now()),
+                Column.of("dtype", "SocialMediaNotification")
+        ));
+
+        NotificationReader notificationReader = converter.toEntity(entity);
+        assertNotNull(notificationReader);
+        Assertions.assertEquals("poli", notificationReader.getNickname());
+        Assertions.assertEquals("Poliana Santana", notificationReader.getName());
+        Notification notification = notificationReader.getNotification();
+        assertNotNull(notification);
+        Assertions.assertEquals(SocialMediaNotification.class, notification.getClass());
+        SocialMediaNotification social = (SocialMediaNotification) notification;
+        Assertions.assertEquals(10L, social.getId());
+        Assertions.assertEquals("News", social.getName());
+        Assertions.assertEquals("123456789", social.getNickname());
+    }
+
+    @Test
+    public void shouldConvertSocialCommunication() {
+        SocialMediaNotification notification = new SocialMediaNotification();
+        notification.setId(10L);
+        notification.setName("Ada");
+        notification.setNickname("ada.lovelace");
+        NotificationReader reader = new NotificationReader("otavio", "Otavio", notification);
+
+        ColumnEntity entity = this.converter.toColumn(reader);
+        assertNotNull(entity);
+
+        assertEquals("NotificationReader", entity.name());
+        assertEquals("otavio", entity.find("_id", String.class).get());
+        assertEquals("Otavio", entity.find("name", String.class).get());
+        List<Column> columns = entity.find("notification", new TypeReference<List<Column>>() {
+        }).get();
+
+        assertThat(columns).contains(Column.of("_id", 10L),
+                        Column.of("name", "Ada"),
+                        Column.of("dtype", "SocialMediaNotification"),
+                        Column.of("nickname", "ada.lovelace"));
+    }
+
+    @Test
+    public void shouldConvertConvertProjectManagerCommunication() {
+        LargeProject large = new LargeProject();
+        large.setBudget(BigDecimal.TEN);
+        large.setName("large");
+
+        SmallProject small = new SmallProject();
+        small.setInvestor("new investor");
+        small.setName("Start up");
+
+        List<Project> projects = new ArrayList<>();
+        projects.add(large);
+        projects.add(small);
+
+        ProjectManager manager = ProjectManager.of(10L, "manager", projects);
+        ColumnEntity entity = this.converter.toColumn(manager);
+        assertNotNull(entity);
+
+        assertEquals("ProjectManager", entity.name());
+        assertEquals(10L, entity.find("_id", Long.class).get());
+        assertEquals("manager", entity.find("name", String.class).get());
+
+        List<List<Column>> columns = (List<List<Column>>) entity.find("projects").get().get();
+
+        List<Column> largeCommunication = columns.get(0);
+        List<Column> smallCommunication = columns.get(1);
+        assertThat(largeCommunication).contains(
+                Column.of("_id", "large"),
+                Column.of("size", "Large"),
+                Column.of("budget", BigDecimal.TEN)
+        );
+
+        assertThat(smallCommunication).contains(
+                Column.of("size", "Small"),
+                Column.of("investor", "new investor"),
+                Column.of("_id", "Start up")
+        );
+
+    }
+
+    @Test
+    public void shouldConvertConvertCommunicationProjectManager() {
+        ColumnEntity communication = ColumnEntity.of("ProjectManager");
+        communication.add("_id", 10L);
+        communication.add("name", "manager");
+        List<List<Column>> columns = new ArrayList<>();
+        columns.add(Arrays.asList(
+                Column.of("_id","small-project"),
+                Column.of("size","Small"),
+                Column.of("investor","investor")
+        ));
+        columns.add(Arrays.asList(
+                Column.of("_id","large-project"),
+                Column.of("size","Large"),
+                Column.of("budget",BigDecimal.TEN)
+        ));
+        communication.add("projects", columns);
+
+        ProjectManager manager = converter.toEntity(communication);
+        assertNotNull(manager);
+
+        assertEquals(10L, manager.getId());
+        assertEquals("manager", manager.getName());
+
+        List<Project> projects = manager.getProjects();
+        assertEquals(2, projects.size());
+        SmallProject small = (SmallProject) projects.get(0);
+        LargeProject large = (LargeProject) projects.get(1);
+        assertNotNull(small);
+        assertEquals("small-project", small.getName());
+        assertEquals("investor", small.getInvestor());
+
+        assertNotNull(large);
+        assertEquals("large-project", large.getName());
+        assertEquals(BigDecimal.TEN, large.getBudget());
+
     }
 }

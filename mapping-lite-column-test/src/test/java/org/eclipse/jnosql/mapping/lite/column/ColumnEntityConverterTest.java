@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2020 Otávio Santana and others
+ *  Copyright (c) 2022 Contributors to the Eclipse Foundation
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the Eclipse Public License v1.0
  *   and Apache License v2.0 which accompanies this distribution.
@@ -14,27 +14,35 @@
  */
 package org.eclipse.jnosql.mapping.lite.column;
 
+import jakarta.inject.Inject;
 import org.eclipse.jnosql.communication.TypeReference;
 import org.eclipse.jnosql.communication.Value;
 import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.communication.column.ColumnEntity;
-import org.eclipse.jnosql.lite.mapping.column.LiteColumnEntityConverter;
-import org.eclipse.jnosql.lite.mapping.entities.Actor;
-import org.eclipse.jnosql.lite.mapping.entities.Address;
-import org.eclipse.jnosql.lite.mapping.entities.AppointmentBook;
-import org.eclipse.jnosql.lite.mapping.entities.Citizen;
-import org.eclipse.jnosql.lite.mapping.entities.Contact;
-import org.eclipse.jnosql.lite.mapping.entities.ContactType;
-import org.eclipse.jnosql.lite.mapping.entities.Director;
-import org.eclipse.jnosql.lite.mapping.entities.Download;
-import org.eclipse.jnosql.lite.mapping.entities.Job;
-import org.eclipse.jnosql.lite.mapping.entities.Money;
-import org.eclipse.jnosql.lite.mapping.entities.Movie;
-import org.eclipse.jnosql.lite.mapping.entities.Person;
-import org.eclipse.jnosql.lite.mapping.entities.UserScope;
-import org.eclipse.jnosql.lite.mapping.entities.Vendor;
-import org.eclipse.jnosql.lite.mapping.entities.Worker;
-import org.eclipse.jnosql.lite.mapping.entities.ZipCode;
+import org.eclipse.jnosql.mapping.Converters;
+import org.eclipse.jnosql.mapping.column.ColumnEntityConverter;
+import org.eclipse.jnosql.mapping.column.DefaultColumnEntityConverter;
+import org.eclipse.jnosql.mapping.column.entities.Actor;
+import org.eclipse.jnosql.mapping.column.entities.Address;
+import org.eclipse.jnosql.mapping.column.entities.AppointmentBook;
+import org.eclipse.jnosql.mapping.column.entities.Citizen;
+import org.eclipse.jnosql.mapping.column.entities.Contact;
+import org.eclipse.jnosql.mapping.column.entities.ContactType;
+import org.eclipse.jnosql.mapping.column.entities.Director;
+import org.eclipse.jnosql.mapping.column.entities.Download;
+import org.eclipse.jnosql.mapping.column.entities.Job;
+import org.eclipse.jnosql.mapping.column.entities.Money;
+import org.eclipse.jnosql.mapping.column.entities.Movie;
+import org.eclipse.jnosql.mapping.column.entities.Person;
+import org.eclipse.jnosql.mapping.column.entities.Vendor;
+import org.eclipse.jnosql.mapping.column.entities.Worker;
+import org.eclipse.jnosql.mapping.column.entities.ZipCode;
+import org.eclipse.jnosql.mapping.column.spi.ColumnExtension;
+import org.eclipse.jnosql.mapping.reflection.Reflections;
+import org.eclipse.jnosql.mapping.spi.EntityMetadataExtension;
+import org.jboss.weld.junit5.auto.AddExtensions;
+import org.jboss.weld.junit5.auto.AddPackages;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,68 +60,68 @@ import java.util.stream.Stream;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
-class LiteColumnEntityConverterTest {
+@EnableAutoWeld
+@AddPackages(value = {Converters.class, ColumnEntityConverter.class})
+@AddPackages(MockProducer.class)
+@AddPackages(Reflections.class)
+@AddExtensions({EntityMetadataExtension.class, ColumnExtension.class})
+public class ColumnEntityConverterTest {
 
-
-    private LiteColumnEntityConverter converter;
+    @Inject
+    private DefaultColumnEntityConverter converter;
 
     private Column[] columns;
 
     private final Actor actor = Actor.actorBuilder().withAge()
             .withId()
             .withName()
-            .withPhones(Arrays.asList("234", "2342"))
+            .withPhones(asList("234", "2342"))
             .withMovieCharacter(Collections.singletonMap("JavaZone", "Jedi"))
             .withMovieRating(Collections.singletonMap("JavaZone", 10))
             .build();
 
     @BeforeEach
     public void init() {
-        this.converter = new LiteColumnEntityConverter();
+
         columns = new Column[]{Column.of("_id", 12L),
-                Column.of("age", 10), Column.of("name", "Otavio"), Column.of("phones", Arrays.asList("234", "2342"))
+                Column.of("age", 10), Column.of("name", "Otavio"),
+                Column.of("phones", asList("234", "2342"))
                 , Column.of("movieCharacter", Collections.singletonMap("JavaZone", "Jedi"))
                 , Column.of("movieRating", Collections.singletonMap("JavaZone", 10))};
     }
 
     @Test
-    public void shouldConvertColumnEntityFromEntity() {
+    public void shouldConvertEntityFromColumnEntity() {
 
         Person person = Person.builder().withAge()
                 .withId(12)
                 .withName("Otavio")
-                .withPhones(Arrays.asList("234", "2342")).build();
+                .withPhones(asList("234", "2342")).build();
 
         ColumnEntity entity = converter.toColumn(person);
         assertEquals("Person", entity.name());
         assertEquals(4, entity.size());
-        assertThat(entity.columns(), containsInAnyOrder(Column.of("_id", 12L),
-                Column.of("age", 10), Column.of("name", "Otavio"), Column.of("phones", Arrays.asList("234", "2342"))));
+        assertThat(entity.columns()).contains(Column.of("_id", 12L),
+                Column.of("age", 10), Column.of("name", "Otavio"),
+                Column.of("phones", Arrays.asList("234", "2342")));
 
     }
 
     @Test
-    public void shouldConvertEntityFromColumnEntity() {
-
+    public void shouldConvertColumnEntityFromEntity() {
 
         ColumnEntity entity = converter.toColumn(actor);
         assertEquals("Actor", entity.name());
         assertEquals(6, entity.size());
 
-
-        assertThat(entity.columns(), containsInAnyOrder(columns));
+        assertThat(entity.columns()).contains(columns);
     }
 
     @Test
-    public void shouldConvertColumnEntityFromEntity2() {
+    public void shouldConvertColumnEntityToEntity() {
         ColumnEntity entity = ColumnEntity.of("Actor");
         Stream.of(columns).forEach(entity::add);
 
@@ -121,11 +129,24 @@ class LiteColumnEntityConverterTest {
         assertNotNull(actor);
         assertEquals(10, actor.getAge());
         assertEquals(12L, actor.getId());
-        assertEquals(Arrays.asList("234", "2342"), actor.getPhones());
+        assertEquals(asList("234", "2342"), actor.getPhones());
         assertEquals(Collections.singletonMap("JavaZone", "Jedi"), actor.getMovieCharacter());
         assertEquals(Collections.singletonMap("JavaZone", 10), actor.getMovieRating());
     }
 
+    @Test
+    public void shouldConvertColumnEntityToEntity2() {
+        ColumnEntity entity = ColumnEntity.of("Actor");
+        Stream.of(columns).forEach(entity::add);
+
+        Actor actor = converter.toEntity(entity);
+        assertNotNull(actor);
+        assertEquals(10, actor.getAge());
+        assertEquals(12L, actor.getId());
+        assertEquals(asList("234", "2342"), actor.getPhones());
+        assertEquals(Collections.singletonMap("JavaZone", "Jedi"), actor.getMovieCharacter());
+        assertEquals(Collections.singletonMap("JavaZone", 10), actor.getMovieRating());
+    }
 
     @Test
     public void shouldConvertColumnEntityToExistEntity() {
@@ -153,28 +174,15 @@ class LiteColumnEntityConverterTest {
         assertThrows(NullPointerException.class, () -> converter.toEntity(actor, null));
     }
 
-    @Test
-    public void shouldConvertColumnEntityFromEntity3() {
-        ColumnEntity entity = ColumnEntity.of("Actor");
-        Stream.of(columns).forEach(entity::add);
-
-        Actor actor = converter.toEntity(entity);
-        assertNotNull(actor);
-        assertEquals(10, actor.getAge());
-        assertEquals(12L, actor.getId());
-        assertEquals(Arrays.asList("234", "2342"), actor.getPhones());
-        assertEquals(Collections.singletonMap("JavaZone", "Jedi"), actor.getMovieCharacter());
-        assertEquals(Collections.singletonMap("JavaZone", 10), actor.getMovieRating());
-    }
 
     @Test
-    public void shouldConvertEntityFromColumnEntity2() {
+    public void shouldConvertEntityToColumnEntity2() {
 
-        Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
+        Movie movie = new Movie("Matrix", 2012, Collections.singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
                 .withId(12)
                 .withName("Otavio")
-                .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
+                .withPhones(asList("234", "2342")).withMovie(movie).build();
 
         ColumnEntity entity = converter.toColumn(director);
         assertEquals(5, entity.size());
@@ -184,27 +192,27 @@ class LiteColumnEntityConverterTest {
         assertEquals(getValue(entity.find("_id")), director.getId());
         assertEquals(getValue(entity.find("phones")), director.getPhones());
 
+
         Column subColumn = entity.find("movie").get();
         List<Column> columns = subColumn.get(new TypeReference<>() {
         });
+
         assertEquals(3, columns.size());
         assertEquals("movie", subColumn.name());
-
-        assertEquals(movie.getTitle(), getValue(columns.stream().filter(d -> "title".equals(d.name())).findFirst()));
-        assertEquals(movie.getYear(), getValue(columns.stream().filter(d -> "year".equals(d.name())).findFirst()));
-        assertEquals(movie.getActors(), getValue(columns.stream().filter(d -> "actors".equals(d.name())).findFirst()));
+        assertEquals(movie.getTitle(), columns.stream().filter(c -> "title".equals(c.name())).findFirst().get().get());
+        assertEquals(movie.getYear(), columns.stream().filter(c -> "year".equals(c.name())).findFirst().get().get());
+        assertEquals(movie.getActors(), columns.stream().filter(c -> "actors".equals(c.name())).findFirst().get().get());
 
 
     }
 
-
     @Test
     public void shouldConvertToEmbeddedClassWhenHasSubColumn() {
-        Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
+        Movie movie = new Movie("Matrix", 2012, Collections.singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
                 .withId(12)
                 .withName("Otavio")
-                .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
+                .withPhones(asList("234", "2342")).withMovie(movie).build();
 
         ColumnEntity entity = converter.toColumn(director);
         Director director1 = converter.toEntity(entity);
@@ -215,18 +223,16 @@ class LiteColumnEntityConverterTest {
         assertEquals(director.getId(), director1.getId());
     }
 
-
     @Test
     public void shouldConvertToEmbeddedClassWhenHasSubColumn2() {
         Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
                 .withId(12)
                 .withName("Otavio")
-                .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
+                .withPhones(asList("234", "2342")).withMovie(movie).build();
 
         ColumnEntity entity = converter.toColumn(director);
         entity.remove("movie");
-        entity.add(Column.of("title", "Matrix"));
         entity.add(Column.of("movie", Arrays.asList(Column.of("title", "Matrix"),
                 Column.of("year", 2012), Column.of("actors", singleton("Actor")))));
         Director director1 = converter.toEntity(entity);
@@ -237,18 +243,16 @@ class LiteColumnEntityConverterTest {
         assertEquals(director.getId(), director1.getId());
     }
 
-
     @Test
     public void shouldConvertToEmbeddedClassWhenHasSubColumn3() {
         Movie movie = new Movie("Matrix", 2012, singleton("Actor"));
         Director director = Director.builderDirector().withAge(12)
                 .withId(12)
                 .withName("Otavio")
-                .withPhones(Arrays.asList("234", "2342")).withMovie(movie).build();
+                .withPhones(asList("234", "2342")).withMovie(movie).build();
 
         ColumnEntity entity = converter.toColumn(director);
         entity.remove("movie");
-
         Map<String, Object> map = new HashMap<>();
         map.put("title", "Matrix");
         map.put("year", 2012);
@@ -264,7 +268,7 @@ class LiteColumnEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertToColumnWhenHasConverter() {
+    public void shouldConvertToColumnWhenHaConverter() {
         Worker worker = new Worker();
         Job job = new Job();
         job.setCity("Sao Paulo");
@@ -297,11 +301,28 @@ class LiteColumnEntityConverterTest {
     }
 
     @Test
+    public void shouldConvertEmbeddableLazily() {
+        ColumnEntity entity = ColumnEntity.of("Worker");
+        entity.add("name", "Otavio");
+        entity.add("money", "BRL 10");
+
+        Worker worker = converter.toEntity(entity);
+        assertEquals("Otavio", worker.getName());
+        assertEquals(new Money("BRL", BigDecimal.TEN), worker.getSalary());
+        Assertions.assertNull(worker.getJob());
+
+    }
+
+
+    @Test
     public void shouldConvertToListEmbeddable() {
         AppointmentBook appointmentBook = new AppointmentBook("ids");
-        appointmentBook.add(Contact.builder().withType(ContactType.EMAIL).withName("Ada").withInformation("ada@lovelace.com").build());
-        appointmentBook.add(Contact.builder().withType(ContactType.MOBILE).withName("Ada").withInformation("11 1231231 123").build());
-        appointmentBook.add(Contact.builder().withType(ContactType.PHONE).withName("Ada").withInformation("12 123 1231 123123").build());
+        appointmentBook.add(Contact.builder().withType(ContactType.EMAIL)
+                .withName("Ada").withInformation("ada@lovelace.com").build());
+        appointmentBook.add(Contact.builder().withType(ContactType.MOBILE)
+                .withName("Ada").withInformation("11 1231231 123").build());
+        appointmentBook.add(Contact.builder().withType(ContactType.PHONE)
+                .withName("Ada").withInformation("12 123 1231 123123").build());
 
         ColumnEntity entity = converter.toColumn(appointmentBook);
         Column contacts = entity.find("contacts").get();
@@ -338,6 +359,7 @@ class LiteColumnEntityConverterTest {
 
     }
 
+
     @Test
     public void shouldConvertSubEntity() {
         ZipCode zipcode = new ZipCode();
@@ -350,15 +372,16 @@ class LiteColumnEntityConverterTest {
         address.setStreet("Rua Engenheiro Jose Anasoh");
         address.setZipCode(zipcode);
 
-        ColumnEntity ColumnEntity = converter.toColumn(address);
-        List<Column> columns = ColumnEntity.columns();
-        assertEquals("Address", ColumnEntity.name());
+        ColumnEntity columnEntity = converter.toColumn(address);
+        List<Column> columns = columnEntity.columns();
+        assertEquals("Address", columnEntity.name());
         assertEquals(4, columns.size());
-        List<Column> zip = ColumnEntity.find("zipCode").map(d -> d.get(new TypeReference<List<Column>>() {
+        List<Column> zip = columnEntity.find("zipCode").map(d -> d.get(new TypeReference<List<Column>>() {
         })).orElse(Collections.emptyList());
-        assertEquals("Rua Engenheiro Jose Anasoh", getValue(ColumnEntity.find("street")));
-        assertEquals("Salvador", getValue(ColumnEntity.find("city")));
-        assertEquals("Bahia", getValue(ColumnEntity.find("state")));
+
+        assertEquals("Rua Engenheiro Jose Anasoh", getValue(columnEntity.find("street")));
+        assertEquals("Salvador", getValue(columnEntity.find("city")));
+        assertEquals("Bahia", getValue(columnEntity.find("state")));
         assertEquals("12321", getValue(zip.stream().filter(d -> d.name().equals("zip")).findFirst()));
         assertEquals("1234", getValue(zip.stream().filter(d -> d.name().equals("plusFour")).findFirst()));
     }
@@ -371,16 +394,9 @@ class LiteColumnEntityConverterTest {
         entity.add(Column.of("street", "Rua Engenheiro Jose Anasoh"));
         entity.add(Column.of("city", "Salvador"));
         entity.add(Column.of("state", "Bahia"));
-        entity.add(Column.of("zip", "12321"));
-        entity.add(Column.of("plusFour", "1234"));
-
-        entity.add(Column.of("street", "Rua Engenheiro Jose Anasoh"));
-        entity.add(Column.of("city", "Salvador"));
-        entity.add(Column.of("state", "Bahia"));
         entity.add(Column.of("zipCode", Arrays.asList(
                 Column.of("zip", "12321"),
                 Column.of("plusFour", "1234"))));
-
         Address address = converter.toEntity(entity);
 
         assertEquals("Rua Engenheiro Jose Anasoh", address.getStreet());
@@ -389,30 +405,6 @@ class LiteColumnEntityConverterTest {
         assertEquals("12321", address.getZipCode().getZip());
         assertEquals("1234", address.getZipCode().getPlusFour());
 
-    }
-
-    @Test
-    public void shouldConvertAndDoNotUseUnmodifiableCollection() {
-        ColumnEntity entity = ColumnEntity.of("vendors");
-        entity.add("name", "name");
-        entity.add("prefixes", Arrays.asList("value", "value2"));
-
-        Vendor vendor = converter.toEntity(entity);
-        vendor.add("value3");
-
-        Assertions.assertEquals(3, vendor.getPrefixes().size());
-
-    }
-
-    @Test
-    public void shouldCreateLazilyEntity() {
-        ColumnEntity entity = ColumnEntity.of("Citizen");
-        entity.add("id", "10");
-        entity.add("name", "Salvador");
-
-        Citizen citizen = converter.toEntity(entity);
-        Assertions.assertNotNull(citizen);
-        assertNull(citizen.getCity());
     }
 
     @Test
@@ -434,7 +426,20 @@ class LiteColumnEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertEntityToColumnWithArray() {
+    public void shouldConvertAndDoNotUseUnmodifiableCollection() {
+        ColumnEntity entity = ColumnEntity.of("vendors");
+        entity.add("name", "name");
+        entity.add("prefixes", Arrays.asList("value", "value2"));
+
+        Vendor vendor = converter.toEntity(entity);
+        vendor.add("value3");
+
+        Assertions.assertEquals(3, vendor.getPrefixes().size());
+
+    }
+
+    @Test
+    public void shouldConvertEntityToDocumentWithArray() {
         byte[] contents = {1, 2, 3, 4, 5, 6};
 
         ColumnEntity entity = ColumnEntity.of("download");
@@ -447,7 +452,7 @@ class LiteColumnEntityConverterTest {
     }
 
     @Test
-    public void shouldConvertColumnToEntityWithArray() {
+    public void shouldConvertDocumentToEntityWithArray() {
         byte[] contents = {1, 2, 3, 4, 5, 6};
 
         Download download = new Download();
@@ -456,9 +461,8 @@ class LiteColumnEntityConverterTest {
 
         ColumnEntity entity = converter.toColumn(download);
 
-
         Assertions.assertEquals(1L, entity.find("_id").get().get());
-        final byte[] bytes = entity.find("contents").get().get(byte[].class);
+        final byte[] bytes = entity.find("contents").map(v -> v.get(byte[].class)).orElse(new byte[0]);
         Assertions.assertArrayEquals(contents, bytes);
     }
 
@@ -492,8 +496,19 @@ class LiteColumnEntityConverterTest {
 
     }
 
+    @Test
+    public void shouldCreateLazilyEntity() {
+        ColumnEntity entity = ColumnEntity.of("Citizen");
+        entity.add("id", "10");
+        entity.add("name", "Salvador");
+
+        Citizen citizen = converter.toEntity(entity);
+        Assertions.assertNotNull(citizen);
+        Assertions.assertNull(citizen.getCity());
+    }
 
     private Object getValue(Optional<Column> column) {
         return column.map(Column::value).map(Value::get).orElse(null);
     }
+
 }
