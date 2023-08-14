@@ -155,7 +155,6 @@ public class {{className}} implements {{repository}} {
         return getTemplate().select(query);
     }
 
-    @Override
     public Page<{{entityType}}> findAll(Pageable pageable) {
         Objects.requireNonNull(pageable, "pageable is required");
         EntityMetadata metadata = getEntityMetadata();
