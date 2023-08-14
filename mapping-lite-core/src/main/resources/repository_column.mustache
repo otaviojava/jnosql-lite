@@ -14,15 +14,14 @@
  */
 package {{package}};
 
-import jakarta.nosql.column.SelectQueryConverter;
 import jakarta.nosql.column.ColumnTemplate;
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
-import org.eclipse.jnosql.lite.mapping.column.RepositoryColumnObserverParser;
-import org.eclipse.jnosql.communication.column.query.SelectQueryParser;
-import org.eclipse.jnosql.communication.query.method.FindByMethodQueryProvider;
+import org.eclipse.jnosql.communication.column.SelectQueryParser;
+import org.eclipse.jnosql.communication.query.SelectQueryConverter;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
+
 import javax.annotation.processing.Generated;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,17 +30,17 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static jakarta.nosql.IdNotFoundException.KEY_NOT_FOUND_EXCEPTION_SUPPLIER;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
+import static org.eclipse.jnosql.mapping.IdNotFoundException.KEY_NOT_FOUND_EXCEPTION_SUPPLIER;
 
 @Generated(value= "JNoSQL Lite Column Repository Generator", date = "{{now}}")
-@javax.enterprise.context.ApplicationScoped
+@jakarta.enterprise.context.ApplicationScoped
 public class {{className}} implements {{repository}} {
 
-    private final ColumnTemplate template;
+    private final JNoSQLColumnTemplate template;
 
     private final EntityMetadata metadata;
 
@@ -52,7 +51,7 @@ public class {{className}} implements {{repository}} {
     private final SelectQueryConverter converter;
 
 
-    @javax.inject.Inject
+    @jakarta.inject.Inject
     public {{className}}(ColumnTemplate template) {
         this.template = Objects.requireNonNull(template, "template is required");
         EntitiesMetadata entities = new DefaultEntitiesMetadata();
@@ -62,7 +61,16 @@ public class {{className}} implements {{repository}} {
         this.converter = new SelectQueryParser();
     }
 
-    ColumnTemplate getTemplate(){
+    @jakarta.inject.Inject
+    public {{className}}() {
+        this.template = null;
+        this.metadata = null;
+        this.selectProvider = null;
+        this.parser = null;
+        this.converter = null;
+    }
+
+    JNoSQLColumnTemplate getTemplate(){
         return template;
     }
 
@@ -82,7 +90,7 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public <S extends {{entityType}}> Iterable<S> save(Iterable<S> entities) {
+    public <S extends {{entityType}}> Iterable<S> saveAll(Iterable<S> entities) {
         requireNonNull(entities, "entities is required");
         return StreamSupport.stream(entities.spliterator(), false).map(this::save).collect(toList());
     }
@@ -94,9 +102,27 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public void deleteById(Iterable<{{keyType}}> ids) {
+    public void delete({{entityType}} entity) {
+        requireNonNull(entity, "entity is required");
+        getTemplate().delete(entity);
+    }
+
+
+        @Override
+    public void deleteAllById(Iterable<{{keyType}}> ids) {
         requireNonNull(ids, "ids is required");
         ids.forEach(this::deleteById);
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends {{entityType}}> entities) {
+        requireNonNull(entities, "entities is required");
+        getTemplate().delete(entities);
+    }
+
+    @Override
+    public void deleteAll() {
+        getTemplate().delete(getEntityClass());
     }
 
     @Override
@@ -105,11 +131,12 @@ public class {{className}} implements {{repository}} {
         return getTemplate().find(getEntityClass(), id);
     }
 
+
     @Override
-    public Iterable<{{entityType}}> findById(Iterable<{{keyType}}> ids) {
+    public Stream<{{entityType}}> findAllById(Iterable<{{keyType}}> ids) {
         requireNonNull(ids, "ids is required");
         return (Iterable) stream(ids.spliterator(), false)
-                .flatMap(optionalToStream()).collect(Collectors.toList());
+                .flatMap(optionalToStream());
     }
 
     @Override
@@ -119,7 +146,13 @@ public class {{className}} implements {{repository}} {
 
     @Override
     public boolean existsById({{keyType}} id) {
-      return findById(id).isPresent();
+        return findById(id).isPresent();
+    }
+
+    @Override
+    public Stream<Person> findAll() {
+        ColumnQuery query = ColumnQuery.select().from(getEntityMetadata().name()).build();
+        return getTemplate().select(query);
     }
 
     {{#methods}}
@@ -147,7 +180,7 @@ public class {{className}} implements {{repository}} {
     }
 
     private Class<{{entityType}}> getEntityClass() {
-        return (Class<{{entityType}}>) getEntityMetadata().getClassInstance();
+        return (Class<{{entityType}}>) getEntityMetadata().type();
     }
 
 }
