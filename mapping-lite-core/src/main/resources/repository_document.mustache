@@ -49,8 +49,8 @@ import static org.eclipse.jnosql.mapping.IdNotFoundException.KEY_NOT_FOUND_EXCEP
 public class {{className}} implements {{repository}} {
 
     {{^methods.isEmpty}}
-    private static final org.eclipse.jnosql.communication.column.SelectQueryParser SELECT_PARSER =
-            new org.eclipse.jnosql.communication.column.SelectQueryParser();
+    private static final org.eclipse.jnosql.communication.document.SelectQueryParser SELECT_PARSER =
+            new org.eclipse.jnosql.communication.document.SelectQueryParser();
     {{/methods.isEmpty}}
     private final JNoSQLDocumentTemplate template;
 
