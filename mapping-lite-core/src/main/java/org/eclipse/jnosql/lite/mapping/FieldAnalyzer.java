@@ -116,11 +116,13 @@ public class FieldAnalyzer implements Supplier<String> {
         boolean embeddable = false;
         String collectionInstance = CollectionUtil.DEFAULT;
         MappingType mappingType = MappingType.DEFAULT;
+        String supplierElement = null;
 
 
         if (typeMirror instanceof DeclaredType declaredType) {
             Element element = declaredType.asElement();
             className = element.toString();
+            supplierElement = typeMirror.toString();
             embeddable = isEmbeddable(declaredType);
            collectionInstance = CollectionUtil.INSTANCE.apply(className);
            elementType = elementType(declaredType);
@@ -184,6 +186,7 @@ public class FieldAnalyzer implements Supplier<String> {
                 .withMappingType("MappingType." + mappingType.name())
                 .withValueByAnnotation(valueAnnotationModels)
                 .withCollectionInstance(collectionInstance)
+                .withSupplierElement(supplierElement)
                 .build();
     }
 

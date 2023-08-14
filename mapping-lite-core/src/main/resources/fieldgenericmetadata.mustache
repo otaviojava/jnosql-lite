@@ -20,6 +20,8 @@ import org.eclipse.jnosql.communication.Value;
 import org.eclipse.jnosql.mapping.AttributeConverter;
 import org.eclipse.jnosql.mapping.metadata.GenericFieldMetadata;
 import org.eclipse.jnosql.mapping.metadata.MappingType;
+import org.eclipse.jnosql.communication.TypeSupplier;
+import org.eclipse.jnosql.communication.TypeReference;
 
 import javax.annotation.processing.Generated;
 import java.util.Map;
@@ -34,6 +36,8 @@ public final class {{className}} implements GenericFieldMetadata {
     private final Class<? extends AttributeConverter<?, ?>> typeConverter;
 
     private final Map<Class<? extends Annotation>, String> valueByAnnotation;
+
+    private final TypeSupplier<{{{supplierElement}}}> typeSupplier = new TypeReference<>(){};
 
     public {{className}}() {
         this.converter = {{converter}};
@@ -88,7 +92,11 @@ public final class {{className}} implements GenericFieldMetadata {
     @Override
     public Object value(Value value) {
         Objects.requireNonNull(value, "value is required");
-        return value.get({{type}}.class);
+        if(value.get() instanceof Iterable) {
+            return value.get(typeSupplier);
+        } else {
+            return Value.of(java.util.Collections.singletonList(value.get())).get(typeSupplier);
+        }
     }
 
     @Override

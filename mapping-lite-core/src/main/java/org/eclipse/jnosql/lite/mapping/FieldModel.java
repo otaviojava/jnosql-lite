@@ -45,9 +45,12 @@ public class FieldModel extends BaseMappingModel {
 
     private final String collectionInstance;
 
-    FieldModel(String packageName, String name,
+    private String supplierElement;
+
+    private FieldModel(String packageName, String name,
                String type, String entity,
-               String reader, String writer, String fieldName,
+               String reader, String writer,
+                       String fieldName,
                boolean id,
                String converter, String mappingType,
                String typeConverter,
@@ -141,6 +144,14 @@ public class FieldModel extends BaseMappingModel {
         return collectionInstance;
     }
 
+    public String getSupplierElement() {
+        return supplierElement;
+    }
+
+    public void setSupplierElement(String supplierElement) {
+        this.supplierElement = supplierElement;
+    }
+
     @Override
     public String toString() {
         return "FieldModel{" +
@@ -159,6 +170,7 @@ public class FieldModel extends BaseMappingModel {
                 ", elementType='" + elementType + '\'' +
                 ", embeddable=" + embeddable +
                 ", collectionInstance='" + collectionInstance + '\'' +
+                ", supplierElement='" + supplierElement + '\'' +
                 '}';
     }
 
@@ -189,6 +201,8 @@ public class FieldModel extends BaseMappingModel {
 
         private String collectionInstance;
 
+        private String supplierElement;
+
 
         private FieldMetaDataBuilder() {
         }
@@ -213,13 +227,13 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
-        public FieldMetaDataBuilder withReader(String getName) {
-            this.reader = getName;
+        public FieldMetaDataBuilder withReader(String reader) {
+            this.reader = reader;
             return this;
         }
 
-        public FieldMetaDataBuilder withWriter(String setName) {
-            this.writer = setName;
+        public FieldMetaDataBuilder withWriter(String writer) {
+            this.writer = writer;
             return this;
         }
 
@@ -273,10 +287,18 @@ public class FieldModel extends BaseMappingModel {
             return this;
         }
 
+        public FieldMetaDataBuilder withSupplierElement(String supplierElement) {
+            this.supplierElement = supplierElement;
+            return this;
+        }
+
+
         public FieldModel build() {
-            return new FieldModel(packageName, name, type, entity, reader, writer, fieldName,
+            var field= new FieldModel(packageName, name, type, entity, reader, writer, fieldName,
                     id, converter, mappingType, typeConverter, valueByAnnotation, elementType,
                     embeddable, collectionInstance);
+            field.setSupplierElement(supplierElement);
+            return field;
         }
     }
 }
