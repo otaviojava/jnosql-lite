@@ -21,25 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+
 enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
 
     METHOD_QUERY {
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider supplier = \n\t\t\t\t" +
-                    "new org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider()");
-            lines.add("org.eclipse.jnosql.communication.query.SelectQuery selectQuery = \n\t\t\t\t" +
-                    "supplier.apply(\"" + metadata.getMethodName() + "\", metadata.name())");
-            lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n\t\t\t\t" +
-                    "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
-            lines.add("org.eclipse.jnosql.communication.column.ColumnQueryParams queryParams = \n\t\t\t\t" +
-                    "SELECT_PARSER.apply(selectQuery, parser)");
-            lines.add("org.eclipse.jnosql.communication.column.ColumnQuery query = queryParams.query()");
-            lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params()");
-            for (Parameter parameter : metadata.getParameters()) {
-                lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
-            }
+            feedSelectQuery(metadata, lines);
             MethodQueryRepositoryReturnType returnType = MethodQueryRepositoryReturnType.of(metadata);
             lines.addAll(returnType.apply(metadata));
             return lines;
@@ -60,6 +49,24 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
             lines.addAll(returnType.apply(metadata));
             return lines;
         }
+    }, EXIST_BY {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            feedSelectQuery(metadata, lines);
+            lines.add("Stream<" + metadata.getEntityType() + "> entities = this.template.select(query)");
+            lines.add("boolean result = entities.findAny().isPresent()");
+            return lines;
+        }
+    },COUNT_BY {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            feedSelectQuery(metadata, lines);
+            lines.add("Stream<" + metadata.getEntityType() + "> entities = this.template.select(query)");
+            lines.add("long result = entities.count()");
+            return lines;
+        }
     }, NOT_SUPPORTED {
         @Override
         public List<String> apply(MethodMetadata metadata) {
@@ -67,10 +74,30 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
         }
     };
 
+    private static void feedSelectQuery(MethodMetadata metadata, List<String> lines) {
+        lines.add("org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider supplier = \n\t\t\t\t" +
+                "new org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider()");
+        lines.add("org.eclipse.jnosql.communication.query.SelectQuery selectQuery = \n\t\t\t\t" +
+                "supplier.apply(\"" + metadata.getMethodName() + "\", metadata.name())");
+        lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n\t\t\t\t" +
+                "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
+        lines.add("org.eclipse.jnosql.communication.column.ColumnQueryParams queryParams = \n\t\t\t\t" +
+                "SELECT_PARSER.apply(selectQuery, parser)");
+        lines.add("org.eclipse.jnosql.communication.column.ColumnQuery query = queryParams.query()");
+        lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params()");
+        for (Parameter parameter : metadata.getParameters()) {
+            lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+        }
+    }
+
     static ColumnMethodBuilder of(MethodMetadata metadata) {
         if (metadata.getMethodName().startsWith("findBy")) {
             return METHOD_QUERY;
-        } else if (metadata.hasQuery()) {
+        } else if (metadata.getMethodName().startsWith("countBy")) {
+            return COUNT_BY;
+        } else if (metadata.getMethodName().startsWith("existsBy")) {
+            return EXIST_BY;
+        }else if (metadata.hasQuery()) {
             return ANNOTATION_QUERY;
         }
         return NOT_SUPPORTED;

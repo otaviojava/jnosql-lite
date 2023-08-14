@@ -80,7 +80,7 @@ enum MethodQueryRepositoryReturnType implements Function<MethodMetadata, List<St
         }
     };
 
-    private static String getEntity(MethodMetadata metadata) {
+    static String getEntity(MethodMetadata metadata) {
         return extractFromType(metadata.getReturnType());
     }
 

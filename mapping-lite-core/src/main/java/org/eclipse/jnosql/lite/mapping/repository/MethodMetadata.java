@@ -44,8 +44,10 @@ class MethodMetadata {
 
     private MethodGenerator generator;
 
+    private String entityType;
+
     public MethodMetadata(String methodName, TypeElement returnElement, String returnType,
-                          List<Parameter> parameters, Query query, DatabaseType type) {
+                          List<Parameter> parameters, Query query, DatabaseType type, String entityType) {
 
         this.methodName = methodName;
         this.returnElement = returnElement;
@@ -53,6 +55,7 @@ class MethodMetadata {
         this.parameters = parameters;
         this.query = query;
         this.type = type;
+        this.entityType = entityType;
     }
 
     public String getMethodName() {
@@ -100,7 +103,10 @@ class MethodMetadata {
         return query != null;
     }
 
-    public static MethodMetadata of(Element element, DatabaseType type, ProcessingEnvironment processingEnv) {
+    public String getEntityType() {
+        return entityType;
+    }
+    public static MethodMetadata of(Element element, String entityType, DatabaseType type, ProcessingEnvironment processingEnv) {
         ElementKind kind = element.getKind();
         if (ElementKind.METHOD.equals(kind)) {
             ExecutableElement method = (ExecutableElement) element;
@@ -113,7 +119,7 @@ class MethodMetadata {
                     .collect(Collectors.toList());
 
             Query query = method.getAnnotation(Query.class);
-            return new MethodMetadata(methodName, returnElement, returnType, parameters, query, type);
+            return new MethodMetadata(methodName, returnElement, returnType, parameters, query, type, entityType);
         }
         return null;
     }

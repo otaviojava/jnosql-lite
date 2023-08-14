@@ -114,7 +114,7 @@ class RepositoryElement {
                 String repositoryInterface = typeElement.getQualifiedName().toString();
                 List<MethodMetadata> methods = typeElement.getEnclosedElements()
                         .stream()
-                        .map(e -> MethodMetadata.of(e, type, processingEnv))
+                        .map(e -> MethodMetadata.of(e, entityType, type, processingEnv))
                         .filter(Objects::nonNull)
                         .collect(Collectors.toList());
                 return new RepositoryElement(processingEnv, typeElement,
