@@ -76,9 +76,9 @@ enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
                     " new org.eclipse.jnosql.communication.query.method.DeleteByMethodQueryProvider()");
             lines.add("org.eclipse.jnosql.communication.query.DeleteQuery delete = supplier.apply(\"" +
                     metadata.getMethodName() + "\", metadata.name())");
-            lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n\t\t\t\t" +
-                    "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
-            lines.add("org.eclipse.jnosql.communication.column.ColumnDeleteQueryParams queryParams = \n\t\t\t" +
+            lines.add("org.eclipse.jnosql.communication.document.DocumentObserverParser parser = \n\t\t\t\t" +
+                    "org.eclipse.jnosql.mapping.document.query.RepositoryDocumentObserverParser.of(metadata)");
+            lines.add("org.eclipse.jnosql.communication.document.DocumentDeleteQueryParams queryParams = \n\t\t\t" +
                     "DELETE_PARSER.apply(delete, parser)");
             lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params();");
             for (Parameter parameter : metadata.getParameters()) {

@@ -35,6 +35,6 @@ class DocumentMethodGenerator implements MethodGenerator {
 
     @Override
     public boolean hasReturn() {
-        return !methodBuilder.equals(ColumnMethodBuilder.DELETE_BY);
+        return !methodBuilder.equals(DocumentMethodBuilder.DELETE_BY);
     }
 }
