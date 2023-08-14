@@ -50,7 +50,7 @@ public final class {{className}} implements LiteEntityMetadata {
         this.fields.add(new {{.}}());
         {{/fields}}
         {{#inheritanceParameter}}
-         this.inheritance= new InheritanceMetadata({{{inheritanceParameter}}});
+        this.inheritance = new InheritanceMetadata({{{inheritanceParameter}}});
         {{/inheritanceParameter}}
         {{^inheritanceParameter}}
         this.inheritance = null;
@@ -149,7 +149,12 @@ public final class {{className}} implements LiteEntityMetadata {
 
     @Override
     public boolean isInheritance() {
-        return {{inheritance}};
+        {{#inheritanceParameter}}
+          return true;
+        {{/inheritanceParameter}}
+        {{^inheritanceParameter}}
+          return false;
+        {{/inheritanceParameter}}
     }
 
     @Override
