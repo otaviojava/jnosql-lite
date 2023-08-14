@@ -121,8 +121,7 @@ public class FieldAnalyzer implements Supplier<String> {
         if (typeMirror instanceof DeclaredType declaredType) {
             Element element = declaredType.asElement();
             className = element.toString();
-            embeddable = element.getAnnotation(Embeddable.class) != null ||
-                    element.getAnnotation(Entity.class) != null;
+            embeddable = isEmbeddable(declaredType);
            collectionInstance = CollectionUtil.INSTANCE.apply(className);
            elementType = elementType(declaredType);
            mappingType = of(element, collectionInstance, collectionInstance);
@@ -247,6 +246,13 @@ public class FieldAnalyzer implements Supplier<String> {
         } else {
             return NULL;
         }
+    }
+
+    private boolean isEmbeddable(DeclaredType declaredType) {
+        return declaredType.getTypeArguments().stream()
+                .filter(DeclaredType.class::isInstance).map(DeclaredType.class::cast)
+                .map(DeclaredType::asElement).findFirst().map(e -> e.getAnnotation(Embeddable.class) != null ||
+                e.getAnnotation(Entity.class) != null).orElse(false);
     }
 
 }
