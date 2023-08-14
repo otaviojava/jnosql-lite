@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2022 Otávio Santana and others
+ *  Copyright (c) 2022 Contributors to the Eclipse Foundation
  *   All rights reserved. This program and the accompanying materials
  *   are made available under the terms of the Eclipse Public License v1.0
  *   and Apache License v2.0 which accompanies this distribution.
@@ -13,7 +13,6 @@
  *   Otavio Santana
  */
 package org.eclipse.jnosql.lite.mapping.entities;
-
 
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
@@ -53,15 +52,15 @@ public class Citizen {
         return city;
     }
 
-    void setId(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    void setCity(City city) {
+    public void setCity(City city) {
         this.city = city;
     }
 

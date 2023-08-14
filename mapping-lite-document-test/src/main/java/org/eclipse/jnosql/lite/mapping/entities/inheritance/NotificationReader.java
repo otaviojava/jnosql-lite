@@ -12,55 +12,59 @@
  *
  *    Otavio Santana
  */
-
 package org.eclipse.jnosql.lite.mapping.entities.inheritance;
 
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
-import org.eclipse.jnosql.mapping.Inheritance;
 
-import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
-@Inheritance
-public abstract class Notification {
+public class NotificationReader {
 
     @Id
-    protected Long id;
+    private String nickname;
 
     @Column
-    protected String name;
+    private String name;
 
     @Column
-    protected LocalDate createdOn;
+    private Notification notification;
 
-    public Long getId() {
-        return id;
+    @Deprecated
+    NotificationReader() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public NotificationReader(String nickname, String name, Notification notification) {
+        this.nickname = nickname;
+        this.name = name;
+        this.notification = notification;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public String getName() {
         return name;
     }
 
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public LocalDate getCreatedOn() {
-        return createdOn;
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
-
-    public void setCreatedOn(LocalDate createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public abstract String send();
 
     @Override
     public boolean equals(Object o) {
@@ -70,21 +74,21 @@ public abstract class Notification {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Notification that = (Notification) o;
-        return Objects.equals(id, that.id);
+        NotificationReader that = (NotificationReader) o;
+        return Objects.equals(nickname, that.nickname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(nickname);
     }
 
     @Override
     public String toString() {
-        return "Notification{" +
-                "id=" + id +
+        return "NotificationReader{" +
+                "nickname='" + nickname + '\'' +
                 ", name='" + name + '\'' +
-                ", createdOn=" + createdOn +
+                ", notification=" + notification +
                 '}';
     }
 }

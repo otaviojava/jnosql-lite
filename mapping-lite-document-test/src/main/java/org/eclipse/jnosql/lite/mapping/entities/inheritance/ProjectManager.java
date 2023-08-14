@@ -12,55 +12,65 @@
  *
  *    Otavio Santana
  */
-
 package org.eclipse.jnosql.lite.mapping.entities.inheritance;
+
 
 import jakarta.nosql.Column;
 import jakarta.nosql.Entity;
 import jakarta.nosql.Id;
-import org.eclipse.jnosql.mapping.Inheritance;
 
-import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Inheritance
-public abstract class Notification {
+public class ProjectManager {
 
     @Id
-    protected Long id;
+    private Long id;
 
     @Column
-    protected String name;
+    private String name;
 
     @Column
-    protected LocalDate createdOn;
+    private List<Project> projects;
+
+    @Deprecated
+    ProjectManager() {
+    }
+
+    private ProjectManager(Long id, String name, List<Project> projects) {
+        this.id = id;
+        this.name = name;
+        this.projects = projects;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
+    public List<Project> getProjects() {
+        if(projects == null) {
+            return Collections.emptyList();
+        }
+        return Collections.unmodifiableList(projects);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public LocalDate getCreatedOn() {
-        return createdOn;
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
-
-    public void setCreatedOn(LocalDate createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public abstract String send();
 
     @Override
     public boolean equals(Object o) {
@@ -70,7 +80,7 @@ public abstract class Notification {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Notification that = (Notification) o;
+        ProjectManager that = (ProjectManager) o;
         return Objects.equals(id, that.id);
     }
 
@@ -81,10 +91,17 @@ public abstract class Notification {
 
     @Override
     public String toString() {
-        return "Notification{" +
-                "id=" + id +
+        return "ProjectManager{" +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", createdOn=" + createdOn +
+                ", projects=" + projects +
                 '}';
+    }
+
+    public static ProjectManager of(Long id, String name, List<Project> projects) {
+        Objects.requireNonNull(id, "id is required");
+        Objects.requireNonNull(name, "name is required");
+        Objects.requireNonNull(projects, "projects is required");
+        return new ProjectManager(id, name, projects);
     }
 }
