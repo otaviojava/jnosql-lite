@@ -28,4 +28,5 @@ public interface PersonRepository extends PageableRepository<Person, Long> {
 
     @Query("select * from Person where name = @name")
     List<Person> query(@Param("name") String name);
+
 }
