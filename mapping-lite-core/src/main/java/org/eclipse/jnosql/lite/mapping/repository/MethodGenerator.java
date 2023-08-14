@@ -20,4 +20,6 @@ public interface MethodGenerator {
 
     List<String> getLines();
 
+    boolean hasReturn();
+
 }

@@ -20,13 +20,21 @@ class ColumnMethodGenerator implements MethodGenerator {
 
     private final MethodMetadata metadata;
 
+    private final ColumnMethodBuilder methodBuilder;
+
     ColumnMethodGenerator(MethodMetadata metadata) {
         this.metadata = metadata;
+        this.methodBuilder = ColumnMethodBuilder.of(this.metadata);
     }
 
     @Override
     public List<String> getLines() {
         ColumnMethodBuilder methodBuilder = ColumnMethodBuilder.of(this.metadata);
         return methodBuilder.apply(this.metadata);
+    }
+
+    @Override
+    public boolean hasReturn() {
+        return !methodBuilder.equals(ColumnMethodBuilder.DELETE_BY);
     }
 }

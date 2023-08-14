@@ -27,4 +27,9 @@ class KeyValueMethodGenerator implements MethodGenerator {
         return Collections.singletonList("throw new UnsupportedOperationException" +
                 "(\"The Key-value repository implementation does not support method query\")");
     }
+
+    @Override
+    public boolean hasReturn() {
+        return true;
+    }
 }

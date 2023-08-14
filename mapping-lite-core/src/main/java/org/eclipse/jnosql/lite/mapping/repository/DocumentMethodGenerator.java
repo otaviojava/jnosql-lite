@@ -29,4 +29,9 @@ class DocumentMethodGenerator implements MethodGenerator {
         DocumentMethodBuilder methodBuilder = DocumentMethodBuilder.of(this.metadata);
         return methodBuilder.apply(this.metadata);
     }
+
+    @Override
+    public boolean hasReturn() {
+        return false;
+    }
 }

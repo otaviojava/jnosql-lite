@@ -83,6 +83,10 @@ class MethodMetadata {
         return this.generator.getLines();
     }
 
+    public boolean hasReturn() {
+        return this.generator.hasReturn();
+    }
+
     public String getReturnValue() {
         return "result";
     }
