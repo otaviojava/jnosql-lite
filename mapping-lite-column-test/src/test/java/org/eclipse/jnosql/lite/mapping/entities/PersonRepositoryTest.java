@@ -16,10 +16,17 @@ package org.eclipse.jnosql.lite.mapping.entities;
 
 import jakarta.data.repository.Page;
 import jakarta.data.repository.Pageable;
+import org.assertj.core.api.Assertions;
+import org.assertj.core.api.SoftAssertions;
+import org.eclipse.jnosql.communication.Condition;
+import org.eclipse.jnosql.communication.Value;
+import org.eclipse.jnosql.communication.column.Column;
+import org.eclipse.jnosql.communication.column.ColumnCondition;
 import org.eclipse.jnosql.communication.column.ColumnQuery;
 import org.eclipse.jnosql.mapping.column.JNoSQLColumnTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -30,6 +37,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -173,6 +181,22 @@ class PersonRepositoryTest {
     @Test
     public void shouldThrowExceptionIfPageableIsNull() {
         assertThrows(NullPointerException.class, () -> personRepository.findAll(null));
+    }
+
+    @Test
+    public void shouldFindByName(){
+        when(template.select(any(ColumnQuery.class))).thenReturn( Stream.of(new Person(), new Person()));
+        List<Person> result = this.personRepository.findByName("Ada");
+        ArgumentCaptor<ColumnQuery> captor = ArgumentCaptor.forClass(ColumnQuery.class);
+        assertThat(result).isNotEmpty().hasSize(2);
+        verify(template).select(captor.capture());
+        ColumnQuery query = captor.getValue();
+        ColumnCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.column().get(String.class)).isEqualTo("Ada");
+        });
+
     }
 
 }
