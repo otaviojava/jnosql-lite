@@ -19,6 +19,7 @@ import jakarta.inject.Inject;
 import org.eclipse.jnosql.communication.TypeReference;
 import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.communication.column.ColumnEntity;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.EmailNotification;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.LargeProject;
 import org.eclipse.jnosql.lite.mapping.entities.inheritance.Notification;
@@ -51,6 +52,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @EnableAutoWeld
 @AddPackages(value = {Converters.class, ColumnEntityConverter.class})
 @AddExtensions({EntityMetadataExtension.class, ColumnExtension.class})
+@AddPackages(LiteEntitiesMetadata.class)
 class ColumnEntityConverterInheritanceTest {
 
     @Inject
