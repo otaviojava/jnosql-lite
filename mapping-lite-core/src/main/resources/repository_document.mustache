@@ -44,6 +44,8 @@ import static org.eclipse.jnosql.mapping.IdNotFoundException.KEY_NOT_FOUND_EXCEP
 
 @Generated(value= "JNoSQL Lite Document Repository Generator", date = "{{now}}")
 @jakarta.enterprise.context.ApplicationScoped
+@jakarta.enterprise.inject.Default
+@org.eclipse.jnosql.mapping.Database(value = org.eclipse.jnosql.mapping.DatabaseType.DOCUMENT)
 public class {{className}} implements {{repository}} {
 
     {{^methods.isEmpty}}
