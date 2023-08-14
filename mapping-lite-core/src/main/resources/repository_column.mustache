@@ -175,7 +175,7 @@ public class {{className}} implements {{repository}} {
     {{/methods}}
 
     private FieldMetadata getIdField() {
-        return getEntityMetadata().getId().orElseThrow(KEY_NOT_FOUND_EXCEPTION_SUPPLIER);
+        return getEntityMetadata().id().orElseThrow(KEY_NOT_FOUND_EXCEPTION_SUPPLIER);
     }
 
     private Function optionalToStream() {
