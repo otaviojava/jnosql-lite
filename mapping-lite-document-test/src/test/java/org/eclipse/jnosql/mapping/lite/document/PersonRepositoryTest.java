@@ -16,12 +16,18 @@ package org.eclipse.jnosql.mapping.lite.document;
 
 import jakarta.data.repository.Page;
 import jakarta.data.repository.Pageable;
+import jakarta.nosql.PreparedStatement;
+import org.assertj.core.api.SoftAssertions;
+import org.eclipse.jnosql.communication.Condition;
+import org.eclipse.jnosql.communication.document.DocumentCondition;
+import org.eclipse.jnosql.communication.document.DocumentDeleteQuery;
 import org.eclipse.jnosql.communication.document.DocumentQuery;
 import org.eclipse.jnosql.lite.mapping.entities.Person;
 import org.eclipse.jnosql.lite.mapping.entities.PersonRepositoryLiteDocument;
 import org.eclipse.jnosql.mapping.document.JNoSQLDocumentTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -32,6 +38,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -175,6 +182,80 @@ class PersonRepositoryTest {
     @Test
     public void shouldThrowExceptionIfPageableIsNull() {
         assertThrows(NullPointerException.class, () -> personRepository.findAll(null));
+    }
+
+
+
+    @Test
+    public void shouldFindByName(){
+        when(template.select(any(DocumentQuery.class))).thenReturn( Stream.of(new Person(), new Person()));
+        List<Person> result = this.personRepository.findByName("Ada");
+        ArgumentCaptor<DocumentQuery> captor = ArgumentCaptor.forClass(DocumentQuery.class);
+        assertThat(result).isNotEmpty().hasSize(2);
+        verify(template).select(captor.capture());
+        DocumentQuery query = captor.getValue();
+        DocumentCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.document().get(String.class)).isEqualTo("Ada");
+        });
+
+    }
+
+    @Test
+    public void shouldQuery(){
+        when(template.prepare(anyString())).thenReturn(Mockito.mock(PreparedStatement.class));
+        this.personRepository.query("Ada");
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(template).prepare(captor.capture());
+        String value = captor.getValue();
+        assertThat(value).isEqualTo("select * from Person where name = @name");
+    }
+
+    @Test
+    public void shouldExistByName(){
+        when(template.select(any(DocumentQuery.class))).thenReturn( Stream.of(new Person(), new Person()));
+        boolean result = this.personRepository.existsByName("Ada");
+        ArgumentCaptor<DocumentQuery> captor = ArgumentCaptor.forClass(DocumentQuery.class);
+        assertThat(result).isTrue();
+        verify(template).select(captor.capture());
+        DocumentQuery query = captor.getValue();
+        DocumentCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.document().get(String.class)).isEqualTo("Ada");
+        });
+
+    }
+
+    @Test
+    public void shouldCountByName(){
+        when(template.select(any(DocumentQuery.class))).thenReturn( Stream.of(new Person(), new Person()));
+        long result = this.personRepository.countByName("Ada");
+        ArgumentCaptor<DocumentQuery> captor = ArgumentCaptor.forClass(DocumentQuery.class);
+        assertThat(result).isEqualTo(2L);
+        verify(template).select(captor.capture());
+        DocumentQuery query = captor.getValue();
+        DocumentCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.document().get(String.class)).isEqualTo("Ada");
+        });
+
+    }
+
+    @Test
+    public void shouldDeleteByName(){
+        this.personRepository.deleteByName("Ada");
+        ArgumentCaptor<DocumentDeleteQuery> captor = ArgumentCaptor.forClass(DocumentDeleteQuery.class);
+        verify(template).delete(captor.capture());
+        DocumentDeleteQuery query = captor.getValue();
+        DocumentCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.document().get(String.class)).isEqualTo("Ada");
+        });
+
     }
 
 }
