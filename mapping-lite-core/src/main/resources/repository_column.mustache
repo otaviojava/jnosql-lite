@@ -130,7 +130,7 @@ public class {{className}} implements {{repository}} {
     @Override
     public Stream<{{entityType}}> findAllById(Iterable<{{keyType}}> ids) {
         requireNonNull(ids, "ids is required");
-        return (Iterable) stream(ids.spliterator(), false)
+        return stream(ids.spliterator(), false)
                 .flatMap(optionalToStream());
     }
 
