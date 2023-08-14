@@ -112,13 +112,14 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
     }
 
     static ColumnMethodBuilder of(MethodMetadata metadata) {
-        if (metadata.getMethodName().startsWith("findBy")) {
+        var methodName = metadata.getMethodName();
+        if (methodName.startsWith("findBy")) {
             return METHOD_QUERY;
-        } else if (metadata.getMethodName().startsWith("countBy")) {
+        } else if (methodName.startsWith("countBy")) {
             return COUNT_BY;
-        } else if (metadata.getMethodName().startsWith("existsBy")) {
+        } else if (methodName.startsWith("existsBy")) {
             return EXIST_BY;
-        } else if (metadata.getMethodName().startsWith("deleteBy")) {
+        } else if (methodName.startsWith("deleteBy")) {
             return DELETE_BY;
         }  else if (metadata.hasQuery()) {
             return ANNOTATION_QUERY;
