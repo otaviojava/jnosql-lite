@@ -68,13 +68,29 @@ enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
         }
     },DELETE_BY{
         @Override
-        public List<String> apply(MethodMetadata methodMetadata) {
-            return null;
+        public List<String> apply(MethodMetadata metadata) {
+            List<String> lines = new ArrayList<>();
+            lines.add("org.eclipse.jnosql.communication.query.method.DeleteMethodProvider deleteMethodFactory = \n\t\t\t" +
+                    "org.eclipse.jnosql.communication.query.method.DeleteMethodProvider.INSTANCE");
+            lines.add("org.eclipse.jnosql.communication.query.method.DeleteByMethodQueryProvider supplier = \n\t\t\t" +
+                    " new org.eclipse.jnosql.communication.query.method.DeleteByMethodQueryProvider()");
+            lines.add("org.eclipse.jnosql.communication.query.DeleteQuery delete = supplier.apply(\"" +
+                    metadata.getMethodName() + "\", metadata.name())");
+            lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n\t\t\t\t" +
+                    "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
+            lines.add("org.eclipse.jnosql.communication.column.ColumnDeleteQueryParams queryParams = \n\t\t\t" +
+                    "DELETE_PARSER.apply(delete, parser)");
+            lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params();");
+            for (Parameter parameter : metadata.getParameters()) {
+                lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
+            }
+            lines.add("this.template.delete(queryParams.query())");
+            return lines;
         }
     },NOT_SUPPORTED {
         @Override
         public List<String> apply(MethodMetadata metadata) {
-            return List.of("There is no support for this method type yet.");
+            return List.of("//There is no support for this method type yet.");
         }
     };
 

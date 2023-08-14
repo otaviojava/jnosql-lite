@@ -20,8 +20,11 @@ class DocumentMethodGenerator implements MethodGenerator {
 
     private final MethodMetadata metadata;
 
+    private final DocumentMethodBuilder methodBuilder;
+
     DocumentMethodGenerator(MethodMetadata metadata) {
         this.metadata = metadata;
+        this.methodBuilder = DocumentMethodBuilder.of(metadata);
     }
 
     @Override
@@ -32,6 +35,6 @@ class DocumentMethodGenerator implements MethodGenerator {
 
     @Override
     public boolean hasReturn() {
-        return false;
+        return !methodBuilder.equals(ColumnMethodBuilder.DELETE_BY);
     }
 }

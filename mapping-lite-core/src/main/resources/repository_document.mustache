@@ -51,7 +51,10 @@ public class {{className}} implements {{repository}} {
     {{^methods.isEmpty}}
     private static final org.eclipse.jnosql.communication.document.SelectQueryParser SELECT_PARSER =
             new org.eclipse.jnosql.communication.document.SelectQueryParser();
+    private static final org.eclipse.jnosql.communication.document.DeleteQueryParser DELETE_PARSER =
+            new org.eclipse.jnosql.communication.document.DeleteQueryParser();
     {{/methods.isEmpty}}
+
     private final JNoSQLDocumentTemplate template;
 
     private final EntityMetadata metadata;
@@ -172,7 +175,9 @@ public class {{className}} implements {{repository}} {
     {{#sourceCode}}
        {{{.}}};
     {{/sourceCode}}
-       return {{{returnValue}}};
+    {{#hasReturn}}
+        return {{{returnValue}}};
+    {{/hasReturn}}
     }
     {{/methods}}
 
