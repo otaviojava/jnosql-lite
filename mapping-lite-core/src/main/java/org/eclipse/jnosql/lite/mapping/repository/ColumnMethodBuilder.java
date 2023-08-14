@@ -60,13 +60,19 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
             lines.addAll(returnType.apply(metadata));
             return lines;
         }
+    }, NOT_SUPPORTED {
+        @Override
+        public List<String> apply(MethodMetadata metadata) {
+            return List.of("throw new UnsupportedOperationException(\"The lite implementation of Column Repository does not provide support yet\")");
+        }
     };
 
     static ColumnMethodBuilder of(MethodMetadata metadata) {
-        if (metadata.hasQuery()) {
-            return ANNOTATION_QUERY;
-        } else {
+        if (metadata.getMethodName().startsWith("findBy")) {
             return METHOD_QUERY;
+        } else if (metadata.hasQuery()) {
+            return ANNOTATION_QUERY;
         }
+        return NOT_SUPPORTED;
     }
 }
