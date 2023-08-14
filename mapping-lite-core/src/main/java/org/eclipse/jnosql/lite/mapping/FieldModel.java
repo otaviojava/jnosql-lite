@@ -21,58 +21,33 @@ import javax.lang.model.type.TypeMirror;
 import java.util.List;
 import java.util.Objects;
 
-public class FieldModel extends BaseMappingModel {
+public final class FieldModel extends BaseMappingModel {
 
-    private final String packageName;
-    private final String name;
-    private final String type;
-    private final String entity;
-    private final String reader;
-    private final String writer;
-    private final String fieldName;
-    private final boolean id;
-    private final String converter;
+    private String packageName;
+    private String name;
+    private String type;
+    private String entity;
+    private String reader;
+    private String writer;
+    private String fieldName;
+    private boolean id;
+    private String converter;
 
-    private final String mappingType;
+    private String mappingType;
 
-    private final String typeConverter;
+    private String typeConverter;
 
-    private final List<ValueAnnotationModel> valueByAnnotation;
+    private List<ValueAnnotationModel> valueByAnnotation;
 
-    private final String elementType;
+    private String elementType;
 
-    private final boolean embeddable;
+    private boolean embeddable;
 
-    private final String collectionInstance;
+    private String collectionInstance;
 
     private String supplierElement;
 
-    private FieldModel(String packageName, String name,
-               String type, String entity,
-               String reader, String writer,
-                       String fieldName,
-               boolean id,
-               String converter, String mappingType,
-               String typeConverter,
-               List<ValueAnnotationModel> valueByAnnotation,
-               String elementType,
-               boolean embeddable,
-               String collectionInstance) {
-        this.packageName = packageName;
-        this.name = name;
-        this.type = type;
-        this.entity = entity;
-        this.reader = reader;
-        this.writer = writer;
-        this.fieldName = fieldName;
-        this.id = id;
-        this.converter = converter;
-        this.mappingType = mappingType;
-        this.typeConverter = typeConverter;
-        this.valueByAnnotation = valueByAnnotation;
-        this.elementType = elementType;
-        this.embeddable = embeddable;
-        this.collectionInstance = collectionInstance;
+    private FieldModel() {
     }
 
     public String getPackageName() {
@@ -148,9 +123,6 @@ public class FieldModel extends BaseMappingModel {
         return supplierElement;
     }
 
-    public void setSupplierElement(String supplierElement) {
-        this.supplierElement = supplierElement;
-    }
 
     @Override
     public String toString() {
@@ -180,125 +152,104 @@ public class FieldModel extends BaseMappingModel {
 
 
     public static class FieldMetaDataBuilder {
-        private String packageName;
-        private String name;
-        private String type;
-        private String entity;
-        private String reader;
-        private String writer;
-        private String fieldName;
-        private boolean id;
-        private String converter = "null";
 
-        private String mappingType= "null";
-
-        private String typeConverter=  "null";
-        private List<ValueAnnotationModel> valueByAnnotation;
-
-        private String elementType;
-
-        private boolean embeddable;
-
-        private String collectionInstance;
-
-        private String supplierElement;
-
+        private FieldModel fieldModel;
 
         private FieldMetaDataBuilder() {
+            this.fieldModel = new FieldModel();
+            this.fieldModel.converter = "null";
+            this.fieldModel.mappingType = "null";
+            this.fieldModel.typeConverter = "null";
         }
 
-        public FieldMetaDataBuilder withPackageName(String packageName) {
-            this.packageName = packageName;
+        public FieldMetaDataBuilder packageName(String packageName) {
+            this.fieldModel.packageName = packageName;
             return this;
         }
 
-        public FieldMetaDataBuilder withName(String name) {
-            this.name = name;
+        public FieldMetaDataBuilder name(String name) {
+            this.fieldModel.name = name;
             return this;
         }
 
-        public FieldMetaDataBuilder withType(String type) {
-            this.type = type;
+        public FieldMetaDataBuilder type(String type) {
+            this.fieldModel.type = type;
             return this;
         }
 
-        public FieldMetaDataBuilder withEntity(String entity) {
-            this.entity = entity;
+        public FieldMetaDataBuilder entity(String entity) {
+            this.fieldModel.entity = entity;
             return this;
         }
 
-        public FieldMetaDataBuilder withReader(String reader) {
-            this.reader = reader;
+        public FieldMetaDataBuilder reader(String reader) {
+            this.fieldModel.reader = reader;
             return this;
         }
 
-        public FieldMetaDataBuilder withWriter(String writer) {
-            this.writer = writer;
+        public FieldMetaDataBuilder writer(String writer) {
+            this.fieldModel.writer = writer;
             return this;
         }
 
-        public FieldMetaDataBuilder withFieldName(String fieldName) {
-            this.fieldName = fieldName;
+        public FieldMetaDataBuilder fieldName(String fieldName) {
+            this.fieldModel.fieldName = fieldName;
             return this;
         }
 
-        public FieldMetaDataBuilder withId(boolean id) {
-            this.id = id;
+        public FieldMetaDataBuilder id(boolean id) {
+            this.fieldModel.id = id;
             return this;
         }
 
-        public FieldMetaDataBuilder withConverter(Convert converter) {
+        public FieldMetaDataBuilder converter(Convert converter) {
             if (Objects.nonNull(converter)) {
                 try {
-                    this.converter = String.format("new %s();", converter.value().getName());
-                    this.typeConverter = converter.value().getName().concat(".class");
+                    this.fieldModel.converter = String.format("new %s();", converter.value().getName());
+                    this.fieldModel.typeConverter = converter.value().getName().concat(".class");
                 } catch (MirroredTypeException exception) {
                     TypeMirror typeMirror = exception.getTypeMirror();
-                    this.converter = String.format("new %s()", typeMirror);
-                    this.typeConverter = typeMirror.toString().concat(".class");
+                    this.fieldModel.converter = String.format("new %s()", typeMirror);
+                    this.fieldModel.typeConverter = typeMirror.toString().concat(".class");
                 }
 
             }
             return this;
         }
 
-        public FieldMetaDataBuilder withMappingType(String mappingType) {
-            this.mappingType = mappingType;
+        public FieldMetaDataBuilder mappingType(String mappingType) {
+            this.fieldModel.mappingType = mappingType;
             return this;
         }
 
-        public FieldMetaDataBuilder withValueByAnnotation(List<ValueAnnotationModel> valueByAnnotation) {
-            this.valueByAnnotation = valueByAnnotation;
+        public FieldMetaDataBuilder valueByAnnotation(List<ValueAnnotationModel> valueByAnnotation) {
+            this.fieldModel.valueByAnnotation = valueByAnnotation;
             return this;
         }
 
-        public FieldMetaDataBuilder withElementType(String elementType) {
-            this.elementType = elementType;
+        public FieldMetaDataBuilder elementType(String elementType) {
+            this.fieldModel.elementType = elementType;
             return this;
         }
 
-        public FieldMetaDataBuilder withEmbeddable(boolean embeddable) {
-            this.embeddable = embeddable;
+        public FieldMetaDataBuilder embeddable(boolean embeddable) {
+            this.fieldModel.embeddable = embeddable;
             return this;
         }
 
-        public FieldMetaDataBuilder withCollectionInstance(String collectionInstance) {
-            this.collectionInstance = collectionInstance;
+        public FieldMetaDataBuilder collectionInstance(String collectionInstance) {
+            this.fieldModel.collectionInstance = collectionInstance;
             return this;
         }
 
-        public FieldMetaDataBuilder withSupplierElement(String supplierElement) {
-            this.supplierElement = supplierElement;
+        public FieldMetaDataBuilder supplierElement(String supplierElement) {
+            this.fieldModel.supplierElement = supplierElement;
             return this;
         }
 
 
         public FieldModel build() {
-            var field= new FieldModel(packageName, name, type, entity, reader, writer, fieldName,
-                    id, converter, mappingType, typeConverter, valueByAnnotation, elementType,
-                    embeddable, collectionInstance);
-            field.setSupplierElement(supplierElement);
-            return field;
+           return fieldModel;
         }
     }
 }
