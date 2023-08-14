@@ -27,13 +27,19 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("jakarta.nosql.query.SelectQuery selectQuery = selectProvider.apply(\"" + metadata.getMethodName() + "\", metadata.getName())");
-            lines.add("jakarta.nosql.column.ColumnQueryParams queryParams = converter.apply(selectQuery, parser)");
-            lines.add("jakarta.nosql.Params params = queryParams.getParams()");
+            lines.add("org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider supplier = \n\t\t\t\t" +
+                    "new org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider()");
+            lines.add("org.eclipse.jnosql.communication.query.SelectQuery selectQuery = \n\t\t\t\t" +
+                    "supplier.apply(\"" + metadata.getMethodName() + "\", metadata.name())");
+            lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n\t\t\t\t" +
+                    "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
+            lines.add("org.eclipse.jnosql.communication.column.ColumnQueryParams queryParams = \n\t\t\t\t" +
+                    "SELECT_PARSER.apply(selectQuery, parser)");
+            lines.add("org.eclipse.jnosql.communication.column.ColumnQuery query = queryParams.query()");
+            lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params()");
             for (Parameter parameter : metadata.getParameters()) {
                 lines.add("params.bind(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
             }
-            lines.add("jakarta.nosql.column.ColumnQuery query = queryParams.getQuery()");
             MethodQueryRepositoryReturnType returnType = MethodQueryRepositoryReturnType.of(metadata);
             lines.addAll(returnType.apply(metadata));
             return lines;

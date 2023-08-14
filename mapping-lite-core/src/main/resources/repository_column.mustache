@@ -18,6 +18,7 @@ import jakarta.data.repository.Page;
 import jakarta.data.repository.Pageable;
 import org.eclipse.jnosql.communication.column.ColumnQuery;
 import org.eclipse.jnosql.communication.column.SelectQueryParser;
+
 import org.eclipse.jnosql.communication.query.SelectQueryConverter;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
 import org.eclipse.jnosql.mapping.NoSQLPage;
@@ -45,6 +46,8 @@ import static org.eclipse.jnosql.mapping.IdNotFoundException.KEY_NOT_FOUND_EXCEP
 @Generated(value= "JNoSQL Lite Column Repository Generator", date = "{{now}}")
 @jakarta.enterprise.context.ApplicationScoped
 public class {{className}} implements {{repository}} {
+
+    private static final SelectQueryParser SELECT_PARSER = new SelectQueryParser();
 
     private final JNoSQLColumnTemplate template;
 
