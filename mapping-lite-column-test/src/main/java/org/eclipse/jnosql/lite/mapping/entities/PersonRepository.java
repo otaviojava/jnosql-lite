@@ -34,4 +34,6 @@ public interface PersonRepository extends PageableRepository<Person, Long> {
 
     long countByName(String name);
 
+    void deleteByName(String name);
+
 }
