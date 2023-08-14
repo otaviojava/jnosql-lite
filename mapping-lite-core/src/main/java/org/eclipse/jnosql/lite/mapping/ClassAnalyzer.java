@@ -124,8 +124,10 @@ public class ClassAnalyzer implements Supplier<String> {
         final Entity annotation = element.getAnnotation(Entity.class);
         final boolean entityAnnotation = Objects.nonNull(annotation);
         final boolean embedded = Objects.nonNull(element.getAnnotation(Embeddable.class));
+        final boolean hasInheritanceAnnotation = Objects.nonNull(element.getAnnotation(Inheritance.class));
         String packageName = ProcessorUtil.getPackageName(element);
         String sourceClassName = ProcessorUtil.getSimpleNameAsString(element);
+
 
         String entityName = Optional.ofNullable(annotation)
                 .map(Entity::value)
@@ -141,7 +143,7 @@ public class ClassAnalyzer implements Supplier<String> {
             inheritanceParameter = getInheritanceParameter(element, element);
         }
         return new EntityModel(packageName, sourceClassName, entityName, fields, embedded, notConcrete,
-                inheritanceParameter, entityAnnotation);
+                inheritanceParameter, entityAnnotation, hasInheritanceAnnotation);
     }
 
     private String getInheritanceParameter(TypeElement element, TypeElement superclass) {

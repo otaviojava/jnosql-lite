@@ -32,10 +32,12 @@ public class EntityModel extends BaseMappingModel {
     private final boolean notConcrete;
 
     private final boolean entityAnnotation;
+
+    private final boolean hasInheritanceAnnotation;
     EntityModel(String packageName, String entity, String name,
                        List<String> fields, boolean embedded, boolean notConcrete,
                        String inheritanceParameter,
-                       boolean entityAnnotation) {
+                       boolean entityAnnotation, boolean hasInheritanceAnnotation) {
         this.packageName = packageName;
         this.entity = entity;
         this.name = name;
@@ -44,6 +46,7 @@ public class EntityModel extends BaseMappingModel {
         this.notConcrete = notConcrete;
         this.inheritanceParameter = inheritanceParameter;
         this.entityAnnotation = entityAnnotation;
+        this.hasInheritanceAnnotation = hasInheritanceAnnotation;
     }
 
     public String getPackageName() {
@@ -88,6 +91,10 @@ public class EntityModel extends BaseMappingModel {
 
     public boolean isEntityAnnotation() {
         return entityAnnotation;
+    }
+
+    public boolean isHasInheritanceAnnotation() {
+        return hasInheritanceAnnotation;
     }
 
     @Override

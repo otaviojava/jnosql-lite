@@ -139,22 +139,12 @@ public final class {{className}} implements LiteEntityMetadata {
 
     @Override
     public boolean hasEntityName() {
-      {{#inheritance}}
-         return true;
-      {{/inheritance}}
-      {{^inheritance}}
-         return Objects.isNull(inheritance);
-      {{/inheritance}}
+         return Objects.isNull(inheritance) || isInheritance();
     }
 
     @Override
     public boolean isInheritance() {
-        {{#inheritanceParameter}}
-          return true;
-        {{/inheritanceParameter}}
-        {{^inheritanceParameter}}
-          return false;
-        {{/inheritanceParameter}}
+          return {{hasInheritanceAnnotation}};
     }
 
     @Override
