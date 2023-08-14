@@ -19,26 +19,25 @@ import org.eclipse.jnosql.communication.TypeReference;
 import org.eclipse.jnosql.communication.Value;
 import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.communication.column.ColumnEntity;
+import org.eclipse.jnosql.lite.mapping.entities.Actor;
+import org.eclipse.jnosql.lite.mapping.entities.Address;
+import org.eclipse.jnosql.lite.mapping.entities.AppointmentBook;
+import org.eclipse.jnosql.lite.mapping.entities.Citizen;
+import org.eclipse.jnosql.lite.mapping.entities.Contact;
+import org.eclipse.jnosql.lite.mapping.entities.ContactType;
+import org.eclipse.jnosql.lite.mapping.entities.Director;
+import org.eclipse.jnosql.lite.mapping.entities.Download;
+import org.eclipse.jnosql.lite.mapping.entities.Job;
+import org.eclipse.jnosql.lite.mapping.entities.Money;
+import org.eclipse.jnosql.lite.mapping.entities.Movie;
+import org.eclipse.jnosql.lite.mapping.entities.Person;
+import org.eclipse.jnosql.lite.mapping.entities.UserScope;
+import org.eclipse.jnosql.lite.mapping.entities.Vendor;
+import org.eclipse.jnosql.lite.mapping.entities.Worker;
+import org.eclipse.jnosql.lite.mapping.entities.ZipCode;
 import org.eclipse.jnosql.mapping.Converters;
 import org.eclipse.jnosql.mapping.column.ColumnEntityConverter;
-import org.eclipse.jnosql.mapping.column.DefaultColumnEntityConverter;
-import org.eclipse.jnosql.mapping.column.entities.Actor;
-import org.eclipse.jnosql.mapping.column.entities.Address;
-import org.eclipse.jnosql.mapping.column.entities.AppointmentBook;
-import org.eclipse.jnosql.mapping.column.entities.Citizen;
-import org.eclipse.jnosql.mapping.column.entities.Contact;
-import org.eclipse.jnosql.mapping.column.entities.ContactType;
-import org.eclipse.jnosql.mapping.column.entities.Director;
-import org.eclipse.jnosql.mapping.column.entities.Download;
-import org.eclipse.jnosql.mapping.column.entities.Job;
-import org.eclipse.jnosql.mapping.column.entities.Money;
-import org.eclipse.jnosql.mapping.column.entities.Movie;
-import org.eclipse.jnosql.mapping.column.entities.Person;
-import org.eclipse.jnosql.mapping.column.entities.Vendor;
-import org.eclipse.jnosql.mapping.column.entities.Worker;
-import org.eclipse.jnosql.mapping.column.entities.ZipCode;
 import org.eclipse.jnosql.mapping.column.spi.ColumnExtension;
-import org.eclipse.jnosql.mapping.reflection.Reflections;
 import org.eclipse.jnosql.mapping.spi.EntityMetadataExtension;
 import org.jboss.weld.junit5.auto.AddExtensions;
 import org.jboss.weld.junit5.auto.AddPackages;
@@ -65,13 +64,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @EnableAutoWeld
 @AddPackages(value = {Converters.class, ColumnEntityConverter.class})
-@AddPackages(MockProducer.class)
-@AddPackages(Reflections.class)
 @AddExtensions({EntityMetadataExtension.class, ColumnExtension.class})
 public class ColumnEntityConverterTest {
 
     @Inject
-    private DefaultColumnEntityConverter converter;
+    private ColumnEntityConverter converter;
 
     private Column[] columns;
 
