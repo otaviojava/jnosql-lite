@@ -16,13 +16,17 @@ package org.eclipse.jnosql.lite.mapping.entities;
 
 import jakarta.data.repository.Page;
 import jakarta.data.repository.Pageable;
+import jakarta.nosql.PreparedStatement;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.eclipse.jnosql.communication.Condition;
 import org.eclipse.jnosql.communication.Value;
 import org.eclipse.jnosql.communication.column.Column;
 import org.eclipse.jnosql.communication.column.ColumnCondition;
+import org.eclipse.jnosql.communication.column.ColumnDeleteQuery;
+import org.eclipse.jnosql.communication.column.ColumnPreparedStatement;
 import org.eclipse.jnosql.communication.column.ColumnQuery;
+import org.eclipse.jnosql.communication.query.DeleteQuery;
 import org.eclipse.jnosql.mapping.column.JNoSQLColumnTemplate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -191,6 +195,62 @@ class PersonRepositoryTest {
         assertThat(result).isNotEmpty().hasSize(2);
         verify(template).select(captor.capture());
         ColumnQuery query = captor.getValue();
+        ColumnCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.column().get(String.class)).isEqualTo("Ada");
+        });
+
+    }
+
+    @Test
+    public void shouldQuery(){
+        when(template.prepare(anyString())).thenReturn(Mockito.mock(PreparedStatement.class));
+        this.personRepository.query("Ada");
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(template).prepare(captor.capture());
+        String value = captor.getValue();
+        assertThat(value).isEqualTo("select * from Person where name = @name");
+    }
+
+    @Test
+    public void shouldExistByName(){
+        when(template.select(any(ColumnQuery.class))).thenReturn( Stream.of(new Person(), new Person()));
+        boolean result = this.personRepository.existsByName("Ada");
+        ArgumentCaptor<ColumnQuery> captor = ArgumentCaptor.forClass(ColumnQuery.class);
+        assertThat(result).isTrue();
+        verify(template).select(captor.capture());
+        ColumnQuery query = captor.getValue();
+        ColumnCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.column().get(String.class)).isEqualTo("Ada");
+        });
+
+    }
+
+    @Test
+    public void shouldCountByName(){
+        when(template.select(any(ColumnQuery.class))).thenReturn( Stream.of(new Person(), new Person()));
+        long result = this.personRepository.countByName("Ada");
+        ArgumentCaptor<ColumnQuery> captor = ArgumentCaptor.forClass(ColumnQuery.class);
+        assertThat(result).isEqualTo(2L);
+        verify(template).select(captor.capture());
+        ColumnQuery query = captor.getValue();
+        ColumnCondition condition = query.condition().orElseThrow();
+        SoftAssertions.assertSoftly(soft -> {
+            soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
+            soft.assertThat(condition.column().get(String.class)).isEqualTo("Ada");
+        });
+
+    }
+
+    @Test
+    public void shouldDeleteByName(){
+        this.personRepository.deleteByName("Ada");
+        ArgumentCaptor<ColumnDeleteQuery> captor = ArgumentCaptor.forClass(ColumnDeleteQuery.class);
+        verify(template).delete(captor.capture());
+        ColumnDeleteQuery query = captor.getValue();
         ColumnCondition condition = query.condition().orElseThrow();
         SoftAssertions.assertSoftly(soft -> {
             soft.assertThat(condition.condition()).isEqualTo(Condition.EQUALS);
