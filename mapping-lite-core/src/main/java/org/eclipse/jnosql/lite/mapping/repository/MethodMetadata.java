@@ -44,7 +44,7 @@ class MethodMetadata {
 
     private MethodGenerator generator;
 
-    private String entityType;
+    private final String entityType;
 
     public MethodMetadata(String methodName, TypeElement returnElement, String returnType,
                           List<Parameter> parameters, Query query, DatabaseType type, String entityType) {
