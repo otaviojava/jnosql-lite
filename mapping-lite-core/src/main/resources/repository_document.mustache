@@ -14,16 +14,21 @@
  */
 package {{package}};
 
-import jakarta.nosql.document.SelectQueryConverter;
-import jakarta.nosql.document.DocumentTemplate;
-import org.eclipse.jnosql.lite.mapping.metadata.EntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.DefaultEntitiesMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.EntityMetadata;
-import org.eclipse.jnosql.lite.mapping.metadata.FieldMetadata;
-import org.eclipse.jnosql.lite.mapping.document.RepositoryDocumentObserverParser;
-import org.eclipse.jnosql.communication.document.query.SelectQueryParser;
-import org.eclipse.jnosql.communication.query.method.FindByMethodQueryProvider;
+import jakarta.data.repository.Page;
+import jakarta.data.repository.Pageable;
+import org.eclipse.jnosql.communication.document.DocumentQuery;
+import org.eclipse.jnosql.communication.document.SelectQueryParser;
+import org.eclipse.jnosql.communication.query.SelectQueryConverter;
+import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
+import org.eclipse.jnosql.mapping.NoSQLPage;
+import org.eclipse.jnosql.mapping.document.JNoSQLDocumentTemplate;
+import org.eclipse.jnosql.mapping.document.MappingDocumentQuery;
+import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
+import org.eclipse.jnosql.mapping.metadata.EntityMetadata;
+import org.eclipse.jnosql.mapping.metadata.FieldMetadata;
+
 import javax.annotation.processing.Generated;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -31,25 +36,19 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import static jakarta.nosql.IdNotFoundException.KEY_NOT_FOUND_EXCEPTION_SUPPLIER;
 import static java.util.Objects.nonNull;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.StreamSupport.stream;
+import static org.eclipse.jnosql.mapping.IdNotFoundException.KEY_NOT_FOUND_EXCEPTION_SUPPLIER;
 
 @Generated(value= "JNoSQL Lite Document Repository Generator", date = "{{now}}")
-@javax.enterprise.context.ApplicationScoped
+@jakarta.enterprise.context.ApplicationScoped
 public class {{className}} implements {{repository}} {
 
-    private final DocumentTemplate template;
+    private final JNoSQLDocumentTemplate template;
 
     private final EntityMetadata metadata;
-
-    private final FindByMethodQueryProvider selectProvider;
-
-    private final RepositoryDocumentObserverParser parser;
-
-    private final SelectQueryConverter converter;
 
 
     @javax.inject.Inject
@@ -57,12 +56,9 @@ public class {{className}} implements {{repository}} {
         this.template = Objects.requireNonNull(template, "template is required");
         EntitiesMetadata entities = new DefaultEntitiesMetadata();
         this.metadata = entities.get({{entityType}}.class);
-        this.selectProvider = new FindByMethodQueryProvider();
-        this.parser = new RepositoryDocumentObserverParser(this.metadata);
-        this.converter = new SelectQueryParser();
     }
 
-    DocumentTemplate getTemplate(){
+    JNoSQLDocumentTemplate getTemplate(){
         return template;
     }
 
@@ -82,7 +78,7 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public <S extends {{entityType}}> Iterable<S> save(Iterable<S> entities) {
+    public <S extends {{entityType}}> Iterable<S> saveAll(Iterable<S> entities) {
         requireNonNull(entities, "entities is required");
         return StreamSupport.stream(entities.spliterator(), false).map(this::save).collect(toList());
     }
@@ -94,9 +90,27 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public void deleteById(Iterable<{{keyType}}> ids) {
+    public void delete({{entityType}} entity) {
+        requireNonNull(entity, "entity is required");
+        getTemplate().delete(entity);
+    }
+
+
+    @Override
+    public void deleteAllById(Iterable<{{keyType}}> ids) {
         requireNonNull(ids, "ids is required");
         ids.forEach(this::deleteById);
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends {{entityType}}> entities) {
+        requireNonNull(entities, "entities is required");
+        getTemplate().delete(entities);
+    }
+
+    @Override
+    public void deleteAll() {
+       getTemplate().delete(getEntityClass());
     }
 
     @Override
@@ -106,10 +120,10 @@ public class {{className}} implements {{repository}} {
     }
 
     @Override
-    public Iterable<{{entityType}}> findById(Iterable<{{keyType}}> ids) {
+    public Stream<{{entityType}}> findAllById(Iterable<{{keyType}}> ids) {
         requireNonNull(ids, "ids is required");
-        return (Iterable) stream(ids.spliterator(), false)
-                .flatMap(optionalToStream()).collect(Collectors.toList());
+        return stream(ids.spliterator(), false)
+                .flatMap(optionalToStream());
     }
 
     @Override
@@ -120,6 +134,23 @@ public class {{className}} implements {{repository}} {
     @Override
     public boolean existsById({{keyType}} id) {
       return findById(id).isPresent();
+    }
+
+    @Override
+    public Stream<{{entityType}}> findAll() {
+        DocumentQuery query = DocumentQuery.select().from(getEntityMetadata().name()).build();
+        return getTemplate().select(query);
+    }
+
+    @Override
+    public Page<{{entityType}}> findAll(Pageable pageable) {
+        Objects.requireNonNull(pageable, "pageable is required");
+        EntityMetadata metadata = getEntityMetadata();
+        DocumentQuery query = new MappingDocumentQuery(pageable.sorts(),
+        pageable.size(), NoSQLPage.skip(pageable), null ,metadata.name());
+
+        List<{{entityType}}> entities = getTemplate().<{{entityType}}>select(query).toList();
+                return NoSQLPage.of(entities, pageable);
     }
 
     {{#methods}}
@@ -136,7 +167,7 @@ public class {{className}} implements {{repository}} {
     {{/methods}}
 
     private FieldMetadata getIdField() {
-        return getEntityMetadata().getId().orElseThrow(KEY_NOT_FOUND_EXCEPTION_SUPPLIER);
+        return getEntityMetadata().id().orElseThrow(KEY_NOT_FOUND_EXCEPTION_SUPPLIER);
     }
 
     private Function optionalToStream() {
@@ -147,7 +178,7 @@ public class {{className}} implements {{repository}} {
     }
 
     private Class<{{entityType}}> getEntityClass() {
-        return (Class<{{entityType}}>) getEntityMetadata().getClassInstance();
+        return (Class<{{entityType}}>) getEntityMetadata().type();
     }
 
 }
