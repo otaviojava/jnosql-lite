@@ -15,8 +15,17 @@
 package org.eclipse.jnosql.lite.mapping.entities;
 
 import jakarta.data.repository.PageableRepository;
+import jakarta.data.repository.Param;
+import jakarta.data.repository.Query;
 import jakarta.data.repository.Repository;
+
+import java.util.List;
 
 @Repository
 public interface PersonRepository extends PageableRepository<Person, Long> {
+
+    List<Person> findByName(String name);
+
+    @Query("select * from Person where name = @name")
+    List<Person> query(@Param("name") String name);
 }
