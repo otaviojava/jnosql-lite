@@ -40,7 +40,7 @@
    </properties>
 
     <modules>
-        <module>mapping-lite-core</module>
+        <module>mapping-lite-processor</module>
         <module>mapping-lite-key-value-test</module>
         <module>mapping-lite-core-test</module>
         <module>mapping-lite-document-test</module>
