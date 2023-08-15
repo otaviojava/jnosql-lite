@@ -15,7 +15,6 @@
 package org.eclipse.jnosql.lite.mapping.repository;
 
 
-import org.eclipse.jnosql.lite.mapping.ValidationException;
 import org.eclipse.jnosql.mapping.DatabaseType;
 
 import javax.annotation.processing.AbstractProcessor;
