@@ -81,7 +81,7 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
                     "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
             lines.add("org.eclipse.jnosql.communication.column.ColumnDeleteQueryParams queryParams = \n\t\t\t" +
                     "DELETE_PARSER.apply(delete, parser)");
-            lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params();");
+            lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params()");
             for (Parameter parameter : metadata.getParameters()) {
                 lines.add("params.prefix(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
             }

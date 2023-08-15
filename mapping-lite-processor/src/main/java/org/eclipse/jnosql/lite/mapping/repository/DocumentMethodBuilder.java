@@ -80,7 +80,7 @@ enum DocumentMethodBuilder implements Function<MethodMetadata, List<String>> {
                     "org.eclipse.jnosql.mapping.document.query.RepositoryDocumentObserverParser.of(metadata)");
             lines.add("org.eclipse.jnosql.communication.document.DocumentDeleteQueryParams queryParams = \n\t\t\t" +
                     "DELETE_PARSER.apply(delete, parser)");
-            lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params();");
+            lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params()");
             for (Parameter parameter : metadata.getParameters()) {
                 lines.add("params.prefix(\"" + parameter.getName() + "\"," + parameter.getName() + ")");
             }
