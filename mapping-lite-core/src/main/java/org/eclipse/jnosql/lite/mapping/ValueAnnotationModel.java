@@ -14,22 +14,10 @@
  */
 package org.eclipse.jnosql.lite.mapping;
 
-public class ValueAnnotationModel {
+/**
+ * A simple record representing a key-value pair for annotation models.
+ * This class encapsulates a pair of strings: a key and a corresponding value.
+ */
+public record ValueAnnotationModel(String key, String value) {
 
-    private final String key;
-    private final String value;
-
-
-    public ValueAnnotationModel(String key, String value) {
-        this.key = key;
-        this.value = value;
-    }
-
-    public String key() {
-        return key;
-    }
-
-    public String value() {
-        return value;
-    }
 }

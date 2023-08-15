@@ -23,8 +23,16 @@ import java.util.regex.Pattern;
 
 import static java.util.Locale.ENGLISH;
 
+/**
+ * Utility class containing static methods for processing and manipulating elements in annotation processors.
+ * This class provides methods for retrieving package names, simple names, capitalizing strings, checking element types,
+ * and extracting data from type strings.
+ */
 public final class ProcessorUtil {
 
+    /**
+     * A compiled regular expression pattern for extracting text enclosed in angle brackets.
+     */
     public static final Pattern COMPILE = Pattern.compile("<(.*?)>");
 
     private ProcessorUtil() {
@@ -42,10 +50,22 @@ public final class ProcessorUtil {
         return name.substring(0, 1).toUpperCase(ENGLISH) + name.substring(1);
     }
 
+    /**
+     * Checks if the given Element is an instance of TypeElement.
+     *
+     * @param element The Element to check.
+     * @return true if the Element is a TypeElement, false otherwise.
+     */
     public static boolean isTypeElement(Element element) {
         return element instanceof TypeElement;
     }
 
+    /**
+     * Extracts text enclosed in angle brackets from a type string using a regular expression pattern.
+     *
+     * @param returnType The input type string.
+     * @return The extracted text from within angle brackets, or the input string if no match is found.
+     */
     public static String extractFromType(String returnType) {
         Matcher matcher = COMPILE.matcher(returnType);
         if (matcher.find()) {
