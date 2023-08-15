@@ -16,6 +16,7 @@ package org.eclipse.jnosql.lite.mapping.repository;
 
 import com.github.mustachejava.Mustache;
 import org.eclipse.jnosql.lite.mapping.ValidationException;
+import org.eclipse.jnosql.mapping.DatabaseType;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -34,15 +35,18 @@ final class RepositoryAnalyzer implements Supplier<String> {
 
     private final ProcessingEnvironment processingEnv;
 
-    RepositoryAnalyzer(Element repositoryType, ProcessingEnvironment processingEnv) {
+    private final DatabaseType type;
+
+    RepositoryAnalyzer(Element repositoryType, ProcessingEnvironment processingEnv, DatabaseType type) {
         this.entity = repositoryType;
         this.processingEnv = processingEnv;
+        this.type = type;
     }
 
     @Override
     public String get() {
         LOGGER.info("Starting to process the repository processor with the class ");
-        RepositoryElement element = RepositoryElement.of(entity, processingEnv);
+        RepositoryElement element = RepositoryElement.of(entity, processingEnv, type);
         Filer filer = processingEnv.getFiler();
         RepositoryMetadata metadata = element.getMetadata(element.getType());
         RepositoryTemplateType templateType = metadata.getTemplateType();
