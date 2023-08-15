@@ -71,15 +71,15 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
         @Override
         public List<String> apply(MethodMetadata metadata) {
             List<String> lines = new ArrayList<>();
-            lines.add("org.eclipse.jnosql.communication.query.method.DeleteMethodProvider deleteMethodFactory = \n\t\t\t" +
+            lines.add("org.eclipse.jnosql.communication.query.method.DeleteMethodProvider deleteMethodFactory = \n      " +
                     "org.eclipse.jnosql.communication.query.method.DeleteMethodProvider.INSTANCE");
-            lines.add("org.eclipse.jnosql.communication.query.method.DeleteByMethodQueryProvider supplier = \n\t\t\t" +
+            lines.add("org.eclipse.jnosql.communication.query.method.DeleteByMethodQueryProvider supplier = \n     " +
                     " new org.eclipse.jnosql.communication.query.method.DeleteByMethodQueryProvider()");
             lines.add("org.eclipse.jnosql.communication.query.DeleteQuery delete = supplier.apply(\"" +
                     metadata.getMethodName() + "\", metadata.name())");
-            lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n\t\t\t\t" +
+            lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n          " +
                     "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
-            lines.add("org.eclipse.jnosql.communication.column.ColumnDeleteQueryParams queryParams = \n\t\t\t" +
+            lines.add("org.eclipse.jnosql.communication.column.ColumnDeleteQueryParams queryParams = \n          " +
                     "DELETE_PARSER.apply(delete, parser)");
             lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params()");
             for (Parameter parameter : metadata.getParameters()) {
@@ -96,13 +96,13 @@ enum ColumnMethodBuilder implements Function<MethodMetadata, List<String>> {
     };
 
     private static void feedSelectQuery(MethodMetadata metadata, List<String> lines) {
-        lines.add("org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider supplier = \n\t\t\t\t" +
+        lines.add("org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider supplier = \n          " +
                 "new org.eclipse.jnosql.communication.query.method.SelectMethodQueryProvider()");
-        lines.add("org.eclipse.jnosql.communication.query.SelectQuery selectQuery = \n\t\t\t\t" +
+        lines.add("org.eclipse.jnosql.communication.query.SelectQuery selectQuery = \n          " +
                 "supplier.apply(\"" + metadata.getMethodName() + "\", metadata.name())");
-        lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n\t\t\t\t" +
+        lines.add("org.eclipse.jnosql.communication.column.ColumnObserverParser parser = \n          " +
                 "org.eclipse.jnosql.mapping.column.query.RepositoryColumnObserverParser.of(metadata)");
-        lines.add("org.eclipse.jnosql.communication.column.ColumnQueryParams queryParams = \n\t\t\t\t" +
+        lines.add("org.eclipse.jnosql.communication.column.ColumnQueryParams queryParams = \n          " +
                 "SELECT_PARSER.apply(selectQuery, parser)");
         lines.add("org.eclipse.jnosql.communication.column.ColumnQuery query = queryParams.query()");
         lines.add("org.eclipse.jnosql.communication.Params params = queryParams.params()");
