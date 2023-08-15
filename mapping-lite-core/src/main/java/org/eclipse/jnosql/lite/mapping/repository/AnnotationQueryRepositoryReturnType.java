@@ -92,26 +92,15 @@ enum AnnotationQueryRepositoryReturnType implements Function<MethodMetadata, Lis
         if (returnType.equals(getEntity(metadata))) {
             return ENTITY_TYPE;
         }
-        switch (returnType) {
-            case "java.util.stream.Stream":
-                return STREAM;
-            case "java.util.List":
-            case "java.util.Collection":
-            case "java.lang.Iterable":
-                return LIST;
-            case "java.util.Set":
-                return SET;
-            case "java.util.Queue":
-            case "java.util.Deque":
-                return QUEUE;
-            case "java.util.SortedSet":
-            case "java.util.TreeSet":
-                return SORTED_SET;
-            case "java.util.Optional":
-                return OPTIONAL;
-            default:
-                throw new UnsupportedOperationException("This return is not supported: " + returnType);
-        }
+        return switch (returnType) {
+            case "java.util.stream.Stream" -> STREAM;
+            case "java.util.List", "java.util.Collection", "java.lang.Iterable" -> LIST;
+            case "java.util.Set" -> SET;
+            case "java.util.Queue", "java.util.Deque" -> QUEUE;
+            case "java.util.SortedSet", "java.util.TreeSet" -> SORTED_SET;
+            case "java.util.Optional" -> OPTIONAL;
+            default -> throw new UnsupportedOperationException("This return is not supported: " + returnType);
+        };
 
     }
 }

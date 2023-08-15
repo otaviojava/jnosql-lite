@@ -153,7 +153,7 @@ final class FieldModel extends BaseMappingModel {
 
     public static class FieldMetaDataBuilder {
 
-        private FieldModel fieldModel;
+        private final FieldModel fieldModel;
 
         private FieldMetaDataBuilder() {
             this.fieldModel = new FieldModel();

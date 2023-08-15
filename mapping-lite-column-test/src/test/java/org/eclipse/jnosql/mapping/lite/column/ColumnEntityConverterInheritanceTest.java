@@ -67,7 +67,7 @@ class ColumnEntityConverterInheritanceTest {
         Project project = this.converter.toEntity(entity);
         assertEquals("Small Project", project.getName());
         assertEquals(SmallProject.class, project.getClass());
-        SmallProject smallProject = SmallProject.class.cast(project);
+        SmallProject smallProject = (SmallProject) project;
         assertEquals("Otavio Santana", smallProject.getInvestor());
     }
 
@@ -80,7 +80,7 @@ class ColumnEntityConverterInheritanceTest {
         Project project = this.converter.toEntity(entity);
         assertEquals("Large Project", project.getName());
         assertEquals(LargeProject.class, project.getClass());
-        LargeProject smallProject = LargeProject.class.cast(project);
+        LargeProject smallProject = (LargeProject) project;
         assertEquals(BigDecimal.TEN, smallProject.getBudget());
     }
 

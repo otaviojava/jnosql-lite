@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CollectionUtilTest {
 
 
-    private CollectionUtil collectionUtil= CollectionUtil.INSTANCE;
+    private final CollectionUtil collectionUtil= CollectionUtil.INSTANCE;
     @Test
     public void shouldReturnList(){
         assertThat(collectionUtil.apply(List.class.getName())).isEqualTo(CollectionUtil.NEW_LIST);

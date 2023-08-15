@@ -42,8 +42,7 @@ final class RepositoryUtil {
     }
 
     static List<String> findParameters(TypeMirror repository) {
-        if (repository instanceof DeclaredType) {
-            DeclaredType declaredType = (DeclaredType) repository;
+        if (repository instanceof DeclaredType declaredType) {
             return declaredType.getTypeArguments().stream()
                     .map(TypeMirror::toString)
                     .collect(Collectors.toList());

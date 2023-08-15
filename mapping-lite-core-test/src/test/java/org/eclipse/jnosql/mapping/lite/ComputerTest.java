@@ -14,7 +14,6 @@
  */
 package org.eclipse.jnosql.mapping.lite;
 
-import jakarta.nosql.Entity;
 import org.assertj.core.api.SoftAssertions;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
 import org.eclipse.jnosql.mapping.metadata.EntitiesMetadata;
@@ -27,8 +26,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ComputerTest {
 
@@ -57,7 +54,7 @@ class ComputerTest {
     public void shouldReturnAsEntity(){
         Map<String, FieldMetadata> groupByName = this.entityMetadata.fieldsGroupByName();
         FieldMetadata fieldMetadata = groupByName.get("users");
-        GenericFieldMetadata users = GenericFieldMetadata.class.cast(fieldMetadata);
+        GenericFieldMetadata users = (GenericFieldMetadata) fieldMetadata;
         SoftAssertions.assertSoftly(soft -> {
             soft.assertThat(users.name()).isEqualTo("users");
             soft.assertThat(users.isId()).isFalse();

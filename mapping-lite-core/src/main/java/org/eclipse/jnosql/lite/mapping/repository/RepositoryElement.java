@@ -63,16 +63,12 @@ class RepositoryElement {
     }
 
     public RepositoryMetadata getMetadata(DatabaseType type) {
-        switch (type) {
-            case DOCUMENT:
-                return new DocumentRepositoryMetadata(this);
-            case COLUMN:
-                return new ColumnRepositoryMetadata(this);
-            case KEY_VALUE:
-                return new KeyValueRepositoryMetadata(this);
-            default:
-                throw new UnsupportedOperationException("There is not template to this database type: " + type);
-        }
+        return switch (type) {
+            case DOCUMENT -> new DocumentRepositoryMetadata(this);
+            case COLUMN -> new ColumnRepositoryMetadata(this);
+            case KEY_VALUE -> new KeyValueRepositoryMetadata(this);
+            default -> throw new UnsupportedOperationException("There is not template to this database type: " + type);
+        };
     }
 
     public String getEntityType() {

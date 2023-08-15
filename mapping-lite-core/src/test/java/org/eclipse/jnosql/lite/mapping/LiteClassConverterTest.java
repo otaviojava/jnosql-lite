@@ -25,8 +25,6 @@ class LiteClassConverterTest {
     public void shouldThrowException() {
         LiteClassConverter converter = new LiteClassConverter();
 
-        assertThrows(UnsupportedOperationException.class, () -> {
-            converter.apply(String.class);
-        });
+        assertThrows(UnsupportedOperationException.class, () -> converter.apply(String.class));
     }
 }
