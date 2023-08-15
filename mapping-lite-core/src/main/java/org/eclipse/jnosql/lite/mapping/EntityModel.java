@@ -16,7 +16,7 @@ package org.eclipse.jnosql.lite.mapping;
 
 import java.util.List;
 
-public class EntityModel extends BaseMappingModel {
+final class EntityModel extends BaseMappingModel {
 
     private final String packageName;
 

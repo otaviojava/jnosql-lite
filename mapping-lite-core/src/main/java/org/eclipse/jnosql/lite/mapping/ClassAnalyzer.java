@@ -43,7 +43,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ClassAnalyzer implements Supplier<String> {
+class ClassAnalyzer implements Supplier<String> {
 
     private static final Logger LOGGER = Logger.getLogger(ClassAnalyzer.class.getName());
     private static final String NEW_INSTANCE = "entitymetadata.mustache";

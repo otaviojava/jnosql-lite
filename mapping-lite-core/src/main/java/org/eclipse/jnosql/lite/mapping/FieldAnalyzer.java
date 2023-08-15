@@ -46,7 +46,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class FieldAnalyzer implements Supplier<String> {
+class FieldAnalyzer implements Supplier<String> {
 
     private static final String DEFAULT_TEMPLATE = "fieldmetadata.mustache";
     private static final String GENERIC_TEMPLATE = "fieldgenericmetadata.mustache";

@@ -21,7 +21,7 @@ import javax.lang.model.type.TypeMirror;
 import java.util.List;
 import java.util.Objects;
 
-public final class FieldModel extends BaseMappingModel {
+final class FieldModel extends BaseMappingModel {
 
     private String packageName;
     private String name;
