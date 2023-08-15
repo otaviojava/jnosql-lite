@@ -17,8 +17,6 @@ package {{package}};
 import jakarta.data.repository.Page;
 import jakarta.data.repository.Pageable;
 import org.eclipse.jnosql.communication.document.DocumentQuery;
-import org.eclipse.jnosql.communication.document.SelectQueryParser;
-import org.eclipse.jnosql.communication.query.SelectQueryConverter;
 import org.eclipse.jnosql.lite.mapping.LiteEntitiesMetadata;
 import org.eclipse.jnosql.mapping.NoSQLPage;
 import org.eclipse.jnosql.mapping.document.JNoSQLDocumentTemplate;
@@ -32,7 +30,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
