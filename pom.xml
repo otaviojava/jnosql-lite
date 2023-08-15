@@ -32,7 +32,7 @@
 
     <packaging>pom</packaging>
 
-    <description>An experimental implementation that uses Java Annotation Processing instead of Reflection.</description>
+    <description>An implementation that uses Java Annotation Processing instead of Reflection.</description>
     <url>http://jnosql.org/</url>
 
 
