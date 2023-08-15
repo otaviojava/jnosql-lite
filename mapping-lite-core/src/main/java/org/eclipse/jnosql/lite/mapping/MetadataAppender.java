@@ -56,12 +56,13 @@ final class MetadataAppender {
         Objects.requireNonNull(url, "Could not load resources from metadata folder");
         LOGGER.info("URL folder: " + url);
         LOGGER.info("URI folder: " + url.toURI());
-        Stream<Path> path = Files.walk(getPath(url));
-        path.map(Path::getFileName)
-                .map(Path::toString)
-                .filter(s -> s.contains(".java"))
-                .map(s -> s.substring(0, s.lastIndexOf(".")))
-                .forEach(this::loadClass);
+        try(Stream<Path> path = Files.walk(getPath(url))){
+            path.map(Path::getFileName)
+                    .map(Path::toString)
+                    .filter(s -> s.contains(".java"))
+                    .map(s -> s.substring(0, s.lastIndexOf(".")))
+                    .forEach(this::loadClass);
+        }
     }
 
     private Path getPath(URL url) throws IOException, URISyntaxException {
